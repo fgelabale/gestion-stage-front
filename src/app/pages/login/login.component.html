@@ -1,0 +1,48 @@
+<div style="display:flex; justify-content:center; margin-top:60px;">
+  <mat-card style="width:420px; padding:16px;">
+    <h2>Connexion admin</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Courriel</mat-label>
+        <input matInput formControlName="email" />
+
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <mat-error>
+            @if (form.controls.email.errors?.['required']) {
+              Le courriel est requis.
+            } @else if (form.controls.email.errors?.['email']) {
+              Le format du courriel est invalide.
+            }
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput type="password" formControlName="password" />
+
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <mat-error>Le mot de passe est requis.</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage) {
+        <p style="color:red;">{{ errorMessage }}</p>
+      }
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="isLoading"
+      >
+        @if (isLoading) {
+          Connexion...
+        } @else {
+          Se connecter
+        }
+      </button>
+    </form>
+  </mat-card>
+</div>

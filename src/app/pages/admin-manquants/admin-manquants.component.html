@@ -1,0 +1,75 @@
+<div style="padding:24px;">
+  <h1>Stages en suivi</h1>
+
+  @if (stages().length === 0) {
+    <p>Aucun stage à afficher.</p>
+  } @else {
+    <table mat-table [dataSource]="stages()" class="mat-elevation-z2" style="width:100%;">
+      <ng-container matColumnDef="etudiant">
+        <th mat-header-cell *matHeaderCellDef>Étudiant</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.etudiant?.prenom }} {{ row.etudiant?.nom }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="groupe">
+        <th mat-header-cell *matHeaderCellDef>Groupe</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.etudiant?.groupe || '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="entreprise">
+        <th mat-header-cell *matHeaderCellDef>Entreprise</th>
+        <td mat-cell *matCellDef="let row">{{ row.entreprise }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="semainesManquantes">
+        <th mat-header-cell *matHeaderCellDef>Semaines manquantes</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.semainesManquantes?.length ? row.semainesManquantes.join(', ') : 'Aucune' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bilanMiStage">
+        <th mat-header-cell *matHeaderCellDef>Mi-stage</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.bilanMiStageRempli ? 'Oui' : 'Non' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bilanFinStage">
+        <th mat-header-cell *matHeaderCellDef>Fin stage</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.bilanFinStageRempli ? 'Oui' : 'Non' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="evaluationMaitreStage">
+        <th mat-header-cell *matHeaderCellDef>Éval maître</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="statut">  
+        <th mat-header-cell *matHeaderCellDef>Statut</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.statutGlobal }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let row">
+          <a mat-button color="primary" [routerLink]="['/admin/stages', row.stageId]">
+            Voir
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  }
+</div>
