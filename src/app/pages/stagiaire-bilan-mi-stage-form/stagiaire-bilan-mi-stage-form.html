@@ -1,0 +1,118 @@
+@if (isLoading()) {
+  <div style="padding:24px;">
+    <p>Chargement...</p>
+  </div>
+} @else {
+  <div style="padding:24px; max-width:1000px; margin:0 auto;">
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <h1>Bilan mi-stage</h1>
+      <p><strong>Stage :</strong> {{ stageId() }}</p>
+
+      <a
+        mat-button
+        [routerLink]="['/stagiaire/stages', stageId()]"
+      >
+        Retour au stage
+      </a>
+    </mat-card>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-card style="padding:16px; margin-bottom:20px;">
+        <h2>Accueil / Intégration</h2>
+
+        @for (field of [
+          ['accueilParMaitreStage', 'J’ai été accueilli par mon maître de stage.'],
+          ['espaceTravailAssigne', 'On m’a assigné un espace de travail.'],
+          ['visiteDesLieux', 'On m’a fait visiter les lieux.'],
+          ['presentationAuxEmployes', 'On m’a présenté aux autres employés.'],
+          ['ambianceTravailBonne', 'L’ambiance de travail est bonne.'],
+          ['consignesMaitreStageComprises', 'J’ai bien compris les consignes de mon maître de stage.'],
+          ['reglesEntrepriseComprises', 'J’ai bien compris les règles et la politique de l’entreprise.'],
+          ['aisePoserQuestions', 'Je me sens à l’aise de poser des questions au besoin.'],
+          ['accueilApprecie', 'J’ai apprécié l’accueil auquel j’ai eu droit.']
+        ]; track field[0]) {
+          <div style="margin-bottom:18px;">
+            <p><strong>{{ field[1] }}</strong></p>
+            <mat-radio-group [formControlName]="field[0]">
+              @for (option of yesNoOptions; track option) {
+                <mat-radio-button [value]="option" style="margin-right:16px;">
+                  {{ option }}
+                </mat-radio-button>
+              }
+            </mat-radio-group>
+          </div>
+        }
+      </mat-card>
+
+      <mat-card style="padding:16px; margin-bottom:20px;">
+        <h2>Tâches</h2>
+
+        @for (field of [
+          ['tachesEnLienAvecFormation', 'Les tâches assignées sont en lien avec ma formation.'],
+          ['tachesVariees', 'Les tâches sont variées.'],
+          ['tachesRecommencees', 'J’ai dû recommencer une ou plusieurs tâches.'],
+          ['retroactionRecue', 'J’ai reçu de la rétroaction sur le travail effectué.'],
+          ['progressionDansExecution', 'J’ai progressé dans l’exécution de mes tâches.'],
+          ['difficultesDansCertainesTaches', 'J’ai rencontré des difficultés dans certaines tâches.'],
+          ['respectSanteSecurite', 'J’ai respecté les consignes de santé et sécurité au travail.']
+        ]; track field[0]) {
+          <div style="margin-bottom:18px;">
+            <p><strong>{{ field[1] }}</strong></p>
+            <mat-radio-group [formControlName]="field[0]">
+              @for (option of yesNoOptions; track option) {
+                <mat-radio-button [value]="option" style="margin-right:16px;">
+                  {{ option }}
+                </mat-radio-button>
+              }
+            </mat-radio-group>
+          </div>
+        }
+      </mat-card>
+
+      <mat-card style="padding:16px; margin-bottom:20px;">
+        <h2>Directives mi-stage</h2>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Comment s’est déroulé votre intégration au sein de l’entreprise ?</mat-label>
+          <textarea matInput rows="4" formControlName="integrationEntrepriseCommentaire"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Quelles actions avez-vous posées pour mieux vous intégrer à l’équipe ?</mat-label>
+          <textarea matInput rows="4" formControlName="actionsIntegrationEquipe"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Comment avez-vous pu mettre à profit vos connaissances sur la santé et la sécurité au travail ?</mat-label>
+          <textarea matInput rows="4" formControlName="miseEnPratiqueSanteSecurite"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Quels points forts avez-vous mis de l’avant durant cette 1re partie du stage ?</mat-label>
+          <textarea matInput rows="4" formControlName="pointsFortsPremierePartie"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Quels éléments souhaitez-vous améliorer au cours de la 2e partie du stage ?</mat-label>
+          <textarea matInput rows="4" formControlName="elementsAAmeliorerDeuxiemePartie"></textarea>
+        </mat-form-field>
+      </mat-card>
+
+      @if (successMessage()) {
+        <p style="color:green;">{{ successMessage() }}</p>
+      }
+
+      @if (errorMessage()) {
+        <p style="color:red;">{{ errorMessage() }}</p>
+      }
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+        @if (isSaving()) {
+          Enregistrement...
+        } @else {
+          Enregistrer le bilan mi-stage
+        }
+      </button>
+    </form>
+  </div>
+}

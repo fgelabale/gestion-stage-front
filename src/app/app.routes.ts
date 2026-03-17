@@ -7,6 +7,8 @@ import { MaitreStageAccessComponent } from './pages/maitre-stage-access/maitre-s
 import { StagiaireDashboardComponent } from './pages/stagiaire-dashboard-component/stagiaire-dashboard-component';
 import { StagiaireStageDetailComponent } from './pages/stagiaire-stage-detail-component/stagiaire-stage-detail-component';
 import { StagiaireRapportFormComponent } from './pages/stagiaire-rapport-form/stagiaire-rapport-form';
+import { StagiaireBilanMiStageComponent } from './pages/stagiaire-bilan-mi-stage-form/stagiaire-bilan-mi-stage-form';
+import { StagiaireBilanFinStageComponent } from './pages/stagiaire-bilan-fin-stage/stagiaire-bilan-fin-stage';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -42,6 +44,15 @@ export const routes: Routes = [
     component: StagiaireRapportFormComponent,
     canActivate: [authGuard],
   },
+  {
+  path: 'stagiaire/stages/:id/bilan-mi-stage',
+  component: StagiaireBilanMiStageComponent,
+  canActivate: [authGuard],
+},{
+  path: 'stagiaire/stages/:id/bilan-fin-stage',
+  component: StagiaireBilanFinStageComponent,
+  canActivate: [authGuard],
+},
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];

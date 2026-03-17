@@ -37,4 +37,20 @@ export class StagesService {
   upsertRapportHebdomadaire(payload: any) {
     return this.http.post(`${this.apiUrl}/rapports-hebdomadaires`, payload);
   }
+
+  getBilanMiStage(stageId: number) {
+    return this.http.get(`${this.apiUrl}/bilan-mi-stage/stage/${stageId}`);
+  }
+
+  upsertBilanMiStage(payload: any) {
+    return this.http.post(`${this.apiUrl}/bilan-mi-stage`, payload);
+  }
+
+  getBilanFinStage(stageId: number) {
+  return this.http.get(`${this.apiUrl}/bilan-fin-stage/stage/${stageId}`);
+}
+
+upsertBilanFinStage(payload: any) {
+  return this.http.post(`${this.apiUrl}/bilan-fin-stage`, payload);
+}
 }
