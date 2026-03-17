@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { StagesService } from '../../core/services/stage/stages.service';
+import { AppHeaderComponent } from '../../layout/app-header/app-header';
 
 @Component({
   selector: 'app-stagiaire-bilan-fin-stage',
@@ -23,6 +24,7 @@ import { StagesService } from '../../core/services/stage/stages.service';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    AppHeaderComponent
   ],
   templateUrl: './stagiaire-bilan-fin-stage.html',
 })

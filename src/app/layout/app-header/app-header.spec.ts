@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StagiaireBilanStageForm } from './stagiaire-bilan-stage-form';
+import { AppHeader } from './app-header';
 
-describe('StagiaireBilanStageForm', () => {
-  let component: StagiaireBilanStageForm;
-  let fixture: ComponentFixture<StagiaireBilanStageForm>;
+describe('AppHeader', () => {
+  let component: AppHeader;
+  let fixture: ComponentFixture<AppHeader>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StagiaireBilanStageForm],
+      imports: [AppHeader],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StagiaireBilanStageForm);
+    fixture = TestBed.createComponent(AppHeader);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
