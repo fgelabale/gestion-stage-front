@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 export class StagesService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getStagesManquants(): Observable<any> {
     return this.http.get(`${this.apiUrl}/tableau-synthese/admin/manquants`);
@@ -25,5 +25,16 @@ export class StagesService {
 
   getMonStageDetail(stageId: number) {
     return this.http.post(`${this.apiUrl}/stages/mon-stage/${stageId}`, {});
+  }
+
+  getRapportsByStage(stageId: number) {
+    return this.http.get(
+      `${this.apiUrl}/rapports-hebdomadaires/stage/${stageId}`,
+      {},
+    );
+  }
+
+  upsertRapportHebdomadaire(payload: any) {
+    return this.http.post(`${this.apiUrl}/rapports-hebdomadaires`, payload);
   }
 }

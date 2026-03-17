@@ -1,0 +1,140 @@
+@if (isLoading()) {
+  <div style="padding:24px;">
+    <p>Chargement...</p>
+  </div>
+} @else if (errorMessage() && !successMessage()) {
+  <div style="padding:24px;">
+    <p style="color:red;">{{ errorMessage() }}</p>
+  </div>
+} @else {
+  <div style="padding:24px; max-width:1000px; margin:0 auto;">
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <h1>Rapport hebdomadaire</h1>
+      <p><strong>Stage :</strong> {{ stageId() }}</p>
+      <p><strong>Semaine :</strong> {{ semaine() }}</p>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;">
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="goToWeek(-1)"
+          [disabled]="semaine() === 1"
+        >
+          Semaine précédente
+        </button>
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="goToWeek(1)"
+          [disabled]="semaine() === 7"
+        >
+          Semaine suivante
+        </button>
+
+        <a
+          mat-button
+          [routerLink]="['/stagiaire/stages', stageId()]"
+        >
+          Retour au stage
+        </a>
+      </div>
+    </mat-card>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-card style="padding:16px; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <h2 style="margin:0;">Tâches réalisées</h2>
+
+          <button mat-stroked-button type="button" (click)="addTache()">
+            Ajouter une tâche
+          </button>
+        </div>
+
+        @if (tachesControls().length === 0) {
+          <p>Aucune tâche pour le moment.</p>
+        } @else {
+          <div formArrayName="taches" style="margin-top:16px;">
+            @for (tache of tachesControls(); track $index) {
+              <div
+                [formGroupName]="$index"
+                style="border:1px solid #ddd; padding:16px; margin-bottom:16px; border-radius:8px;"
+              >
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="margin:0;">Tâche {{ $index + 1 }}</h3>
+
+                  <button
+                    mat-button
+                    color="warn"
+                    type="button"
+                    (click)="removeTache($index)"
+                    [disabled]="tachesControls().length === 1"
+                  >
+                    Retirer
+                  </button>
+                </div>
+
+                <mat-form-field appearance="outline" style="width:100%; margin-top:12px;">
+                  <mat-label>Description</mat-label>
+                  <textarea matInput rows="3" formControlName="description"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width:100%;">
+                  <mat-label>Logiciels utilisés</mat-label>
+                  <input matInput formControlName="logicielsUtilises" />
+                </mat-form-field>
+              </div>
+            }
+          </div>
+        }
+      </mat-card>
+<mat-card style="padding:16px; margin-bottom:20px;">
+        <h2>Autoévaluation</h2>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Niveau d’autonomie</mat-label>
+          <mat-select formControlName="niveauAutonomie">
+            @for (option of autonomieOptions; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Difficultés rencontrées</mat-label>
+          <textarea matInput rows="4" formControlName="difficultes"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Apprentissages réalisés</mat-label>
+          <textarea matInput rows="4" formControlName="apprentissages"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Solutions apportées</mat-label>
+          <textarea matInput rows="4" formControlName="solutions"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Axes d’amélioration</mat-label>
+          <textarea matInput rows="4" formControlName="axesAmelioration"></textarea>
+        </mat-form-field>
+      </mat-card>
+      @if (successMessage()) {
+        <p style="color:green;">{{ successMessage() }}</p>
+      }
+
+      @if (errorMessage() && !isLoading()) {
+        <p style="color:red;">{{ errorMessage() }}</p>
+      }
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+        @if (isSaving()) {
+          Enregistrement...
+        } @else {
+          Enregistrer le rapport
+        }
+      </button>
+    </form>
+  </div>
+}

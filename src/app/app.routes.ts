@@ -6,6 +6,7 @@ import { StageDetailComponent } from './pages/stage-detail/stage-detail.componen
 import { MaitreStageAccessComponent } from './pages/maitre-stage-access/maitre-stage-access.component';
 import { StagiaireDashboardComponent } from './pages/stagiaire-dashboard-component/stagiaire-dashboard-component';
 import { StagiaireStageDetailComponent } from './pages/stagiaire-stage-detail-component/stagiaire-stage-detail-component';
+import { StagiaireRapportFormComponent } from './pages/stagiaire-rapport-form/stagiaire-rapport-form';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -35,6 +36,11 @@ export const routes: Routes = [
   {
     path: 'maitre-stage/acces/:token',
     component: MaitreStageAccessComponent,
+  },
+  {
+    path: 'stagiaire/stages/:id/rapport/:semaine',
+    component: StagiaireRapportFormComponent,
+    canActivate: [authGuard],
   },
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },

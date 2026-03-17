@@ -1,100 +1,94 @@
 @if (isLoading()) {
-  <div style="padding:24px;">
-    <p>Chargement...</p>
-  </div>
+<div style="padding:24px;">
+  <p>Chargement...</p>
+</div>
 } @else if (errorMessage()) {
-  <div style="padding:24px;">
-    <p style="color:red;">{{ errorMessage() }}</p>
-  </div>
+<div style="padding:24px;">
+  <p style="color:red;">{{ errorMessage() }}</p>
+</div>
 } @else if (data()?.stage; as stage) {
-  <div style="padding:24px;">
-    <h1>Mon stage</h1>
+<div style="padding:24px;">
+  <h1>Mon stage</h1>
 
-    <p><strong>Titre :</strong> {{ stage.titre }}</p>
-    <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
-    <p>
-      <strong>Période :</strong>
-      {{ stage.dateDebut | date:'yyyy-MM-dd' }}
-      au
-      {{ stage.dateFin | date:'yyyy-MM-dd' }}
-    </p>
+  <p><strong>Titre :</strong> {{ stage.titre }}</p>
+  <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+  <p>
+    <strong>Période :</strong>
+    {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+    au
+    {{ stage.dateFin | date:'yyyy-MM-dd' }}
+  </p>
 
-    <p>
-      <strong>Maître de stage :</strong>
-      {{ stage.maitreStage?.prenom }} {{ stage.maitreStage?.nom }}
-    </p>
+  <p>
+    <strong>Maître de stage :</strong>
+    {{ stage.maitreStage?.prenom }} {{ stage.maitreStage?.nom }}
+  </p>
 
-    <p>
-      <strong>Superviseur :</strong>
-      {{ stage.superviseur?.prenom }} {{ stage.superviseur?.nom }}
-    </p>
+  <p>
+    <strong>Superviseur :</strong>
+    {{ stage.superviseur?.prenom }} {{ stage.superviseur?.nom }}
+  </p>
 
-    <h2 style="margin-top:24px;">Suivi</h2>
-    <p><strong>Nombre de rapports complétés :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>
-    <p>
-      <strong>Semaines manquantes :</strong>
-      {{
-        data()?.resume?.semainesManquantes?.length
-          ? data()?.resume?.semainesManquantes.join(', ')
-          : 'Aucune'
-      }}
-    </p>
-    <p><strong>Bilan mi-stage :</strong> {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}</p>
-    <p><strong>Bilan fin-stage :</strong> {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}</p>
+  <h2 style="margin-top:24px;">Suivi</h2>
+  <p><strong>Nombre de rapports complétés :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>
+  <p>
+    <strong>Semaines manquantes :</strong>
+    {{
+    data()?.resume?.semainesManquantes?.length
+    ? data()?.resume?.semainesManquantes.join(', ')
+    : 'Aucune'
+    }}
+  </p>
 
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
-      <a
-        mat-raised-button
-        color="primary"
-        [routerLink]="['/stagiaire/stages', stage.id, 'rapport', 1]"
-      >
-        Rapport hebdomadaire
-      </a>
+  <h2 style="margin-top:24px;">Accès rapide aux semaines</h2>
 
-      <a
-        mat-raised-button
-        color="accent"
-        [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']"
-      >
-        Bilan mi-stage
-      </a>
-
-      <a
-        mat-raised-button
-        color="accent"
-        [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']"
-      >
-        Bilan fin-stage
-      </a>
-    </div>
-
-    <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
-
-    @if (stage.rapportsHebdomadaires?.length) {
-      @for (rapport of stage.rapportsHebdomadaires; track rapport.id) {
-        <div style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
-          <h3>Semaine {{ rapport.numeroSemaine }}</h3>
-
-          <p><strong>Niveau d’autonomie :</strong> {{ rapport.niveauAutonomie }}</p>
-          <p><strong>Difficultés :</strong> {{ rapport.difficultes || '-' }}</p>
-          <p><strong>Apprentissages :</strong> {{ rapport.apprentissages || '-' }}</p>
-          <p><strong>Solutions :</strong> {{ rapport.solutions || '-' }}</p>
-          <p><strong>Axes d’amélioration :</strong> {{ rapport.axesAmelioration || '-' }}</p>
-
-          <ul>
-            @for (tache of rapport.taches; track tache.id) {
-              <li>
-                {{ tache.description }}
-                @if (tache.logicielsUtilises) {
-                  <span> — {{ tache.logicielsUtilises }}</span>
-                }
-              </li>
-            }
-          </ul>
-        </div>
-      }
-    } @else {
-      <p>Aucun rapport hebdomadaire pour le moment.</p>
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    @for (semaine of [1,2,3,4,5,6,7]; track semaine) {
+    <a mat-stroked-button [routerLink]="['/stagiaire/stages', stage.id, 'rapport', semaine]">
+      Semaine {{ semaine }}
+    </a>
     }
   </div>
+  <p><strong>Bilan mi-stage :</strong> {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}</p>
+   <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+    <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']">
+      Bilan mi-stage
+    </a>
+  </div>
+  <p><strong>Bilan fin-stage :</strong> {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}</p>
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+    <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']">
+      Bilan fin-stage
+    </a>
+  </div>
+
+  <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
+
+  @if (stage.rapportsHebdomadaires?.length) {
+  @for (rapport of stage.rapportsHebdomadaires; track rapport.id) {
+  <div style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
+    <h3>Semaine {{ rapport.numeroSemaine }}</h3>
+
+    <p><strong>Niveau d’autonomie :</strong> {{ rapport.niveauAutonomie }}</p>
+    <p><strong>Difficultés :</strong> {{ rapport.difficultes || '-' }}</p>
+    <p><strong>Apprentissages :</strong> {{ rapport.apprentissages || '-' }}</p>
+    <p><strong>Solutions :</strong> {{ rapport.solutions || '-' }}</p>
+    <p><strong>Axes d’amélioration :</strong> {{ rapport.axesAmelioration || '-' }}</p>
+
+    <ul>
+      @for (tache of rapport.taches; track tache.id) {
+      <li>
+        {{ tache.description }}
+        @if (tache.logicielsUtilises) {
+        <span> — {{ tache.logicielsUtilises }}</span>
+        }
+      </li>
+      }
+    </ul>
+  </div>
+  }
+  } @else {
+  <p>Aucun rapport hebdomadaire pour le moment.</p>
+  }
+</div>
 }
