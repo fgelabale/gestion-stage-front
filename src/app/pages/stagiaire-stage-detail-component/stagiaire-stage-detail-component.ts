@@ -1,19 +1,18 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { StagesService } from '../../core/services/stage/stages.service';
-import { PdfService } from '../../core/services/pdf/pdf.service';
 
 @Component({
-  selector: 'app-stage-detail',
+  selector: 'app-stagiaire-stage-detail',
   standalone: true,
-  imports: [MatButtonModule],
-  templateUrl: './stage-detail.component.html',
+  imports: [DatePipe, RouterLink, MatButtonModule],
+  templateUrl: './stagiaire-stage-detail-component.html',
 })
-export class StageDetailComponent implements OnInit {
+export class StagiaireStageDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private stagesService = inject(StagesService);
-  private pdfService = inject(PdfService);
 
   data = signal<any | null>(null);
   isLoading = signal(true);
@@ -28,23 +27,15 @@ export class StageDetailComponent implements OnInit {
       return;
     }
 
-    this.stagesService.getStageDetail(stageId).subscribe({
+    this.stagesService.getMonStageDetail(stageId).subscribe({
       next: (response) => {
         this.data.set(response);
         this.isLoading.set(false);
       },
       error: () => {
-        this.errorMessage.set('Impossible de charger le détail du stage.');
+        this.errorMessage.set('Impossible de charger ce stage.');
         this.isLoading.set(false);
       },
     });
-  }
-
-  downloadPdf(): void {
-    const stageId = this.data()?.stage?.id;
-
-    if (stageId) {
-      this.pdfService.downloadStagePdf(stageId);
-    }
   }
 }

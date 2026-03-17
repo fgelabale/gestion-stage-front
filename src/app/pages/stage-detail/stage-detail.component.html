@@ -1,4 +1,12 @@
-@if (data?.stage; as stage) {
+@if (isLoading()) {
+  <div style="padding:24px;">
+    <p>Chargement...</p>
+  </div>
+} @else if (errorMessage()) {
+  <div style="padding:24px;">
+    <p style="color:red;">{{ errorMessage() }}</p>
+  </div>
+} @else if (data()?.stage; as stage) {
   <div style="padding:24px;">
     <h1>Détail du stage</h1>
 
@@ -13,11 +21,21 @@
     <p><strong>Titre :</strong> {{ stage.titre }}</p>
 
     <h2 style="margin-top:24px;">Résumé</h2>
-    <p><strong>Nombre de rapports :</strong> {{ data.resume?.nombreRapportsHebdomadaires }}</p>
-    <p><strong>Semaines manquantes :</strong> {{ data.resume?.semainesManquantes?.join(', ') || 'Aucune' }}</p>
-    <p><strong>Bilan mi-stage :</strong> {{ data.resume?.bilanMiStageRempli ? 'Oui' : 'Non' }}</p>
-    <p><strong>Bilan fin-stage :</strong> {{ data.resume?.bilanFinStageRempli ? 'Oui' : 'Non' }}</p>
-    <p><strong>Évaluation maître de stage :</strong> {{ data.resume?.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}</p>
+    <p><strong>Nombre de rapports :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>
+    <p>
+      <strong>Semaines manquantes :</strong>
+      {{
+        data()?.resume?.semainesManquantes?.length
+          ? data()?.resume?.semainesManquantes.join(', ')
+          : 'Aucune'
+      }}
+    </p>
+    <p><strong>Bilan mi-stage :</strong> {{ data()?.resume?.bilanMiStageRempli ? 'Oui' : 'Non' }}</p>
+    <p><strong>Bilan fin-stage :</strong> {{ data()?.resume?.bilanFinStageRempli ? 'Oui' : 'Non' }}</p>
+    <p>
+      <strong>Évaluation maître de stage :</strong>
+      {{ data()?.resume?.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
+    </p>
 
     <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
 
@@ -28,13 +46,15 @@
           <p><strong>Niveau autonomie :</strong> {{ rapport.niveauAutonomie }}</p>
           <p><strong>Difficultés :</strong> {{ rapport.difficultes || '-' }}</p>
           <p><strong>Apprentissages :</strong> {{ rapport.apprentissages || '-' }}</p>
+          <p><strong>Solutions :</strong> {{ rapport.solutions || '-' }}</p>
+          <p><strong>Axes d’amélioration :</strong> {{ rapport.axesAmelioration || '-' }}</p>
 
           <ul>
             @for (tache of rapport.taches; track tache.id) {
               <li>
                 {{ tache.description }}
                 @if (tache.logicielsUtilises) {
-                  <span>— {{ tache.logicielsUtilises }}</span>
+                  <span> — {{ tache.logicielsUtilises }}</span>
                 }
               </li>
             }
@@ -44,9 +64,5 @@
     } @else {
       <p>Aucun rapport hebdomadaire.</p>
     }
-  </div>
-} @else {
-  <div style="padding:24px;">
-    <p>Chargement...</p>
   </div>
 }

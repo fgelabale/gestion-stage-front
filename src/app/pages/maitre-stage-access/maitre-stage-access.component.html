@@ -1,0 +1,224 @@
+<div style="padding: 24px; max-width: 1100px; margin: 0 auto;">
+  @if (isLoading()) {
+    <p>Chargement...</p>
+  } @else if (errorMessage() && !stageData()) {
+    <p style="color:red;">{{ errorMessage() }}</p>
+  } @else if (stage(); as stage) {
+    <mat-card style="margin-bottom: 20px; padding: 16px;">
+      <h1>Évaluation du maître de stage</h1>
+      <p><strong>Stagiaire :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
+      <p><strong>Groupe :</strong> {{ stage.etudiant?.groupe || '-' }}</p>
+      <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+      <p><strong>Période :</strong> {{ stage.dateDebut | date:'yyyy-MM-dd' }} au {{ stage.dateFin | date:'yyyy-MM-dd' }}</p>
+    </mat-card>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-card style="margin-bottom: 20px; padding: 16px;">
+        <h2>Identification</h2>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Nom de l’entreprise</mat-label>
+          <input matInput formControlName="nomEntreprise" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Nom complet du maître de stage</mat-label>
+          <input matInput formControlName="nomCompletMaitreStage" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Fonction / titre</mat-label>
+          <input matInput formControlName="fonctionTitreMaitreStage" />
+        </mat-form-field>
+      </mat-card>
+
+      <mat-card style="margin-bottom: 20px; padding: 16px;">
+        <h2>Assiduité et ponctualité</h2>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre d’heures de présence</mat-label>
+            <input matInput type="number" formControlName="nombreHeuresPresence" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre d’absences</mat-label>
+            <input matInput type="number" formControlName="nombreAbsences" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre de retards</mat-label>
+            <input matInput type="number" formControlName="nombreRetards" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre de départs hâtifs</mat-label>
+            <input matInput type="number" formControlName="nombreDepartsHatifs" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Respect de la durée des pauses</mat-label>
+          <mat-select formControlName="respectDureePauses">
+            @for (option of yesNoOptions; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </mat-card>
+
+      <mat-card style="margin-bottom: 20px; padding: 16px;">
+        <h2>Tâches effectuées</h2>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Tâches effectuées par le stagiaire</mat-label>
+          <textarea matInput rows="5" formControlName="tachesEffectuees"></textarea>
+        </mat-form-field>
+      </mat-card>
+
+      <mat-card style="margin-bottom: 20px; padding: 16px;">
+        <h2>Compétences linguistiques</h2>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <mat-form-field appearance="outline">
+            <mat-label>Français parlé</mat-label>
+            <mat-select formControlName="francaisParle">
+              @for (option of noteOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Français écrit</mat-label>
+            <mat-select formControlName="francaisEcrit">
+              @for (option of noteOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Anglais parlé</mat-label>
+            <mat-select formControlName="anglaisParle">
+              @for (option of noteOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Anglais écrit</mat-label>
+            <mat-select formControlName="anglaisEcrit">
+              @for (option of noteOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card>
+
+      <mat-card style="margin-bottom: 20px; padding: 16px;">
+        <h2>Compétences techniques</h2>
+
+        <div style="display:grid; grid-template-columns:1fr; gap:16px;">
+          <mat-form-field appearance="outline">
+            <mat-label>Maîtrise les équipements informatiques</mat-label>
+            <mat-select formControlName="maitriseEquipementsInformatiques">
+              @for (option of noteOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Maîtrise les logiciels informatiques</mat-label>
+            <mat-select formControlName="maitriseLogicielsInformatiques">
+              @for (option of noteOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Rapidité d’exécution</mat-label>
+            <mat-select formControlName="rapiditeExecution">
+              @for (option of noteOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card>
+
+      <mat-card style="margin-bottom: 20px; padding: 16px;">
+        <h2>Qualités personnelles et professionnelles</h2>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          @for (field of [
+            ['courtoisie','Courtoisie'],
+            ['capaciteAdaptation','Capacité d’adaptation'],
+            ['initiative','Initiative'],
+            ['espritCollaboration','Esprit de collaboration'],
+            ['jugement','Jugement'],
+            ['sensResponsabilites','Sens des responsabilités'],
+            ['autonomie','Autonomie'],
+            ['respectEcheanciers','Respect des échéanciers'],
+            ['sensOrganisation','Sens de l’organisation'],
+            ['capaciteTravaillerSousPression','Capacité à travailler sous pression'],
+            ['tenueVestimentaire','Tenue vestimentaire'],
+            ['relationAutorite','Relation avec l’autorité'],
+            ['qualiteTravail','Qualité du travail'],
+            ['relationCollegues','Relation avec les collègues'],
+            ['faciliteApprentissage','Facilité d’apprentissage'],
+            ['relationClientele','Relation avec la clientèle']
+          ]; track field[0]) {
+            <mat-form-field appearance="outline">
+              <mat-label>{{ field[1] }}</mat-label>
+              <mat-select [formControlName]="field[0]">
+                @for (option of noteOptions; track option) {
+                  <mat-option [value]="option">{{ option }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+        </div>
+      </mat-card>
+
+      <mat-card style="margin-bottom: 20px; padding: 16px;">
+        <h2>Appréciation globale et commentaires</h2>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Aptitudes appréciées</mat-label>
+          <textarea matInput rows="4" formControlName="aptitudesAppreciees"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Éléments à améliorer</mat-label>
+          <textarea matInput rows="4" formControlName="elementsAmelioration"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Commentaires</mat-label>
+          <textarea matInput rows="4" formControlName="commentaire"></textarea>
+        </mat-form-field>
+      </mat-card>
+
+      @if (successMessage()) {
+        <p style="color:green;">{{ successMessage() }}</p>
+      }
+
+      @if (errorMessage()) {
+        <p style="color:red;">{{ errorMessage() }}</p>
+      }
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+        @if (isSaving()) {
+          Enregistrement...
+        } @else {
+          Enregistrer l’évaluation
+        }
+      </button>
+    </form>
+  }
+</div>

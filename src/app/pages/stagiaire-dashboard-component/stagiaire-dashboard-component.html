@@ -1,0 +1,60 @@
+<div style="padding:24px;">
+  <h1>Mon tableau de bord stagiaire</h1>
+
+  <p>
+    Bienvenue
+    {{ currentUser?.firstName || currentUser?.prenom || '' }}
+    {{ currentUser?.lastName || currentUser?.nom || '' }}
+  </p>
+
+  @if (isLoading()) {
+    <p>Chargement...</p>
+  } @else if (errorMessage()) {
+    <p style="color:red;">{{ errorMessage() }}</p>
+  } @else if (stages().length === 0) {
+    <p>Aucun stage disponible.</p>
+  } @else {
+    <div style="display:grid; gap:16px;">
+      @for (stage of stages(); track stage.id) {
+        <mat-card style="padding:16px;">
+          <h2>{{ stage.titre }}</h2>
+
+          <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+          <p>
+            <strong>Période :</strong>
+            {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+            au
+            {{ stage.dateFin | date:'yyyy-MM-dd' }}
+          </p>
+
+          <p>
+            <strong>Semaines manquantes :</strong>
+            {{
+              getMissingWeeks(stage).length
+                ? getMissingWeeks(stage).join(', ')
+                : 'Aucune'
+            }}
+          </p>
+
+          <p>
+            <strong>Bilan mi-stage :</strong>
+            {{ stage.bilanMiStage ? 'Complété' : 'À faire' }}
+          </p>
+
+          <p>
+            <strong>Bilan fin-stage :</strong>
+            {{ stage.bilanFinStage ? 'Complété' : 'À faire' }}
+          </p>
+
+          <a
+            mat-raised-button
+            color="primary"
+            [routerLink]="['/stagiaire/stages', stage.id]"
+          >
+            Voir mon stage
+          </a>
+        </mat-card>
+      }
+    </div>
+  }
+</div>
