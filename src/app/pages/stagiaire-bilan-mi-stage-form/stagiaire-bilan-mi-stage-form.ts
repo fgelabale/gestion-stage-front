@@ -66,8 +66,12 @@ export class StagiaireBilanMiStageComponent {
     elementsAAmeliorerDeuxiemePartie: [''],
   });
 
-  constructor() {
-    const stageId = Number(this.route.snapshot.paramMap.get('id'));
+constructor() {
+  this.route.paramMap.subscribe((params) => {
+    const stageId = Number(params.get('id'));
+
+    this.successMessage.set('');
+    this.errorMessage.set('');
 
     if (!stageId || Number.isNaN(stageId)) {
       this.errorMessage.set('Identifiant de stage invalide.');
@@ -76,10 +80,35 @@ export class StagiaireBilanMiStageComponent {
     }
 
     this.stageId.set(stageId);
-    this.form.patchValue({ stageId });
+    this.form.reset({
+      stageId,
+      accueilParMaitreStage: '',
+      espaceTravailAssigne: '',
+      visiteDesLieux: '',
+      presentationAuxEmployes: '',
+      ambianceTravailBonne: '',
+      consignesMaitreStageComprises: '',
+      reglesEntrepriseComprises: '',
+      aisePoserQuestions: '',
+      accueilApprecie: '',
+      tachesEnLienAvecFormation: '',
+      tachesVariees: '',
+      tachesRecommencees: '',
+      retroactionRecue: '',
+      progressionDansExecution: '',
+      difficultesDansCertainesTaches: '',
+      respectSanteSecurite: '',
+      integrationEntrepriseCommentaire: '',
+      actionsIntegrationEquipe: '',
+      miseEnPratiqueSanteSecurite: '',
+      pointsFortsPremierePartie: '',
+      elementsAAmeliorerDeuxiemePartie: '',
+    });
 
+    this.isLoading.set(true);
     this.loadBilan();
-  }
+  });
+}
 
   private loadBilan(): void {
     const stageId = this.stageId();

@@ -92,10 +92,56 @@ export class MaitreStageAccessComponent {
   });
 
   constructor() {
-    const token = this.route.snapshot.paramMap.get('token') ?? '';
+  this.route.paramMap.subscribe((params) => {
+    const token = params.get('token') ?? '';
+
     this.token.set(token);
+    this.stageData.set(null);
+    this.errorMessage.set('');
+    this.successMessage.set('');
+    this.isLoading.set(true);
+
+    this.form.reset({
+      nomEntreprise: '',
+      nomCompletMaitreStage: '',
+      fonctionTitreMaitreStage: '',
+      nombreHeuresPresence: null,
+      nombreAbsences: null,
+      nombreRetards: null,
+      nombreDepartsHatifs: null,
+      respectDureePauses: '',
+      tachesEffectuees: '',
+      francaisParle: '',
+      francaisEcrit: '',
+      anglaisParle: '',
+      anglaisEcrit: '',
+      maitriseEquipementsInformatiques: '',
+      maitriseLogicielsInformatiques: '',
+      rapiditeExecution: '',
+      courtoisie: '',
+      capaciteAdaptation: '',
+      initiative: '',
+      espritCollaboration: '',
+      jugement: '',
+      sensResponsabilites: '',
+      autonomie: '',
+      respectEcheanciers: '',
+      sensOrganisation: '',
+      capaciteTravaillerSousPression: '',
+      tenueVestimentaire: '',
+      relationAutorite: '',
+      qualiteTravail: '',
+      relationCollegues: '',
+      faciliteApprentissage: '',
+      relationClientele: '',
+      aptitudesAppreciees: '',
+      elementsAmelioration: '',
+      commentaire: '',
+    });
+
     this.loadAccess();
-  }
+  });
+}
 
   get stage() {
     return computed(() => this.stageData()?.stage ?? null);

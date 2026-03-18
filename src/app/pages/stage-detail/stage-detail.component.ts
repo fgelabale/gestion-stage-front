@@ -19,6 +19,34 @@ export class StageDetailComponent implements OnInit {
   isLoading = signal(true);
   errorMessage = signal('');
 
+  constructor() {
+  this.route.paramMap.subscribe((params) => {
+    const stageId = Number(params.get('id'));
+
+    this.data.set(null);
+    this.errorMessage.set('');
+
+    if (!stageId || Number.isNaN(stageId)) {
+      this.errorMessage.set('Identifiant de stage invalide.');
+      this.isLoading.set(false);
+      return;
+    }
+
+    this.isLoading.set(true);
+
+    this.stagesService.getStageDetail(stageId).subscribe({
+      next: (response) => {
+        this.data.set(response);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.errorMessage.set('Impossible de charger le détail du stage.');
+        this.isLoading.set(false);
+      },
+    });
+  });
+}
+
   ngOnInit(): void {
     const stageId = Number(this.route.snapshot.paramMap.get('id'));
 

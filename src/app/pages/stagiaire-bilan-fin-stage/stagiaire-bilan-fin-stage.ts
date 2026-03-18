@@ -71,7 +71,11 @@ export class StagiaireBilanFinStageComponent {
   });
 
   constructor() {
-    const stageId = Number(this.route.snapshot.paramMap.get('id'));
+  this.route.paramMap.subscribe((params) => {
+    const stageId = Number(params.get('id'));
+
+    this.successMessage.set('');
+    this.errorMessage.set('');
 
     if (!stageId || Number.isNaN(stageId)) {
       this.errorMessage.set('Identifiant de stage invalide.');
@@ -80,10 +84,38 @@ export class StagiaireBilanFinStageComponent {
     }
 
     this.stageId.set(stageId);
-    this.form.patchValue({ stageId });
+    this.form.reset({
+      stageId,
+      tachesEnLienAvecFormation: '',
+      tachesVariees: '',
+      tachesRecommencees: '',
+      retroactionRecue: '',
+      progressionDansExecution: '',
+      difficultesDansCertainesTaches: '',
+      respectSanteSecurite: '',
+      appreciationGlobaleTaches: '',
+      difficulteTachesCorrespondNiveau: '',
+      nouvellesConnaissancesAcquises: '',
+      consolidationConnaissancesCompetences: '',
+      stageUtileEtCompleteFormation: '',
+      mieuxPrepareMarcheTravail: '',
+      appreciationEchangesMaitreStage: '',
+      satisfactionStage: '',
+      integrationEntrepriseEvolution: '',
+      actionsIntegrationDeuxiemePartie: '',
+      formationAdequationMondeProfessionnel: '',
+      competencesADevelopper: '',
+      competenceCapitale: '',
+      pointsFortsDeuxiemePartie: '',
+      elementsAAmeliorerFuturEmploi: '',
+      perceptionMetierEvolution: '',
+      confirmationChoixCarriere: '',
+    });
 
+    this.isLoading.set(true);
     this.loadBilan();
-  }
+  });
+}
 
   private loadBilan(): void {
     const stageId = this.stageId();

@@ -23,7 +23,7 @@ import { StagesService } from '../../core/services/stage/stages.service';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   templateUrl: './stagiaire-rapport-form.html',
 })
@@ -60,24 +60,37 @@ export class StagiaireRapportFormComponent {
   });
 
   constructor() {
-    const stageId = Number(this.route.snapshot.paramMap.get('id'));
-    const semaine = Number(this.route.snapshot.paramMap.get('semaine'));
+    this.route.paramMap.subscribe((params) => {
+      const stageId = Number(params.get('id'));
+      const semaine = Number(params.get('semaine'));
 
-    if (!stageId || Number.isNaN(stageId) || !semaine || Number.isNaN(semaine)) {
-      this.errorMessage.set('Paramètres invalides.');
-      this.isLoading.set(false);
-      return;
-    }
+      this.successMessage.set('');
+      this.errorMessage.set('');
 
-    this.stageId.set(stageId);
-    this.semaine.set(semaine);
+      if (!stageId || Number.isNaN(stageId) || !semaine || Number.isNaN(semaine)) {
+        this.errorMessage.set('Paramètres invalides.');
+        this.isLoading.set(false);
+        return;
+      }
 
-    this.form.patchValue({
-      stageId,
-      numeroSemaine: semaine,
+      this.stageId.set(stageId);
+      this.semaine.set(semaine);
+
+      this.form.patchValue({
+        stageId,
+        numeroSemaine: semaine,
+        niveauAutonomie: '',
+        difficultes: '',
+        apprentissages: '',
+        solutions: '',
+        axesAmelioration: '',
+      });
+
+      this.tachesFormArray.clear();
+      this.isLoading.set(true);
+
+      this.loadExistingRapport();
     });
-
-    this.loadExistingRapport();
   }
 
   get tachesFormArray(): FormArray {
@@ -174,18 +187,12 @@ export class StagiaireRapportFormComponent {
   goToWeek(delta: number): void {
     const stageId = this.stageId();
     const currentWeek = this.semaine();
-console.log(stageId);
-console.log(currentWeek);
-console.log(!stageId || !currentWeek);
-
 
     if (!stageId || !currentWeek) return;
 
     const nextWeek = currentWeek + delta;
-console.log(nextWeek);
 
     if (nextWeek < 1 || nextWeek > 7) return;
-console.log("ococ");
 
     this.router.navigate(['/stagiaire/stages', stageId, 'rapport', nextWeek]);
   }

@@ -1,120 +1,136 @@
 @if (isLoading()) {
-  <div style="padding:24px;">
-    <p>Chargement...</p>
-  </div>
+<div style="padding:24px;">
+  <p>Chargement...</p>
+</div>
 } @else if (errorMessage()) {
-  <div style="padding:24px;">
-    <p style="color:red;">{{ errorMessage() }}</p>
-  </div>
+<div style="padding:24px;">
+  <p style="color:red;">{{ errorMessage() }}</p>
+</div>
 } @else if (data()?.stage; as stage) {
-  <div style="padding:24px;">
-    <h1>Mon stage</h1>
+<div style="padding:24px;">
+  <h1>Mon stage</h1>
 
-    <p><strong>Titre :</strong> {{ stage.titre }}</p>
-    <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
-    <p>
-      <strong>Période :</strong>
-      {{ stage.dateDebut | date:'yyyy-MM-dd' }}
-      au
-      {{ stage.dateFin | date:'yyyy-MM-dd' }}
-    </p>
+  <p><strong>Titre :</strong> {{ stage.titre }}</p>
+  <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+  <p>
+    <strong>Période :</strong>
+    {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+    au
+    {{ stage.dateFin | date:'yyyy-MM-dd' }}
+  </p>
 
-    <p>
-      <strong>Maître de stage :</strong>
-      {{ stage.maitreStage?.prenom }} {{ stage.maitreStage?.nom }}
-    </p>
+  <p>
+    <strong>Maître de stage :</strong>
+    {{ stage.maitreStage?.prenom }} {{ stage.maitreStage?.nom }}
+  </p>
 
-    <p>
-      <strong>Superviseur :</strong>
-      {{ stage.superviseur?.prenom }} {{ stage.superviseur?.nom }}
-    </p>
+  <p>
+    <strong>Superviseur :</strong>
+    {{ stage.superviseur?.prenom }} {{ stage.superviseur?.nom }}
+  </p>
 
-    <h2 style="margin-top:24px;">Suivi</h2>
+  <h2 style="margin-top:24px;">Suivi</h2>
 
-    <p>
-      <strong>Nombre de rapports complétés :</strong>
-      {{ data()?.resume?.nombreRapportsHebdomadaires }}
-    </p>
+  <p>
+    <strong>Nombre de rapports complétés :</strong>
+    {{ data()?.resume?.nombreRapportsHebdomadaires }}
+  </p>
 
-    <p>
-      <strong>Semaines manquantes :</strong>
-      {{
-        data()?.resume?.semainesManquantes?.length
-          ? data()?.resume?.semainesManquantes.join(', ')
-          : 'Aucune'
-      }}
-    </p>
+  <p>
+    <strong>Semaines manquantes :</strong>
+    {{
+    data()?.resume?.semainesManquantes?.length
+    ? data()?.resume?.semainesManquantes.join(', ')
+    : 'Aucune'
+    }}
+  </p>
 
-    <p>
-      <strong>Bilan mi-stage :</strong>
-      <span [style]="getBadgeStyle(data()?.resume?.bilanMiStageRempli)">
-        {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}
-      </span>
-    </p>
+  <p>
+    <strong>Bilan mi-stage :</strong>
+    <span [style]="getBadgeStyle(data()?.resume?.bilanMiStageRempli)">
+      {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}
+    </span>
+  </p>
 
-    <p>
-      <strong>Bilan fin-stage :</strong>
-      <span [style]="getBadgeStyle(data()?.resume?.bilanFinStageRempli)">
-        {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}
-      </span>
-    </p>
+  <p>
+    <strong>Bilan fin-stage :</strong>
+    <span [style]="getBadgeStyle(data()?.resume?.bilanFinStageRempli)">
+      {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}
+    </span>
+  </p>
 
-    <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
+  <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:24px;">
-      @for (semaine of [1, 2, 3, 4, 5, 6, 7]; track semaine) {
-        <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
-          <p><strong>Semaine {{ semaine }}</strong></p>
-          <p>
-            <span [style]="getBadgeStyle(isWeekCompleted(stage, semaine))">
-              {{ isWeekCompleted(stage, semaine) ? 'Complétée' : 'À faire' }}
-            </span>
-          </p>
-          <a
-            mat-stroked-button
-            color="primary"
-            [routerLink]="['/stagiaire/stages', stage.id, 'rapport', semaine]"
-          >
-            Ouvrir
-          </a>
-        </div>
-      }
+  <div style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:12px;
+    margin-bottom:24px;
+  ">
+    @for (semaine of [1,2,3,4,5,6,7]; track semaine) {
+    <div style="
+        border:1px solid #ddd;
+        border-radius:8px;
+        padding:12px;
+        background:white;
+      ">
+      <p style="margin:0 0 8px 0;">
+        <strong>Semaine {{ semaine }}</strong>
+      </p>
+
+      <p style="margin:0 0 12px 0;">
+        <span [style]="getBadgeStyle(isWeekCompleted(stage,semaine))">
+          {{ isWeekCompleted(stage,semaine) ? 'Complétée' : 'À faire' }}
+        </span>
+      </p>
+
+      <a mat-stroked-button color="primary" [routerLink]="['/stagiaire/stages',stage.id,'rapport',semaine]">
+        Ouvrir
+      </a>
+    </div>
+    }
+  </div>
+
+  <h2>Bilans</h2>
+
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <div style="
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:16px;
+      min-width:240px;
+    ">
+      <p><strong>Bilan mi-stage</strong></p>
+
+      <p>
+        <span [style]="getBadgeStyle(data()?.resume?.bilanMiStageRempli)">
+          {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}
+        </span>
+      </p>
+
+      <a mat-raised-button color="primary" [routerLink]="['/stagiaire/stages',stage.id,'bilan-mi-stage']">
+        Ouvrir
+      </a>
     </div>
 
-    <h2>Bilans</h2>
+    <div style="
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:16px;
+      min-width:240px;
+    ">
+      <p><strong>Bilan fin-stage</strong></p>
 
-    <div style="display:flex; gap:16px; flex-wrap:wrap;">
-      <div style="border:1px solid #ddd; border-radius:8px; padding:16px; min-width:240px;">
-        <p><strong>Bilan mi-stage</strong></p>
-        <p>
-          <span [style]="getBadgeStyle(data()?.resume?.bilanMiStageRempli)">
-            {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}
-          </span>
-        </p>
-        <a
-          mat-raised-button
-          color="primary"
-          [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']"
-        >
-          Ouvrir
-        </a>
-      </div>
+      <p>
+        <span [style]="getBadgeStyle(data()?.resume?.bilanFinStageRempli)">
+          {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}
+        </span>
+      </p>
 
-      <div style="border:1px solid #ddd; border-radius:8px; padding:16px; min-width:240px;">
-        <p><strong>Bilan fin-stage</strong></p>
-        <p>
-          <span [style]="getBadgeStyle(data()?.resume?.bilanFinStageRempli)">
-            {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}
-          </span>
-        </p>
-        <a
-          mat-raised-button
-          color="accent"
-          [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']"
-        >
-          Ouvrir
-        </a>
-      </div>
+      <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages',stage.id,'bilan-fin-stage']">
+        Ouvrir
+      </a>
     </div>
   </div>
+</div>
 }
