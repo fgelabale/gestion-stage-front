@@ -3,12 +3,11 @@ import { RouterLink } from '@angular/router';
 import { StagesService } from '../../core/services/stage/stages.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { AppHeaderComponent } from '../../layout/app-header/app-header';
  
 @Component({
   selector: 'app-admin-manquants',
   standalone: true,
-  imports: [RouterLink, MatTableModule, MatButtonModule, AppHeaderComponent],
+  imports: [RouterLink, MatTableModule, MatButtonModule],
   templateUrl: './admin-manquants.component.html',
 })
 export class AdminManquantsComponent implements OnInit {

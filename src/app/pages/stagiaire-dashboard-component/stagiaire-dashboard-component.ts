@@ -42,4 +42,9 @@ export class StagiaireDashboardComponent implements OnInit {
     );
     return semainesAttendues.filter((s) => !semainesRemplies.includes(s));
   }
+  
+  getFirstMissingWeek(stage: any): number {
+    const missing = this.getMissingWeeks(stage);
+    return missing.length ? missing[0] : 1;
+  }
 }

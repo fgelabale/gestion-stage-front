@@ -8,53 +8,64 @@
   </p>
 
   @if (isLoading()) {
-    <p>Chargement...</p>
+  <p>Chargement...</p>
   } @else if (errorMessage()) {
-    <p style="color:red;">{{ errorMessage() }}</p>
+  <p style="color:red;">{{ errorMessage() }}</p>
   } @else if (stages().length === 0) {
-    <p>Aucun stage disponible.</p>
+  <p>Aucun stage disponible.</p>
   } @else {
-    <div style="display:grid; gap:16px;">
-      @for (stage of stages(); track stage.id) {
-        <mat-card style="padding:16px;">
-          <h2>{{ stage.titre }}</h2>
+  <div style="display:grid; gap:16px;">
+    @for (stage of stages(); track stage.id) {
+    <mat-card style="padding:16px;">
+      <h2>{{ stage.titre }}</h2>
 
-          <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
-          <p>
-            <strong>Période :</strong>
-            {{ stage.dateDebut | date:'yyyy-MM-dd' }}
-            au
-            {{ stage.dateFin | date:'yyyy-MM-dd' }}
-          </p>
+      <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+      <p>
+        <strong>Période :</strong>
+        {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+        au
+        {{ stage.dateFin | date:'yyyy-MM-dd' }}
+      </p>
 
-          <p>
-            <strong>Semaines manquantes :</strong>
-            {{
-              getMissingWeeks(stage).length
-                ? getMissingWeeks(stage).join(', ')
-                : 'Aucune'
-            }}
-          </p>
+      <p>
+        <strong>Semaines manquantes :</strong>
+        {{
+        getMissingWeeks(stage).length
+        ? getMissingWeeks(stage).join(', ')
+        : 'Aucune'
+        }}
+      </p>
 
-          <p>
-            <strong>Bilan mi-stage :</strong>
-            {{ stage.bilanMiStage ? 'Complété' : 'À faire' }}
-          </p>
+      <p>
+        <strong>Bilan mi-stage :</strong>
+        {{ stage.bilanMiStage ? 'Complété' : 'À faire' }}
+      </p>
 
-          <p>
-            <strong>Bilan fin-stage :</strong>
-            {{ stage.bilanFinStage ? 'Complété' : 'À faire' }}
-          </p>
+      <p>
+        <strong>Bilan fin-stage :</strong>
+        {{ stage.bilanFinStage ? 'Complété' : 'À faire' }}
+      </p>
 
-          <a
-            mat-raised-button
-            color="primary"
-            [routerLink]="['/stagiaire/stages', stage.id]"
-          >
-            Voir mon stage
-          </a>
-        </mat-card>
-      }
-    </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+        <a mat-raised-button color="primary" [routerLink]="['/stagiaire/stages', stage.id]">
+          Voir le stage
+        </a>
+
+        <a mat-stroked-button color="primary"
+          [routerLink]="['/stagiaire/stages', stage.id, 'rapport', getFirstMissingWeek(stage)]">
+          Rapport à compléter
+        </a>
+
+        <a mat-stroked-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']">
+          Bilan mi-stage
+        </a>
+
+        <a mat-stroked-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']">
+          Bilan fin-stage
+        </a>
+      </div>
+    </mat-card>
+    }
+  </div>
   }
 </div>

@@ -174,12 +174,18 @@ export class StagiaireRapportFormComponent {
   goToWeek(delta: number): void {
     const stageId = this.stageId();
     const currentWeek = this.semaine();
+console.log(stageId);
+console.log(currentWeek);
+console.log(!stageId || !currentWeek);
+
 
     if (!stageId || !currentWeek) return;
 
     const nextWeek = currentWeek + delta;
+console.log(nextWeek);
 
     if (nextWeek < 1 || nextWeek > 7) return;
+console.log("ococ");
 
     this.router.navigate(['/stagiaire/stages', stageId, 'rapport', nextWeek]);
   }
