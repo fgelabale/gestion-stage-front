@@ -16,7 +16,7 @@
 
     <h2 style="margin-top:24px;">Identification</h2>
     <p><strong>Étudiant :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
-    <p><strong>Groupe :</strong> {{ stage.etudiant?.groupe || '-' }}</p>
+    <p><strong>Groupe :</strong> {{ stage.etudiant?.groupe?.nom || '-' }}</p>
     <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
     <p><strong>Titre :</strong> {{ stage.titre }}</p>
 

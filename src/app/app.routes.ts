@@ -12,6 +12,7 @@ import { roleGuard } from './core/guards/role-guard';
 import { loginRedirectGuard } from './core/guards/login-redirect-guard';
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout';
 import { StagiaireLayoutComponent } from './layout/stagiaire-layout/stagiaire-layout';
+import { AdminEtudiantsComponent } from './pages/admin-etudiants/admin-etudiants';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,10 @@ export const routes: Routes = [
       {
         path: 'stages/:id',
         component: StageDetailComponent,
+      },
+      {
+        path: 'etudiants',
+        component: AdminEtudiantsComponent,
       },
     ],
   },
