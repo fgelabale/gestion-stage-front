@@ -1,19 +1,19 @@
 <app-header />
 
 <div style="display:flex; min-height:calc(100vh - 73px);">
-  <aside
-    style="
+  <aside style="
       width:240px;
       border-right:1px solid #ddd;
       padding:16px;
       background:#fafafa;
-    "
-  >
+    ">
     <h3>Administration</h3>
 
     <div style="display:flex; flex-direction:column; gap:8px;">
       <a mat-button [routerLink]="['/admin/manquants']">Stages à suivre</a>
       <a mat-button [routerLink]="['/admin/etudiants']">Étudiants</a>
+      <a mat-button [routerLink]="['/admin/affectation-superviseur']">Affectation superviseur</a>
+      <a mat-button [routerLink]="['/admin/superviseurs']">Superviseurs</a>
     </div>
   </aside>
 

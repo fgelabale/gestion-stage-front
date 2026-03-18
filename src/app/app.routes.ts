@@ -13,6 +13,9 @@ import { loginRedirectGuard } from './core/guards/login-redirect-guard';
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout';
 import { StagiaireLayoutComponent } from './layout/stagiaire-layout/stagiaire-layout';
 import { AdminEtudiantsComponent } from './pages/admin-etudiants/admin-etudiants';
+import { AdminAffectationSuperviseurComponent } from './pages/admin-affectation-superviseur/admin-affectation-superviseur';
+import { AdminSuperviseursComponent } from './pages/admin-superviseurs/admin-superviseurs';
+import { AdminEtudiantCreateComponent } from './pages/admin-etudiant-create/admin-etudiant-create';
 
 export const routes: Routes = [
   {
@@ -37,6 +40,18 @@ export const routes: Routes = [
       {
         path: 'etudiants',
         component: AdminEtudiantsComponent,
+      },
+      {
+        path: 'affectation-superviseur',
+        component: AdminAffectationSuperviseurComponent,
+      },
+      {
+        path: 'superviseurs',
+        component: AdminSuperviseursComponent,
+      },
+      {
+        path: 'etudiants/nouveau',
+        component: AdminEtudiantCreateComponent,
       },
     ],
   },

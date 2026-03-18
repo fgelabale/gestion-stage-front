@@ -1,0 +1,65 @@
+<div style="padding:24px; max-width:700px;">
+  <h1>Ajouter un étudiant</h1>
+
+  @if (isLoading()) {
+    <p>Chargement...</p>
+  } @else {
+    <mat-card style="padding:16px;">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="prenom" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="nom" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Courriel</mat-label>
+          <input matInput formControlName="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" formControlName="motDePasse" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Groupe</mat-label>
+          <mat-select formControlName="groupeId">
+            <mat-option [value]="null">Aucun groupe</mat-option>
+            @for (groupe of groupes(); track groupe.id) {
+              <mat-option [value]="groupe.id">
+                {{ groupe.nom }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        @if (successMessage()) {
+          <p style="color:green;">{{ successMessage() }}</p>
+        }
+
+        @if (errorMessage()) {
+          <p style="color:red;">{{ errorMessage() }}</p>
+        }
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+            @if (isSaving()) {
+              Enregistrement...
+            } @else {
+              Ajouter l’étudiant
+            }
+          </button>
+
+          <button mat-stroked-button type="button" (click)="goToEtudiants()">
+            Retour à la liste
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  }
+</div>

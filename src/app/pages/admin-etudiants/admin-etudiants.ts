@@ -6,11 +6,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { UsersService } from '../../core/services/users/users';
 import { GroupesService } from '../../core/services/groupes/groupes';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-etudiants',
   standalone: true,
   imports: [
+    RouterLink,
     MatButtonModule,
     MatTableModule,
     MatFormFieldModule,
@@ -118,12 +120,12 @@ export class AdminEtudiantsComponent {
             rows.map((r) =>
               r.id === row.id
                 ? {
-                    ...r,
-                    groupeId: updated.groupeId,
-                    groupe: updated.groupe,
-                    selectedGroupeId: updated.groupeId ?? null,
-                    isSaving: false,
-                  }
+                  ...r,
+                  groupeId: updated.groupeId,
+                  groupe: updated.groupe,
+                  selectedGroupeId: updated.groupeId ?? null,
+                  isSaving: false,
+                }
                 : r,
             ),
           );

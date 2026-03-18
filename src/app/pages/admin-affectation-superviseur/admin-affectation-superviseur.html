@@ -1,0 +1,49 @@
+<div style="padding:24px; max-width:700px;">
+  <h1>Affecter un superviseur à un groupe</h1>
+
+  @if (isLoading()) {
+    <p>Chargement...</p>
+  } @else {
+    <mat-card style="padding:16px;">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Groupe</mat-label>
+          <mat-select formControlName="groupeId">
+            @for (groupe of groupes(); track groupe.id) {
+              <mat-option [value]="groupe.id">
+                {{ groupe.nom }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Superviseur</mat-label>
+          <mat-select formControlName="superviseurId">
+            @for (superviseur of superviseurs(); track superviseur.id) {
+              <mat-option [value]="superviseur.id">
+                {{ superviseur.prenom }} {{ superviseur.nom }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        @if (successMessage()) {
+          <p style="color:green;">{{ successMessage() }}</p>
+        }
+
+        @if (errorMessage()) {
+          <p style="color:red;">{{ errorMessage() }}</p>
+        }
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+          @if (isSaving()) {
+            Enregistrement...
+          } @else {
+            Affecter
+          }
+        </button>
+      </form>
+    </mat-card>
+  }
+</div>
