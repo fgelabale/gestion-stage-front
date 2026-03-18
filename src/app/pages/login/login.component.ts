@@ -34,7 +34,7 @@ export class LoginComponent {
 
   constructor() {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/admin/manquants']);
+      this.router.navigate([this.authService.getDefaultRouteByRole()]);
     }
   }
 
@@ -50,7 +50,7 @@ export class LoginComponent {
     this.authService.login(this.form.getRawValue()).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/admin/manquants']);
+        this.router.navigate([this.authService.getDefaultRouteByRole()]);
       },
       error: (error) => {
         this.isLoading = false;

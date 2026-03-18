@@ -55,4 +55,30 @@ export class AuthService {
   getCurrentUser() {
     return this.tokenStorage.getUser();
   }
+
+  getCurrentUserRole(): string | null {
+    return this.getCurrentUser()?.role ?? null;
+  }
+
+  hasRole(...roles: string[]): boolean {
+    const role = this.getCurrentUserRole();
+    return !!role && roles.includes(role);
+  }
+
+  getDefaultRouteByRole(): string {
+    const role = this.getCurrentUserRole();
+
+    switch (role) {
+      case 'ADMIN':
+        return '/admin/manquants';
+      case 'ETUDIANT':
+        return '/stagiaire';
+      case 'SUPERVISEUR':
+        return '/admin/manquants';
+      case 'MAITRE_STAGE':
+        return '/login';
+      default:
+        return '/login';
+    }
+  }
 }

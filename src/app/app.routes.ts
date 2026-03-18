@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth-guard';
 import { LoginComponent } from './pages/login/login.component';
 import { AdminManquantsComponent } from './pages/admin-manquants/admin-manquants.component';
 import { StageDetailComponent } from './pages/stage-detail/stage-detail.component';
@@ -9,50 +8,52 @@ import { StagiaireStageDetailComponent } from './pages/stagiaire-stage-detail-co
 import { StagiaireRapportFormComponent } from './pages/stagiaire-rapport-form/stagiaire-rapport-form';
 import { StagiaireBilanMiStageComponent } from './pages/stagiaire-bilan-mi-stage-form/stagiaire-bilan-mi-stage-form';
 import { StagiaireBilanFinStageComponent } from './pages/stagiaire-bilan-fin-stage/stagiaire-bilan-fin-stage';
+import { roleGuard } from './core/guards/role-guard';
+import { loginRedirectGuard } from './core/guards/login-redirect-guard';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-
+  { path: 'login', component: LoginComponent, canActivate: [loginRedirectGuard] },
   {
     path: 'admin/manquants',
     component: AdminManquantsComponent,
-    canActivate: [authGuard],
+    canActivate: [roleGuard('ADMIN', 'SUPERVISEUR')],
   },
   {
     path: 'admin/stages/:id',
     component: StageDetailComponent,
-    canActivate: [authGuard],
+    canActivate: [roleGuard('ADMIN', 'SUPERVISEUR')],
   },
 
   {
     path: 'stagiaire',
     component: StagiaireDashboardComponent,
-    canActivate: [authGuard],
+    canActivate: [roleGuard('ETUDIANT')],
   },
   {
     path: 'stagiaire/stages/:id',
     component: StagiaireStageDetailComponent,
-    canActivate: [authGuard],
+    canActivate: [roleGuard('ETUDIANT')],
+  },
+  {
+    path: 'stagiaire/stages/:id/rapport/:semaine',
+    component: StagiaireRapportFormComponent,
+    canActivate: [roleGuard('ETUDIANT')],
+  },
+  {
+    path: 'stagiaire/stages/:id/bilan-mi-stage',
+    component: StagiaireBilanMiStageComponent,
+    canActivate: [roleGuard('ETUDIANT')],
+  },
+  {
+    path: 'stagiaire/stages/:id/bilan-fin-stage',
+    component: StagiaireBilanFinStageComponent,
+    canActivate: [roleGuard('ETUDIANT')],
   },
 
   {
     path: 'maitre-stage/acces/:token',
     component: MaitreStageAccessComponent,
   },
-  {
-    path: 'stagiaire/stages/:id/rapport/:semaine',
-    component: StagiaireRapportFormComponent,
-    canActivate: [authGuard],
-  },
-  {
-  path: 'stagiaire/stages/:id/bilan-mi-stage',
-  component: StagiaireBilanMiStageComponent,
-  canActivate: [authGuard],
-},{
-  path: 'stagiaire/stages/:id/bilan-fin-stage',
-  component: StagiaireBilanFinStageComponent,
-  canActivate: [authGuard],
-},
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
