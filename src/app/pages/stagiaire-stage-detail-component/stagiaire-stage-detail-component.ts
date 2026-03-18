@@ -3,12 +3,11 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { StagesService } from '../../core/services/stage/stages.service';
-import { AppHeaderComponent } from '../../layout/app-header/app-header';
 
 @Component({
   selector: 'app-stagiaire-stage-detail',
   standalone: true,
-  imports: [DatePipe, RouterLink, MatButtonModule, AppHeaderComponent],
+  imports: [DatePipe, RouterLink, MatButtonModule],
   templateUrl: './stagiaire-stage-detail-component.html',
 })
 export class StagiaireStageDetailComponent implements OnInit {

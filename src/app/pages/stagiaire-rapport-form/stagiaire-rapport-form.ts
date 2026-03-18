@@ -12,7 +12,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StagesService } from '../../core/services/stage/stages.service';
-import { AppHeaderComponent } from '../../layout/app-header/app-header';
 
 @Component({
   selector: 'app-stagiaire-rapport-form',
@@ -24,8 +23,7 @@ import { AppHeaderComponent } from '../../layout/app-header/app-header';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
-    AppHeaderComponent
+    MatSelectModule
   ],
   templateUrl: './stagiaire-rapport-form.html',
 })

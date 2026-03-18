@@ -5,12 +5,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { StagesService } from '../../core/services/stage/stages.service';
 import { AuthService } from '../../core/services/auth/auth.service';
-import { AppHeaderComponent } from '../../layout/app-header/app-header';
 
 @Component({
   selector: 'app-stagiaire-dashboard',
   standalone: true,
-  imports: [DatePipe, RouterLink, MatCardModule, MatButtonModule, AppHeaderComponent],
+  imports: [DatePipe, RouterLink, MatCardModule, MatButtonModule],
   templateUrl: './stagiaire-dashboard-component.html'
 })
 export class StagiaireDashboardComponent implements OnInit {
