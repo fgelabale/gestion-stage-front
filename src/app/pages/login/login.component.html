@@ -4,43 +4,38 @@
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>Courriel</mat-label>
-        <input matInput formControlName="email" />
+        <mat-label>Courriel école</mat-label>
+        <input matInput formControlName="courrielEcole" />
 
-        @if (form.controls.email.touched && form.controls.email.invalid) {
-          <mat-error>
-            @if (form.controls.email.errors?.['required']) {
-              Le courriel est requis.
-            } @else if (form.controls.email.errors?.['email']) {
-              Le format du courriel est invalide.
-            }
-          </mat-error>
+        @if (form.controls.courrielEcole.touched && form.controls.courrielEcole.invalid) {
+        <mat-error>
+          @if (form.controls.courrielEcole.errors?.['required']) {
+          Le courriel est requis.
+          } @else if (form.controls.courrielEcole.errors?.['courrielEcole']) {
+          Le format du courriel est invalide.
+          }
+        </mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Mot de passe</mat-label>
-        <input matInput type="password" formControlName="password" />
+        <input matInput type="password" formControlName="motDePasse" />
 
-        @if (form.controls.password.touched && form.controls.password.invalid) {
-          <mat-error>Le mot de passe est requis.</mat-error>
+        @if (form.controls.motDePasse.touched && form.controls.motDePasse.invalid) {
+        <mat-error>Le mot de passe est requis.</mat-error>
         }
       </mat-form-field>
 
       @if (errorMessage) {
-        <p style="color:red;">{{ errorMessage }}</p>
+      <p style="color:red;">{{ errorMessage }}</p>
       }
 
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="isLoading"
-      >
+      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
         @if (isLoading) {
-          Connexion...
+        Connexion...
         } @else {
-          Se connecter
+        Se connecter
         }
       </button>
     </form>

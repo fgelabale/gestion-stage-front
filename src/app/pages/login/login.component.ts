@@ -28,10 +28,10 @@ export class LoginComponent {
   isLoading = false;
 
   form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    courrielEcole: ['', [Validators.required, Validators.email]],
+    motDePasse: ['', [Validators.required]],
   });
-
+  
   constructor() {
     if (this.authService.isLoggedIn()) {
       this.router.navigate([this.authService.getDefaultRouteByRole()]);

@@ -3,8 +3,8 @@
 
   <p>
     Bienvenue
-    {{ currentUser?.firstName || currentUser?.prenom || '' }}
-    {{ currentUser?.lastName || currentUser?.nom || '' }}
+    {{ currentUser?.prenom || '' }}
+    {{ currentUser?.nom || '' }}
   </p>
 
   @if (isLoading()) {
@@ -19,7 +19,7 @@
     <mat-card style="padding:16px;">
       <h2>{{ stage.titre }}</h2>
 
-      <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+      <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom }}</p>
       <p>
         <strong>Période :</strong>
         {{ stage.dateDebut | date:'yyyy-MM-dd' }}

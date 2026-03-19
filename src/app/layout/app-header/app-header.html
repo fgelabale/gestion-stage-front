@@ -15,8 +15,8 @@
 
   <div style="display:flex; align-items:center; gap:12px;">
     <span>
-      {{ currentUser?.firstName || currentUser?.prenom || '' }}
-      {{ currentUser?.lastName || currentUser?.nom || '' }}
+      {{ currentUser?.prenom || '' }}
+      {{ currentUser?.nom || '' }}
     </span>
 
     <button mat-stroked-button color="primary" (click)="logout()">

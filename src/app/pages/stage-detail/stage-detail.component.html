@@ -1,68 +1,68 @@
 @if (isLoading()) {
-  <div style="padding:24px;">
-    <p>Chargement...</p>
-  </div>
+<div style="padding:24px;">
+  <p>Chargement...</p>
+</div>
 } @else if (errorMessage()) {
-  <div style="padding:24px;">
-    <p style="color:red;">{{ errorMessage() }}</p>
-  </div>
+<div style="padding:24px;">
+  <p style="color:red;">{{ errorMessage() }}</p>
+</div>
 } @else if (data()?.stage; as stage) {
-  <div style="padding:24px;">
-    <h1>Détail du stage</h1>
+<div style="padding:24px;">
+  <h1>Détail du stage</h1>
 
-    <button mat-raised-button color="primary" (click)="downloadPdf()">
-      Télécharger le PDF
-    </button>
+  <button mat-raised-button color="primary" (click)="downloadPdf()">
+    Télécharger le PDF
+  </button>
 
-    <h2 style="margin-top:24px;">Identification</h2>
-    <p><strong>Étudiant :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
-    <p><strong>Groupe :</strong> {{ stage.etudiant?.groupe?.nom || '-' }}</p>
-    <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
-    <p><strong>Titre :</strong> {{ stage.titre }}</p>
+  <h2 style="margin-top:24px;">Identification</h2>
+  <p><strong>Étudiant :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
+  <p><strong>Groupe :</strong> {{ stage.etudiant?.groupe?.nom || '-' }}</p>
+  <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
+  <p><strong>Titre :</strong> {{ stage.titre }}</p>
 
-    <h2 style="margin-top:24px;">Résumé</h2>
-    <p><strong>Nombre de rapports :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>
-    <p>
-      <strong>Semaines manquantes :</strong>
-      {{
-        data()?.resume?.semainesManquantes?.length
-          ? data()?.resume?.semainesManquantes.join(', ')
-          : 'Aucune'
-      }}
-    </p>
-    <p><strong>Bilan mi-stage :</strong> {{ data()?.resume?.bilanMiStageRempli ? 'Oui' : 'Non' }}</p>
-    <p><strong>Bilan fin-stage :</strong> {{ data()?.resume?.bilanFinStageRempli ? 'Oui' : 'Non' }}</p>
-    <p>
-      <strong>Évaluation maître de stage :</strong>
-      {{ data()?.resume?.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
-    </p>
+  <h2 style="margin-top:24px;">Résumé</h2>
+  <p><strong>Nombre de rapports :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>
+  <p>
+    <strong>Semaines manquantes :</strong>
+    {{
+    data()?.resume?.semainesManquantes?.length
+    ? data()?.resume?.semainesManquantes.join(', ')
+    : 'Aucune'
+    }}
+  </p>
+  <p><strong>Bilan mi-stage :</strong> {{ data()?.resume?.bilanMiStageRempli ? 'Oui' : 'Non' }}</p>
+  <p><strong>Bilan fin-stage :</strong> {{ data()?.resume?.bilanFinStageRempli ? 'Oui' : 'Non' }}</p>
+  <p>
+    <strong>Évaluation maître de stage :</strong>
+    {{ data()?.resume?.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
+  </p>
 
-    <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
+  <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
 
-    @if (stage.rapportsHebdomadaires?.length) {
-      @for (rapport of stage.rapportsHebdomadaires; track rapport.id) {
-        <div style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
-          <h3>Semaine {{ rapport.numeroSemaine }}</h3>
-          <p><strong>Niveau autonomie :</strong> {{ rapport.niveauAutonomie }}</p>
-          <p><strong>Difficultés :</strong> {{ rapport.difficultes || '-' }}</p>
-          <p><strong>Apprentissages :</strong> {{ rapport.apprentissages || '-' }}</p>
-          <p><strong>Solutions :</strong> {{ rapport.solutions || '-' }}</p>
-          <p><strong>Axes d’amélioration :</strong> {{ rapport.axesAmelioration || '-' }}</p>
+  @if (stage.rapportsHebdomadaires?.length) {
+  @for (rapport of stage.rapportsHebdomadaires; track rapport.id) {
+  <div style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
+    <h3>Semaine {{ rapport.numeroSemaine }}</h3>
+    <p><strong>Niveau autonomie :</strong> {{ rapport.niveauAutonomie }}</p>
+    <p><strong>Difficultés :</strong> {{ rapport.difficultes || '-' }}</p>
+    <p><strong>Apprentissages :</strong> {{ rapport.apprentissages || '-' }}</p>
+    <p><strong>Solutions :</strong> {{ rapport.solutions || '-' }}</p>
+    <p><strong>Axes d’amélioration :</strong> {{ rapport.axesAmelioration || '-' }}</p>
 
-          <ul>
-            @for (tache of rapport.taches; track tache.id) {
-              <li>
-                {{ tache.description }}
-                @if (tache.logicielsUtilises) {
-                  <span> — {{ tache.logicielsUtilises }}</span>
-                }
-              </li>
-            }
-          </ul>
-        </div>
+    <ul>
+      @for (tache of rapport.taches; track tache.id) {
+      <li>
+        {{ tache.description }}
+        @if (tache.logicielsUtilises) {
+        <span> — {{ tache.logicielsUtilises }}</span>
+        }
+      </li>
       }
-    } @else {
-      <p>Aucun rapport hebdomadaire.</p>
-    }
+    </ul>
   </div>
+  }
+  } @else {
+  <p>Aucun rapport hebdomadaire.</p>
+  }
+</div>
 }

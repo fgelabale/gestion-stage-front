@@ -27,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    canActivate: [roleGuard('ADMIN', 'SUPERVISEUR')],
+    canActivate: [roleGuard('ADMIN', 'ADMIN_READER', 'SUPERVISEUR')],
     children: [
       {
         path: 'manquants',

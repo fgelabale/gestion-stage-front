@@ -11,7 +11,7 @@
   <h1>Mon stage</h1>
 
   <p><strong>Titre :</strong> {{ stage.titre }}</p>
-  <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+  <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
   <p>
     <strong>Période :</strong>
     {{ stage.dateDebut | date:'yyyy-MM-dd' }}

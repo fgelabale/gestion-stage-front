@@ -5,20 +5,24 @@ import { environment } from '../../../../environments/environment';
 import { TokenStorageService } from '../token-storage/token-storage.service';
 
 export interface LoginRequest {
-  email: string;
-  password: string;
+  courrielEcole: string;
+  motDePasse: string;
 }
 
 export interface LoginResponse {
   access_token: string;
   user: {
     id: number;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-    prenom?: string;
-    nom?: string;
+    courrielEcole: string;
+    prenom: string;
+    nom: string;
+    telephone?: string | null;
     role: string;
+    etudiant?: {
+      id: number;
+      groupeId?: number | null;
+      groupe?: string | null;
+    } | null;
   };
 }
 
@@ -70,13 +74,11 @@ export class AuthService {
 
     switch (role) {
       case 'ADMIN':
+      case 'ADMIN_READER':
+      case 'SUPERVISEUR':
         return '/admin/manquants';
       case 'ETUDIANT':
         return '/stagiaire';
-      case 'SUPERVISEUR':
-        return '/admin/manquants';
-      case 'MAITRE_STAGE':
-        return '/login';
       default:
         return '/login';
     }

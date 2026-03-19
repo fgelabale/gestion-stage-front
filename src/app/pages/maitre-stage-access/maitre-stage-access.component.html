@@ -8,7 +8,7 @@
       <h1>Évaluation du maître de stage</h1>
       <p><strong>Stagiaire :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
       <p><strong>Groupe :</strong>{{ stage.etudiant?.groupe?.nom || '-' }}</p>
-      <p><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+      <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
       <p><strong>Période :</strong> {{ stage.dateDebut | date:'yyyy-MM-dd' }} au {{ stage.dateFin | date:'yyyy-MM-dd' }}</p>
     </mat-card>
 
