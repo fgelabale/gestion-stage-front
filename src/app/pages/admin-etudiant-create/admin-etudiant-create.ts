@@ -13,7 +13,6 @@ import { GroupesService } from '../../core/services/groupes/groupes';
   selector: 'app-admin-etudiant-create',
   standalone: true,
   imports: [
-    RouterLink,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,

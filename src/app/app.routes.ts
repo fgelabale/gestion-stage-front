@@ -16,6 +16,7 @@ import { AdminEtudiantsComponent } from './pages/admin-etudiants/admin-etudiants
 import { AdminAffectationSuperviseurComponent } from './pages/admin-affectation-superviseur/admin-affectation-superviseur';
 import { AdminSuperviseursComponent } from './pages/admin-superviseurs/admin-superviseurs';
 import { AdminEtudiantCreateComponent } from './pages/admin-etudiant-create/admin-etudiant-create';
+import { AdminImportCsvComponent } from './pages/admin-import-csv/admin-import-csv';
 
 export const routes: Routes = [
   {
@@ -52,6 +53,11 @@ export const routes: Routes = [
       {
         path: 'etudiants/nouveau',
         component: AdminEtudiantCreateComponent,
+      },
+      {
+        path: 'import-csv',
+        component: AdminImportCsvComponent,
+        canActivate: [roleGuard('ADMIN')],
       },
     ],
   },

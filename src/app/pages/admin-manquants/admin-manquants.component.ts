@@ -138,4 +138,17 @@ export class AdminManquantsComponent implements OnInit {
   formatSemainesManquantes(semaines: number[]): string {
     return semaines?.length ? semaines.join(', ') : 'Aucune';
   }
+
+  formatBadgeStatut(statut: string): string {
+    switch (statut) {
+      case 'COMPLET':
+        return 'Complet';
+      case 'EN_RETARD':
+        return 'En retard';
+      case 'A_SURVEILLER':
+        return 'À surveiller';
+      default:
+        return 'Inconnu';
+    }
+  }
 }
