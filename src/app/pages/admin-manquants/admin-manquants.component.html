@@ -2,246 +2,274 @@
   <h1>Administration des stages</h1>
 
   @if (isLoading()) {
-    <p>Chargement...</p>
+  <p>Chargement...</p>
   } @else if (errorMessage()) {
-    <p style="color:red;">{{ errorMessage() }}</p>
+  <p style="color:red;">{{ errorMessage() }}</p>
   } @else {
-    <div
-      style="
+  <div style="
         display:flex;
         gap:16px;
         flex-wrap:wrap;
         align-items:flex-end;
         margin-bottom:24px;
-      "
-    >
-      <mat-form-field appearance="outline" style="min-width:220px;">
-        <mat-label>Filtrer par groupe</mat-label>
-        <mat-select
-          [value]="groupeFilter()"
-          (valueChange)="setGroupeFilter($event)"
-        >
-          @for (groupe of groupes(); track groupe) {
-            <mat-option [value]="groupe">{{ groupe }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      ">
+    <mat-form-field appearance="outline" style="min-width:220px;">
+      <mat-label>Filtrer par groupe</mat-label>
+      <mat-select [value]="groupeFilter()" (valueChange)="setGroupeFilter($event)">
+        @for (groupe of groupes(); track groupe) {
+        <mat-option [value]="groupe">{{ groupe }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" style="min-width:320px;">
-        <mat-label>Recherche</mat-label>
-        <input
-          matInput
-          [value]="texteFilter()"
-          (input)="setTexteFilter($any($event.target).value)"
-          placeholder="Nom, entreprise, groupe..."
-        />
-      </mat-form-field>
+    <mat-form-field appearance="outline" style="min-width:320px;">
+      <mat-label>Recherche</mat-label>
+      <input matInput [value]="texteFilter()" (input)="setTexteFilter($any($event.target).value)"
+        placeholder="Nom, entreprise, groupe..." />
+    </mat-form-field>
+  </div>
+
+  <div style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    gap:12px;
+    margin-bottom:24px;
+  ">
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+      <p><strong>Total</strong></p>
+      <p>{{ resume().total }}</p>
     </div>
 
-    <h2>Stages en cours ({{ stagesEnCours().length }})</h2>
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+      <p><strong>Stages en cours</strong></p>
+      <p>{{ resume().enCours }}</p>
+    </div>
 
-    @if (stagesEnCours().length === 0) {
-      <p>Aucun stage en cours.</p>
-    } @else {
-      <table
-        mat-table
-        [dataSource]="stagesEnCours()"
-        class="mat-elevation-z2"
-        style="width:100%; margin-bottom:32px;"
-      >
-        <ng-container matColumnDef="etudiant">
-          <th mat-header-cell *matHeaderCellDef>Étudiant</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.etudiant?.prenom }} {{ row.etudiant?.nom }}
-          </td>
-        </ng-container>
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+      <p><strong>Stages terminés</strong></p>
+      <p>{{ resume().termines }}</p>
+    </div>
 
-        <ng-container matColumnDef="groupe">
-          <th mat-header-cell *matHeaderCellDef>Groupe</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.groupe || '-' }}
-          </td>
-        </ng-container>
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+      <p><strong>Incomplets</strong></p>
+      <p>{{ resume().incomplets }}</p>
+    </div>
 
-        <ng-container matColumnDef="entreprise">
-          <th mat-header-cell *matHeaderCellDef>Entreprise</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.entreprise }}
-          </td>
-        </ng-container>
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+      <p><strong>Mi-bilan en retard</strong></p>
+      <p>{{ resume().miBilanEnRetard }}</p>
+    </div>
 
-        <ng-container matColumnDef="dateDebut">
-          <th mat-header-cell *matHeaderCellDef>Début</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.dateDebut | date:'yyyy-MM-dd' }}
-          </td>
-        </ng-container>
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+      <p><strong>Bilan final en retard</strong></p>
+      <p>{{ resume().bilanFinalEnRetard }}</p>
+    </div>
+  </div>
+  <h2>Stages en cours ({{ stagesEnCours().length }})</h2>
 
-        <ng-container matColumnDef="dateFin">
-          <th mat-header-cell *matHeaderCellDef>Fin</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.dateFin | date:'yyyy-MM-dd' }}
-          </td>
-        </ng-container>
+  @if (stagesEnCours().length === 0) {
+  <p>Aucun stage en cours.</p>
+  } @else {
+  <table mat-table [dataSource]="stagesEnCours()" class="mat-elevation-z2" style="width:100%; margin-bottom:32px;">
+    <ng-container matColumnDef="etudiant">
+      <th mat-header-cell *matHeaderCellDef>Étudiant</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.etudiant?.prenom }} {{ row.etudiant?.nom }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="semainesManquantes">
-          <th mat-header-cell *matHeaderCellDef>Semaines manquantes</th>
-          <td mat-cell *matCellDef="let row">
-            {{ formatSemainesManquantes(row.semainesManquantes) }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="groupe">
+      <th mat-header-cell *matHeaderCellDef>Groupe</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.groupe || '-' }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="miBilan">
-          <th mat-header-cell *matHeaderCellDef>Mi-bilan</th>
-          <td mat-cell *matCellDef="let row">
-            <span [style]="getBadgeStyle(row.statutMiBilan)">
-              {{ formatBadgeStatut(row.statutMiBilan) }}
-            </span>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="entreprise">
+      <th mat-header-cell *matHeaderCellDef>Entreprise</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.entreprise }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="bilanFinal">
-          <th mat-header-cell *matHeaderCellDef>Bilan final</th>
-          <td mat-cell *matCellDef="let row">
-            <span [style]="getBilanFinalBadgeStyle(row.statutBilanFinal)">
-              {{ formatBadgeStatut(row.statutBilanFinal) }}
-            </span>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="dateDebut">
+      <th mat-header-cell *matHeaderCellDef>Début</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.dateDebut | date:'yyyy-MM-dd' }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="evaluationMaitreStage">
-          <th mat-header-cell *matHeaderCellDef>Éval maître</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="dateFin">
+      <th mat-header-cell *matHeaderCellDef>Fin</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.dateFin | date:'yyyy-MM-dd' }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="statut">
-          <th mat-header-cell *matHeaderCellDef>Statut global</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.statutGlobal }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="semainesManquantes">
+      <th mat-header-cell *matHeaderCellDef>Semaines manquantes</th>
+      <td mat-cell *matCellDef="let row">
+        {{ formatSemainesManquantes(row.semainesManquantes) }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let row">
-            <a
-              mat-button
-              color="primary"
-              [routerLink]="['/admin/stages', row.stageId]"
-            >
-              Voir
-            </a>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="miBilan">
+      <th mat-header-cell *matHeaderCellDef>Mi-bilan</th>
+      <td mat-cell *matCellDef="let row">
+        <span [style]="getBadgeStyle(row.statutMiBilan)">
+          {{ formatStatut(row.statutMiBilan) }}
+        </span>
+      </td>
+    </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-    }
+    <ng-container matColumnDef="bilanFinal">
+      <th mat-header-cell *matHeaderCellDef>Bilan final</th>
+      <td mat-cell *matCellDef="let row">
+        <span [style]="getBilanFinalBadgeStyle(row.statutBilanFinal)">
+          {{ formatStatut(row.statutBilanFinal) }}
+        </span>
+      </td>
+    </ng-container>
 
-    <h2>Stages terminés ({{ stagesTermines().length }})</h2>
+    <ng-container matColumnDef="evaluationMaitreStage">
+      <th mat-header-cell *matHeaderCellDef>Éval maître</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
+      </td>
+    </ng-container>
 
-    @if (stagesTermines().length === 0) {
-      <p>Aucun stage terminé.</p>
-    } @else {
-      <table
-        mat-table
-        [dataSource]="stagesTermines()"
-        class="mat-elevation-z2"
-        style="width:100%;"
-      >
-        <ng-container matColumnDef="etudiant">
-          <th mat-header-cell *matHeaderCellDef>Étudiant</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.etudiant?.prenom }} {{ row.etudiant?.nom }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="statut">
+      <th mat-header-cell *matHeaderCellDef>Statut global</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.statutGlobal }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="groupe">
-          <th mat-header-cell *matHeaderCellDef>Groupe</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.groupe || '-' }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="pdf">
+      <th mat-header-cell *matHeaderCellDef>PDF</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button (click)="openPdf(row.stageId)">
+          PDF
+        </button>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="entreprise">
-          <th mat-header-cell *matHeaderCellDef>Entreprise</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.entreprise }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let row">
+        <a mat-button color="primary" [routerLink]="['/admin/stages', row.stageId]">
+          Voir
+        </a>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="dateDebut">
-          <th mat-header-cell *matHeaderCellDef>Début</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.dateDebut | date:'yyyy-MM-dd' }}
-          </td>
-        </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  }
 
-        <ng-container matColumnDef="dateFin">
-          <th mat-header-cell *matHeaderCellDef>Fin</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.dateFin | date:'yyyy-MM-dd' }}
-          </td>
-        </ng-container>
+  <h2>Stages terminés ({{ stagesTermines().length }})</h2>
 
-        <ng-container matColumnDef="semainesManquantes">
-          <th mat-header-cell *matHeaderCellDef>Semaines manquantes</th>
-          <td mat-cell *matCellDef="let row">
-            {{ formatSemainesManquantes(row.semainesManquantes) }}
-          </td>
-        </ng-container>
+  @if (stagesTermines().length === 0) {
+  <p>Aucun stage terminé.</p>
+  } @else {
+  <table mat-table [dataSource]="stagesTermines()" class="mat-elevation-z2" style="width:100%;">
+    <ng-container matColumnDef="etudiant">
+      <th mat-header-cell *matHeaderCellDef>Étudiant</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.etudiant?.prenom }} {{ row.etudiant?.nom }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="miBilan">
-          <th mat-header-cell *matHeaderCellDef>Mi-bilan</th>
-          <td mat-cell *matCellDef="let row">
-            <span [style]="getBadgeStyle(row.statutMiBilan)">
-              {{ formatBadgeStatut(row.statutMiBilan) }}
-            </span>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="groupe">
+      <th mat-header-cell *matHeaderCellDef>Groupe</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.groupe || '-' }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="bilanFinal">
-          <th mat-header-cell *matHeaderCellDef>Bilan final</th>
-          <td mat-cell *matCellDef="let row">
-            <span [style]="getBilanFinalBadgeStyle(row.statutBilanFinal)">
-              {{ formatBadgeStatut(row.statutBilanFinal) }}
-            </span>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="entreprise">
+      <th mat-header-cell *matHeaderCellDef>Entreprise</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.entreprise }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="evaluationMaitreStage">
-          <th mat-header-cell *matHeaderCellDef>Éval maître</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="dateDebut">
+      <th mat-header-cell *matHeaderCellDef>Début</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.dateDebut | date:'yyyy-MM-dd' }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="statut">
-          <th mat-header-cell *matHeaderCellDef>Statut global</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.statutGlobal }}
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="dateFin">
+      <th mat-header-cell *matHeaderCellDef>Fin</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.dateFin | date:'yyyy-MM-dd' }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let row">
-            <a
-              mat-button
-              color="primary"
-              [routerLink]="['/admin/stages', row.stageId]"
-            >
-              Voir
-            </a>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="semainesManquantes">
+      <th mat-header-cell *matHeaderCellDef>Semaines manquantes</th>
+      <td mat-cell *matCellDef="let row">
+        {{ formatSemainesManquantes(row.semainesManquantes) }}
+      </td>
+    </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-    }
+    <ng-container matColumnDef="miBilan">
+      <th mat-header-cell *matHeaderCellDef>Mi-bilan</th>
+      <td mat-cell *matCellDef="let row">
+        <span [style]="getBadgeStyle(row.statutMiBilan)">
+          {{ formatStatut(row.statutMiBilan) }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bilanFinal">
+      <th mat-header-cell *matHeaderCellDef>Bilan final</th>
+      <td mat-cell *matCellDef="let row">
+        <span [style]="getBilanFinalBadgeStyle(row.statutBilanFinal)">
+          {{ formatStatut(row.statutBilanFinal) }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="evaluationMaitreStage">
+      <th mat-header-cell *matHeaderCellDef>Éval maître</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="statut">
+      <th mat-header-cell *matHeaderCellDef>Statut global</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.statutGlobal }}
+      </td>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="pdf">
+      <th mat-header-cell *matHeaderCellDef>PDF</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button (click)="openPdf(row.stageId)">
+          PDF
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let row">
+        <a mat-button color="primary" [routerLink]="['/admin/stages', row.stageId]">
+          Voir
+        </a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  }
   }
 </div>

@@ -4,7 +4,7 @@
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>Courriel école</mat-label>
+        <mat-label>Courriel</mat-label>
         <input matInput formControlName="courrielEcole" />
 
         @if (form.controls.courrielEcole.touched && form.controls.courrielEcole.invalid) {

@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StagesService } from '../../core/services/stage/stages.service';
 import { DatePipe } from '@angular/common';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-manquants',
@@ -24,6 +26,7 @@ import { DatePipe } from '@angular/common';
 })
 export class AdminManquantsComponent implements OnInit {
   private stagesService = inject(StagesService);
+  private apiUrl = environment.apiUrl;
 
   displayedColumns = [
     'etudiant',
@@ -36,6 +39,7 @@ export class AdminManquantsComponent implements OnInit {
     'bilanFinal',
     'evaluationMaitreStage',
     'statut',
+    'pdf',
     'actions',
   ];
 
@@ -45,6 +49,7 @@ export class AdminManquantsComponent implements OnInit {
 
   groupeFilter = signal<string>('TOUS');
   texteFilter = signal<string>('');
+  constructor(private http: HttpClient) {}
 
   groupes = computed(() => {
     const values = this.stages()
@@ -139,16 +144,47 @@ export class AdminManquantsComponent implements OnInit {
     return semaines?.length ? semaines.join(', ') : 'Aucune';
   }
 
-  formatBadgeStatut(statut: string): string {
-    switch (statut) {
+  resume = computed(() => {
+    const rows = this.filteredStages();
+
+    return {
+      total: rows.length,
+      enCours: rows.filter((r) => r.isStageEnCours).length,
+      termines: rows.filter((r) => r.isStageTermine).length,
+      incomplets: rows.filter((r) => r.statutGlobal === 'INCOMPLET').length,
+      miBilanEnRetard: rows.filter((r) => r.isMiBilanEnRetard).length,
+      bilanFinalEnRetard: rows.filter((r) => r.isBilanFinalEnRetard).length,
+    };
+  });
+
+  openPdf(stageId: number): void {
+    //window.open(`${this.apiUrl}/pdf/stage/${stageId}`, '_blank');
+    this.http
+      .get(`${this.apiUrl}/pdf/stage/${stageId}`, {
+        responseType: 'blob',
+      })
+      .subscribe((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `stage-${stageId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      });
+  }
+
+  formatStatut(value: string): string {
+    switch (value) {
       case 'COMPLET':
         return 'Complet';
-      case 'EN_RETARD':
-        return 'En retard';
       case 'A_SURVEILLER':
         return 'À surveiller';
+      case 'EN_RETARD':
+        return 'En retard';
+      case 'INCOMPLET':
+        return 'Incomplet';
       default:
-        return 'Inconnu';
+        return value;
     }
   }
 }
