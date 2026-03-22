@@ -17,6 +17,8 @@ import { AdminAffectationSuperviseurComponent } from './pages/admin-affectation-
 import { AdminSuperviseursComponent } from './pages/admin-superviseurs/admin-superviseurs';
 import { AdminEtudiantCreateComponent } from './pages/admin-etudiant-create/admin-etudiant-create';
 import { AdminImportCsvComponent } from './pages/admin-import-csv/admin-import-csv';
+import { StagiaireProfilComponent } from './pages/stagiaire-profil/stagiaire-profil';
+import { StagiaireStageCreateComponent } from './pages/stagiaire-stage-create/stagiaire-stage-create';
 
 export const routes: Routes = [
   {
@@ -72,6 +74,10 @@ export const routes: Routes = [
         component: StagiaireDashboardComponent,
       },
       {
+        path: 'stages/nouveau',
+        component: StagiaireStageCreateComponent,
+      },
+      {
         path: 'stages/:id',
         component: StagiaireStageDetailComponent,
       },
@@ -86,6 +92,10 @@ export const routes: Routes = [
       {
         path: 'stages/:id/bilan-fin-stage',
         component: StagiaireBilanFinStageComponent,
+      },
+      {
+        path: 'profil',
+        component: StagiaireProfilComponent,
       },
     ],
   },

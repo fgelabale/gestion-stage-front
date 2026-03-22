@@ -155,9 +155,15 @@ constructor() {
 
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Impossible de charger le bilan mi-stage.');
-        this.isLoading.set(false);
+      error: (err) => {
+        if (err?.status === 403) {
+          this.errorMessage.set(
+            "Ce bilan mi-stage est disponible seulement pour un stage à l'état ACCEPTE.",
+          );
+        } else {
+          this.errorMessage.set('Impossible de charger le bilan mi-stage.');
+        }
+        this.isLoading.set(false);      
       },
     });
   }

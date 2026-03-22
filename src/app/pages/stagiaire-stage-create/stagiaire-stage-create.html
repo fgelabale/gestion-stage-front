@@ -1,0 +1,130 @@
+<div style="padding:24px; max-width:900px;">
+  <h1>Créer un stage</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <h2>Stage</h2>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Titre</mat-label>
+        <input matInput formControlName="titre" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Date début</mat-label>
+        <input matInput type="date" formControlName="dateDebut" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Date fin</mat-label>
+        <input matInput type="date" formControlName="dateFin" />
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <h2>Tranche horaire de travail</h2>
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Heure début</mat-label>
+        <input matInput type="time" formControlName="heureDebut" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Heure fin</mat-label>
+        <input matInput type="time" formControlName="heureFin" />
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <h2>Entreprise</h2>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Nom entreprise</mat-label>
+        <input matInput formControlName="entrepriseNom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Adresse</mat-label>
+        <input matInput formControlName="entrepriseAdresse" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="entrepriseTelephone" />
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <h2>Contact du stage</h2>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="contactStagePrenom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="contactStageNom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Courriel</mat-label>
+        <input matInput formControlName="contactStageCourriel" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="contactStageTelephone" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Poste</mat-label>
+        <input matInput formControlName="contactStagePoste" />
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <h2>Maître de stage</h2>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="maitreStagePrenom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="maitreStageNom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Courriel</mat-label>
+        <input matInput formControlName="maitreStageCourriel" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="maitreStageTelephone" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Poste</mat-label>
+        <input matInput formControlName="maitreStagePoste" />
+      </mat-form-field>
+    </mat-card>
+
+    @if (successMessage()) {
+    <p style="color:green;">{{ successMessage() }}</p>
+    }
+
+    @if (errorMessage()) {
+    <p style="color:red;">{{ errorMessage() }}</p>
+    }
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+      @if (isSaving()) {
+      Enregistrement...
+      } @else {
+      Créer le stage
+      }
+    </button>
+  </form>
+</div>

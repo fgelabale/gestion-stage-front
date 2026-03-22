@@ -34,6 +34,14 @@ export class StagesService {
     );
   }
 
+  generateMaitreStageLink(stageId: number, payload?: { email?: string; baseUrl?: string }) {
+    return this.http.post(`${this.apiUrl}/acces-externe/stage/${stageId}/generer-lien`, payload ?? {});
+  }
+  
+  createStudentStage(payload: any) {
+    return this.http.post(`${this.apiUrl}/stages/etudiant`, payload);
+  }
+
   upsertRapportHebdomadaire(payload: any) {
     return this.http.post(`${this.apiUrl}/rapports-hebdomadaires`, payload);
   }
@@ -47,10 +55,16 @@ export class StagesService {
   }
 
   getBilanFinStage(stageId: number) {
-  return this.http.get(`${this.apiUrl}/bilan-fin-stage/stage/${stageId}`);
-}
+    return this.http.get(`${this.apiUrl}/bilan-fin-stage/stage/${stageId}`);
+  }
 
-upsertBilanFinStage(payload: any) {
-  return this.http.post(`${this.apiUrl}/bilan-fin-stage`, payload);
-}
+  upsertBilanFinStage(payload: any) {
+    return this.http.post(`${this.apiUrl}/bilan-fin-stage`, payload);
+  }
+
+  updateStageEtat(stageId: number, etat: string) {
+    return this.http.patch(`${this.apiUrl}/stages/${stageId}/etat`, {
+      etat,
+    });
+  }
 }

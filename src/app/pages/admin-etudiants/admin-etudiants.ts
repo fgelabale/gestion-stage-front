@@ -43,7 +43,7 @@ export class AdminEtudiantsComponent {
         etudiant.prenom,
         etudiant.nom,
         etudiant.email,
-        etudiant.groupe?.nom,
+        etudiant?.groupe?.nom,
       ]
         .filter(Boolean)
         .join(' ')
@@ -65,12 +65,14 @@ export class AdminEtudiantsComponent {
     this.groupesService.getGroupes().subscribe({
       next: (groupes: any) => {
         this.groupes.set(groupes ?? []);
-
+        console.log(groupes);
         this.usersService.getStudents().subscribe({
           next: (etudiants: any) => {
             const rows = (etudiants ?? []).map((e: any) => ({
               ...e,
-              selectedGroupeId: e.groupeId ?? null,
+              groupeId: e.groupeId ?? e.etudiant?.groupeId ?? null,
+              groupe: e.groupe ?? e.etudiant?.groupe ?? null,
+              selectedGroupeId: e.groupeId ?? e.etudiant?.groupeId ?? null,
               isSaving: false,
             }));
 
@@ -121,9 +123,12 @@ export class AdminEtudiantsComponent {
               r.id === row.id
                 ? {
                   ...r,
-                  groupeId: updated.groupeId,
-                  groupe: updated.groupe,
-                  selectedGroupeId: updated.groupeId ?? null,
+                  groupeId:
+                    updated.groupeId ?? updated.etudiant?.groupeId ?? null,
+                  groupe:
+                    updated.groupe ?? updated.etudiant?.groupe ?? null,
+                  selectedGroupeId:
+                    updated.groupeId ?? updated.etudiant?.groupeId ?? null,
                   isSaving: false,
                 }
                 : r,

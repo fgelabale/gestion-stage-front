@@ -71,51 +71,51 @@ export class StagiaireBilanFinStageComponent {
   });
 
   constructor() {
-  this.route.paramMap.subscribe((params) => {
-    const stageId = Number(params.get('id'));
+    this.route.paramMap.subscribe((params) => {
+      const stageId = Number(params.get('id'));
 
-    this.successMessage.set('');
-    this.errorMessage.set('');
+      this.successMessage.set('');
+      this.errorMessage.set('');
 
-    if (!stageId || Number.isNaN(stageId)) {
-      this.errorMessage.set('Identifiant de stage invalide.');
-      this.isLoading.set(false);
-      return;
-    }
+      if (!stageId || Number.isNaN(stageId)) {
+        this.errorMessage.set('Identifiant de stage invalide.');
+        this.isLoading.set(false);
+        return;
+      }
 
-    this.stageId.set(stageId);
-    this.form.reset({
-      stageId,
-      tachesEnLienAvecFormation: '',
-      tachesVariees: '',
-      tachesRecommencees: '',
-      retroactionRecue: '',
-      progressionDansExecution: '',
-      difficultesDansCertainesTaches: '',
-      respectSanteSecurite: '',
-      appreciationGlobaleTaches: '',
-      difficulteTachesCorrespondNiveau: '',
-      nouvellesConnaissancesAcquises: '',
-      consolidationConnaissancesCompetences: '',
-      stageUtileEtCompleteFormation: '',
-      mieuxPrepareMarcheTravail: '',
-      appreciationEchangesMaitreStage: '',
-      satisfactionStage: '',
-      integrationEntrepriseEvolution: '',
-      actionsIntegrationDeuxiemePartie: '',
-      formationAdequationMondeProfessionnel: '',
-      competencesADevelopper: '',
-      competenceCapitale: '',
-      pointsFortsDeuxiemePartie: '',
-      elementsAAmeliorerFuturEmploi: '',
-      perceptionMetierEvolution: '',
-      confirmationChoixCarriere: '',
+      this.stageId.set(stageId);
+      this.form.reset({
+        stageId,
+        tachesEnLienAvecFormation: '',
+        tachesVariees: '',
+        tachesRecommencees: '',
+        retroactionRecue: '',
+        progressionDansExecution: '',
+        difficultesDansCertainesTaches: '',
+        respectSanteSecurite: '',
+        appreciationGlobaleTaches: '',
+        difficulteTachesCorrespondNiveau: '',
+        nouvellesConnaissancesAcquises: '',
+        consolidationConnaissancesCompetences: '',
+        stageUtileEtCompleteFormation: '',
+        mieuxPrepareMarcheTravail: '',
+        appreciationEchangesMaitreStage: '',
+        satisfactionStage: '',
+        integrationEntrepriseEvolution: '',
+        actionsIntegrationDeuxiemePartie: '',
+        formationAdequationMondeProfessionnel: '',
+        competencesADevelopper: '',
+        competenceCapitale: '',
+        pointsFortsDeuxiemePartie: '',
+        elementsAAmeliorerFuturEmploi: '',
+        perceptionMetierEvolution: '',
+        confirmationChoixCarriere: '',
+      });
+
+      this.isLoading.set(true);
+      this.loadBilan();
     });
-
-    this.isLoading.set(true);
-    this.loadBilan();
-  });
-}
+  }
 
   private loadBilan(): void {
     const stageId = this.stageId();
@@ -176,8 +176,14 @@ export class StagiaireBilanFinStageComponent {
 
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Impossible de charger le bilan fin de stage.');
+      error: (err) => {
+        if (err?.status === 403) {
+          this.errorMessage.set(
+            "Ce bilan fin-stage est disponible seulement pour un stage à l'état ACCEPTE.",
+          );
+        } else {
+          this.errorMessage.set('Impossible de charger le bilan fin de stage.');
+        }
         this.isLoading.set(false);
       },
     });

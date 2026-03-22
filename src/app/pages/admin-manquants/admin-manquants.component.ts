@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StagesService } from '../../core/services/stage/stages.service';
+import { AccesExterneService } from '../../core/services/accesExterne/acces-externe';
+
 import { DatePipe } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -26,8 +28,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AdminManquantsComponent implements OnInit {
   private stagesService = inject(StagesService);
-  private apiUrl = environment.apiUrl;
+  private accesExterneService = inject(AccesExterneService);
 
+  private apiUrl = environment.apiUrl;
+  successMessage = signal('');
   displayedColumns = [
     'etudiant',
     'groupe',
@@ -39,7 +43,7 @@ export class AdminManquantsComponent implements OnInit {
     'bilanFinal',
     'evaluationMaitreStage',
     'statut',
-    'pdf',
+    'etat',
     'actions',
   ];
 
@@ -49,7 +53,7 @@ export class AdminManquantsComponent implements OnInit {
 
   groupeFilter = signal<string>('TOUS');
   texteFilter = signal<string>('');
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   groupes = computed(() => {
     const values = this.stages()
@@ -87,6 +91,14 @@ export class AdminManquantsComponent implements OnInit {
 
   stagesEnCours = computed(() =>
     this.filteredStages().filter((row) => row.isStageEnCours),
+  );
+
+  stagesEnCoursDeValidation = computed(() =>
+    this.filteredStages().filter((row) => row.isStageEnCoursValidation),
+  );
+
+  stagesClotures = computed(() =>
+    this.filteredStages().filter((row) => row.isStageCloture),
   );
 
   stagesTermines = computed(() =>
@@ -183,8 +195,55 @@ export class AdminManquantsComponent implements OnInit {
         return 'En retard';
       case 'INCOMPLET':
         return 'Incomplet';
+      case 'CLOTURE':
+        return 'Cloture';        
       default:
         return value;
     }
+  }
+  formatEtat(value: string): string {
+    switch (value) {
+      case 'EN_COURS':
+        return 'En cours';
+      case 'PRE_VALIDE':
+        return 'Pré-validé';
+      case 'ENTENTE_RECUE':
+        return 'Entente reçue';
+      case 'ACCEPTE':
+        return 'Accepté';
+      case 'CLOTURE':
+        return 'Clôturé';
+      default:
+        return value;
+    }
+  }
+  generateMaitreStageLink(row: any): void {
+    this.errorMessage.set('');
+    this.successMessage.set('');
+
+    this.stagesService.generateMaitreStageLink(row.stageId).subscribe({
+      next: (response: any) => {
+        const lien = response?.lien;
+        if (lien) {
+          navigator.clipboard.writeText(lien).then(() => {
+            this.successMessage.set('Lien maître de stage généré et copié dans le presse-papiers.');
+          }).catch(() => {
+            this.successMessage.set(`Lien généré : ${lien}`);
+          });
+        } else {
+          this.successMessage.set('Lien maître de stage généré.');
+        }
+      },
+      error: (err) => {
+        if (err?.status === 403) {
+          this.errorMessage.set(
+            "Le lien maître de stage ne peut être généré que pour un stage à l'état ACCEPTE.",
+          );
+          return;
+        }
+
+        this.errorMessage.set('Impossible de générer le lien maître de stage.');
+      },
+    });
   }
 }

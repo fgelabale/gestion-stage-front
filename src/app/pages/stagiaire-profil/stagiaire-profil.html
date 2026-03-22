@@ -1,0 +1,43 @@
+<div style="padding:24px; max-width:800px;">
+  <h1>Mon profil</h1>
+
+  @if (isLoading()) {
+    <p>Chargement...</p>
+  } @else if (profile(); as p) {
+    <mat-card style="padding:16px; margin-bottom:20px;">
+      <p><strong>Prénom :</strong> {{ p.prenom }}</p>
+      <p><strong>Nom :</strong> {{ p.nom }}</p>
+      <p><strong>Courriel école :</strong> {{ p.courrielEcole }}</p>
+      <p><strong>Courriel perso :</strong> {{ p.courrielPerso || '-' }}</p>
+      <p><strong>Groupe :</strong> {{ p.groupe || '-' }}</p>
+      <p><strong>Code étudiant :</strong> {{ p.codeEtudiantInterne || '-' }}</p>
+    </mat-card>
+
+    <mat-card style="padding:16px;">
+      <h2>Modifier mon téléphone</h2>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="telephone" />
+        </mat-form-field>
+
+        @if (successMessage()) {
+          <p style="color:green;">{{ successMessage() }}</p>
+        }
+
+        @if (errorMessage()) {
+          <p style="color:red;">{{ errorMessage() }}</p>
+        }
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+          @if (isSaving()) {
+            Enregistrement...
+          } @else {
+            Enregistrer
+          }
+        </button>
+      </form>
+    </mat-card>
+  }
+</div>

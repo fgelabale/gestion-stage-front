@@ -4,133 +4,111 @@
   <mat-card style="padding:16px; margin-bottom:20px;">
     <p>
       Le fichier CSV peut créer ou mettre à jour :
-      utilisateurs étudiants, fiches étudiants, superviseurs, entreprises,
-      maîtres de stage et stages.
+      groupes, utilisateurs étudiants et fiches étudiants.
     </p>
 
     <input type="file" accept=".csv" (change)="onFileSelected($event)" />
 
     <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
-      <button
-        mat-stroked-button
-        color="primary"
-        (click)="validate()"
-        [disabled]="isValidating()"
-      >
+      <button mat-stroked-button color="primary" (click)="validate()" [disabled]="isValidating()">
         @if (isValidating()) {
-          Validation...
+        Validation...
         } @else {
-          Valider le CSV
+        Valider le CSV
         }
       </button>
 
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="upload()"
-        [disabled]="isUploading()"
-      >
+      <button mat-raised-button color="primary" (click)="upload()" [disabled]="isUploading()">
         @if (isUploading()) {
-          Import en cours...
+        Import en cours...
         } @else {
-          Importer le CSV
+        Importer le CSV
         }
       </button>
     </div>
 
     @if (successMessage()) {
-      <p style="color:green; margin-top:12px;">{{ successMessage() }}</p>
+    <p style="color:green; margin-top:12px;">{{ successMessage() }}</p>
     }
 
     @if (errorMessage()) {
-      <p style="color:red; margin-top:12px;">{{ errorMessage() }}</p>
+    <p style="color:red; margin-top:12px;">{{ errorMessage() }}</p>
     }
   </mat-card>
 
   @if (validationResult(); as v) {
-    <mat-card style="padding:16px; margin-bottom:20px;">
-      <h2>Résultat de validation</h2>
+  <mat-card style="padding:16px; margin-bottom:20px;">
+    <h2>Résultat de validation</h2>
 
-      <p><strong>Total lignes :</strong> {{ v.totalLignes }}</p>
-      <p><strong>Validation globale :</strong> {{ v.estValide ? 'Valide' : 'Invalide' }}</p>
+    <p><strong>Total lignes :</strong> {{ v.totalLignes }}</p>
+    <p><strong>Validation globale :</strong> {{ v.estValide ? 'Valide' : 'Invalide' }}</p>
 
-      @if (v.colonnesManquantes?.length) {
-        <h3>Colonnes manquantes</h3>
-        <ul>
-          @for (col of v.colonnesManquantes; track $index) {
-            <li>{{ col }}</li>
-          }
-        </ul>
+    @if (v.colonnesManquantes?.length) {
+    <h3>Colonnes manquantes</h3>
+    <ul>
+      @for (col of v.colonnesManquantes; track $index) {
+      <li>{{ col }}</li>
       }
+    </ul>
+    }
 
-      @if (v.colonnesInconnues?.length) {
-        <h3>Colonnes inconnues</h3>
-        <ul>
-          @for (col of v.colonnesInconnues; track $index) {
-            <li>{{ col }}</li>
-          }
-        </ul>
+    @if (v.colonnesInconnues?.length) {
+    <h3>Colonnes inconnues</h3>
+    <ul>
+      @for (col of v.colonnesInconnues; track $index) {
+      <li>{{ col }}</li>
       }
+    </ul>
+    }
 
-      <h3>Erreurs</h3>
-      @if (v.erreurs?.length) {
-        <ul>
-          @for (erreur of v.erreurs; track $index) {
-            <li>Ligne {{ erreur.ligne }} — {{ erreur.message }}</li>
-          }
-        </ul>
-      } @else {
-        <p>Aucune erreur.</p>
+    <h3>Erreurs</h3>
+    @if (v.erreurs?.length) {
+    <ul>
+      @for (erreur of v.erreurs; track $index) {
+      <li>Ligne {{ erreur.ligne }} — {{ erreur.message }}</li>
       }
+    </ul>
+    } @else {
+    <p>Aucune erreur.</p>
+    }
 
-      <h3>Avertissements</h3>
-      @if (v.avertissements?.length) {
-        <ul>
-          @for (warning of v.avertissements; track $index) {
-            <li>Ligne {{ warning.ligne }} — {{ warning.message }}</li>
-          }
-        </ul>
-      } @else {
-        <p>Aucun avertissement.</p>
+    <h3>Avertissements</h3>
+    @if (v.avertissements?.length) {
+    <ul>
+      @for (warning of v.avertissements; track $index) {
+      <li>Ligne {{ warning.ligne }} — {{ warning.message }}</li>
       }
-    </mat-card>
+    </ul>
+    } @else {
+    <p>Aucun avertissement.</p>
+    }
+  </mat-card>
   }
 
   @if (result(); as r) {
-    <mat-card style="padding:16px;">
-      <h2>Résultat de l’import</h2>
+  <mat-card style="padding:16px;">
+    <h2>Résultat de l’import</h2>
 
-      <p><strong>Total lignes :</strong> {{ r.totalLignes }}</p>
-      <p><strong>Lignes traitées :</strong> {{ r.lignesTraitees }}</p>
+    <p><strong>Total lignes :</strong> {{ r.totalLignes }}</p>
+    <p><strong>Lignes traitées :</strong> {{ r.lignesTraitees }}</p>
 
-      <p><strong>Utilisateurs étudiants créés :</strong> {{ r.utilisateursEtudiantsCrees }}</p>
-      <p><strong>Utilisateurs étudiants mis à jour :</strong> {{ r.utilisateursEtudiantsMisAJour }}</p>
+    <p><strong>Groupes créés :</strong> {{ r.groupesCrees }}</p>
+    <p><strong>Groupes mis à jour :</strong> {{ r.groupesMisAJour }}</p>
+    <p><strong>Utilisateurs créés :</strong> {{ r.utilisateursCrees }}</p>
+    <p><strong>Utilisateurs mis à jour :</strong> {{ r.utilisateursMisAJour }}</p>
+    <p><strong>Étudiants créés :</strong> {{ r.etudiantsCrees }}</p>
+    <p><strong>Étudiants mis à jour :</strong> {{ r.etudiantsMisAJour }}</p>
 
-      <p><strong>Fiches étudiants créées :</strong> {{ r.fichesEtudiantsCrees }}</p>
-      <p><strong>Fiches étudiants mises à jour :</strong> {{ r.fichesEtudiantsMisesAJour }}</p>
-
-      <p><strong>Superviseurs créés :</strong> {{ r.superviseursCrees }}</p>
-      <p><strong>Superviseurs mis à jour :</strong> {{ r.superviseursMisAJour }}</p>
-
-      <p><strong>Entreprises créées :</strong> {{ r.entreprisesCrees }}</p>
-      <p><strong>Entreprises mises à jour :</strong> {{ r.entreprisesMisesAJour }}</p>
-
-      <p><strong>Maîtres de stage créés :</strong> {{ r.maitresStageCrees }}</p>
-      <p><strong>Maîtres de stage mis à jour :</strong> {{ r.maitresStageMisAJour }}</p>
-
-      <p><strong>Stages créés :</strong> {{ r.stagesCrees }}</p>
-      <p><strong>Stages mis à jour :</strong> {{ r.stagesMisAJour }}</p>
-
-      <h3 style="margin-top:20px;">Erreurs</h3>
-      @if (r.erreurs?.length) {
-        <ul>
-          @for (erreur of r.erreurs; track $index) {
-            <li>Ligne {{ erreur.ligne }} — {{ erreur.message }}</li>
-          }
-        </ul>
-      } @else {
-        <p>Aucune erreur.</p>
+    <h3 style="margin-top:20px;">Erreurs</h3>
+    @if (r.erreurs?.length) {
+    <ul>
+      @for (erreur of r.erreurs; track $index) {
+      <li>Ligne {{ erreur.ligne }} — {{ erreur.message }}</li>
       }
-    </mat-card>
+    </ul>
+    } @else {
+    <p>Aucune erreur.</p>
+    }
+  </mat-card>
   }
 </div>

@@ -10,6 +10,20 @@
 <div style="padding:24px;">
   <h1>Mon stage</h1>
 
+  @if (stage.etat === 'ENTENTE_RECUE') {
+  <button mat-raised-button color="primary" (click)="acceptStage(stage.id)" [disabled]="isAccepting()">
+    @if (isAccepting()) {
+    Traitement...
+    } @else {
+    ACCEPTE
+    }
+  </button>
+  }
+
+  @if (acceptMessage()) {
+  <p style="color:green;">{{ acceptMessage() }}</p>
+  }
+
   <p><strong>Titre :</strong> {{ stage.titre }}</p>
   <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
   <p>
@@ -61,19 +75,10 @@
 
   <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
 
-  <div style="
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
-    gap:12px;
-    margin-bottom:24px;
-  ">
-    @for (semaine of [1,2,3,4,5,6,7]; track semaine) {
-    <div style="
-        border:1px solid #ddd;
-        border-radius:8px;
-        padding:12px;
-        background:white;
-      ">
+  @if (stage.etat === 'ACCEPTE') {
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:24px;">
+    @for (semaine of [1, 2, 3, 4, 5, 6, 7]; track semaine) {
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
       <p style="margin:0 0 8px 0;">
         <strong>Semaine {{ semaine }}</strong>
       </p>
@@ -90,47 +95,30 @@
     </div>
     }
   </div>
+  } @else {
+  <p>Les rapports hebdomadaires sont disponibles seulement lorsque le stage est accepté.</p>
+  }
 
   <h2>Bilans</h2>
 
-  <div style="display:flex;gap:16px;flex-wrap:wrap;">
-    <div style="
-      border:1px solid #ddd;
-      border-radius:8px;
-      padding:16px;
-      min-width:240px;
-    ">
+  @if (stage.etat === 'ACCEPTE') {
+  <div style="display:flex; gap:16px; flex-wrap:wrap;">
+    <div style="border:1px solid #ddd; border-radius:8px; padding:16px; min-width:240px;">
       <p><strong>Bilan mi-stage</strong></p>
-
-      <p>
-        <span [style]="getBadgeStyle(data()?.resume?.bilanMiStageRempli)">
-          {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}
-        </span>
-      </p>
-
-      <a mat-raised-button color="primary" [routerLink]="['/stagiaire/stages',stage.id,'bilan-mi-stage']">
+      <a mat-raised-button color="primary" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']">
         Ouvrir
       </a>
     </div>
 
-    <div style="
-      border:1px solid #ddd;
-      border-radius:8px;
-      padding:16px;
-      min-width:240px;
-    ">
+    <div style="border:1px solid #ddd; border-radius:8px; padding:16px; min-width:240px;">
       <p><strong>Bilan fin-stage</strong></p>
-
-      <p>
-        <span [style]="getBadgeStyle(data()?.resume?.bilanFinStageRempli)">
-          {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}
-        </span>
-      </p>
-
-      <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages',stage.id,'bilan-fin-stage']">
+      <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']">
         Ouvrir
       </a>
     </div>
   </div>
+  } @else {
+  <p>Les bilans sont disponibles seulement lorsque le stage est accepté.</p>
+  }
 </div>
 }

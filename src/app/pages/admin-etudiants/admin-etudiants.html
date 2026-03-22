@@ -49,7 +49,7 @@
                         <mat-option [value]="null">Aucun groupe</mat-option>
                         @for (groupe of groupes(); track groupe.id) {
                         <mat-option [value]="groupe.id">
-                            {{ row.groupe?.nom || row.groupe || '-' }}
+                            {{ groupe?.nom || groupe || '-' }}
                         </mat-option>
                         }
                     </mat-select>

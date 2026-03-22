@@ -155,8 +155,14 @@ export class StagiaireRapportFormComponent {
 
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Impossible de charger le rapport.');
+      error: (err) => {
+        if (err?.status === 403) {
+          this.errorMessage.set(
+            "Ce rapport est disponible seulement pour un stage à l'état ACCEPTE.",
+          );
+        } else {
+          this.errorMessage.set('Impossible de charger le rapport.');
+        }
         this.isLoading.set(false);
       },
     });

@@ -20,6 +20,35 @@
   <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
   <p><strong>Titre :</strong> {{ stage.titre }}</p>
 
+  <mat-card style="padding:16px; margin-bottom:20px;">
+  <h2>État du stage</h2>
+
+  <form [formGroup]="etatForm" (ngSubmit)="saveEtat(stage.id)">
+    <mat-form-field appearance="outline" style="min-width:260px;">
+      <mat-label>État</mat-label>
+      <mat-select formControlName="etat">
+        @for (etat of etatOptions; track etat) {
+          <mat-option [value]="etat">{{ etat }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div style="margin-top:12px;">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSavingEtat()">
+        @if (isSavingEtat()) {
+          Enregistrement...
+        } @else {
+          Enregistrer l’état
+        }
+      </button>
+    </div>
+
+    @if (successEtatMessage()) {
+      <p style="color:green;">{{ successEtatMessage() }}</p>
+    }
+  </form>
+</mat-card>
+
   <h2 style="margin-top:24px;">Résumé</h2>
   <p><strong>Nombre de rapports :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>
   <p>
