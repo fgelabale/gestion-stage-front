@@ -14,40 +14,188 @@
     Télécharger le PDF
   </button>
 
+  <mat-card style="padding:16px; margin-bottom:20px;">
+    <h2>Modifier le stage</h2>
+
+    <form [formGroup]="adminForm" (ngSubmit)="saveFullStage(stage.id)">
+      <h3>Étudiant</h3>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Téléphone étudiant</mat-label>
+        <input matInput formControlName="telephoneEtudiant" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Groupe</mat-label>
+        <mat-select formControlName="groupeId">
+          <mat-option [value]="null">Aucun groupe</mat-option>
+          @for (groupe of groupes(); track groupe.id) {
+          <mat-option [value]="groupe.id">{{ groupe.nom }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <h3>Stage</h3>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Date début</mat-label>
+        <input matInput type="date" formControlName="dateDebut" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Date fin</mat-label>
+        <input matInput type="date" formControlName="dateFin" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Heure début</mat-label>
+        <input matInput type="time" formControlName="heureDebut" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Heure fin</mat-label>
+        <input matInput type="time" formControlName="heureFin" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>État</mat-label>
+        <mat-select formControlName="etat">
+          @for (etat of etatOptions; track etat) {
+          <mat-option [value]="etat">{{ etat }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Superviseur</mat-label>
+        <mat-select formControlName="superviseurId">
+          <mat-option [value]="null">Aucun superviseur</mat-option>
+          @for (superviseur of superviseurs(); track superviseur.id) {
+          <mat-option [value]="superviseur.id">
+            {{ superviseur.prenom }} {{ superviseur.nom }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <h3>Entreprise</h3>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Nom entreprise</mat-label>
+        <input matInput formControlName="entrepriseNom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Adresse entreprise</mat-label>
+        <input matInput formControlName="entrepriseAdresse" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Téléphone entreprise</mat-label>
+        <input matInput formControlName="entrepriseTelephone" />
+      </mat-form-field>
+
+      <h3>Contact du stage</h3>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="contactStagePrenom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="contactStageNom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Courriel</mat-label>
+        <input matInput formControlName="contactStageCourriel" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="contactStageTelephone" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Poste</mat-label>
+        <input matInput formControlName="contactStagePoste" />
+      </mat-form-field>
+
+      <h3>Maître de stage</h3>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="maitreStagePrenom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="maitreStageNom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Courriel</mat-label>
+        <input matInput formControlName="maitreStageCourriel" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="maitreStageTelephone" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Poste</mat-label>
+        <input matInput formControlName="maitreStagePoste" />
+      </mat-form-field>
+
+      @if (successAdminMessage()) {
+      <p style="color:green;">{{ successAdminMessage() }}</p>
+      }
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSavingAdmin()">
+        @if (isSavingAdmin()) {
+        Enregistrement...
+        } @else {
+        Enregistrer toutes les modifications
+        }
+      </button>
+    </form>
+  </mat-card>
+
   <h2 style="margin-top:24px;">Identification</h2>
   <p><strong>Étudiant :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
   <p><strong>Groupe :</strong> {{ stage.etudiant?.groupe?.nom || '-' }}</p>
   <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
-  <p><strong>Titre :</strong> {{ stage.titre }}</p>
 
   <mat-card style="padding:16px; margin-bottom:20px;">
-  <h2>État du stage</h2>
+    <h2>État du stage</h2>
 
-  <form [formGroup]="etatForm" (ngSubmit)="saveEtat(stage.id)">
-    <mat-form-field appearance="outline" style="min-width:260px;">
-      <mat-label>État</mat-label>
-      <mat-select formControlName="etat">
-        @for (etat of etatOptions; track etat) {
+    <form [formGroup]="etatForm" (ngSubmit)="saveEtat(stage.id)">
+      <mat-form-field appearance="outline" style="min-width:260px;">
+        <mat-label>État</mat-label>
+        <mat-select formControlName="etat">
+          @for (etat of etatOptions; track etat) {
           <mat-option [value]="etat">{{ etat }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <div style="margin-top:12px;">
-      <button mat-raised-button color="primary" type="submit" [disabled]="isSavingEtat()">
-        @if (isSavingEtat()) {
+      <div style="margin-top:12px;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSavingEtat()">
+          @if (isSavingEtat()) {
           Enregistrement...
-        } @else {
+          } @else {
           Enregistrer l’état
-        }
-      </button>
-    </div>
+          }
+        </button>
+      </div>
 
-    @if (successEtatMessage()) {
+      @if (successEtatMessage()) {
       <p style="color:green;">{{ successEtatMessage() }}</p>
-    }
-  </form>
-</mat-card>
+      }
+    </form>
+  </mat-card>
 
   <h2 style="margin-top:24px;">Résumé</h2>
   <p><strong>Nombre de rapports :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>

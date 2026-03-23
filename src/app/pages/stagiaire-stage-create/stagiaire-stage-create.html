@@ -4,12 +4,6 @@
   <form [formGroup]="form" (ngSubmit)="submit()">
     <mat-card style="padding:16px; margin-bottom:20px;">
       <h2>Stage</h2>
-
-      <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>Titre</mat-label>
-        <input matInput formControlName="titre" />
-      </mat-form-field>
-
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Date début</mat-label>
         <input matInput type="date" formControlName="dateDebut" />

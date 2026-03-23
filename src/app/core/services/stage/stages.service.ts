@@ -37,7 +37,7 @@ export class StagesService {
   generateMaitreStageLink(stageId: number, payload?: { email?: string; baseUrl?: string }) {
     return this.http.post(`${this.apiUrl}/acces-externe/stage/${stageId}/generer-lien`, payload ?? {});
   }
-  
+
   createStudentStage(payload: any) {
     return this.http.post(`${this.apiUrl}/stages/etudiant`, payload);
   }
@@ -66,5 +66,8 @@ export class StagesService {
     return this.http.patch(`${this.apiUrl}/stages/${stageId}/etat`, {
       etat,
     });
+  }
+  updateStageAdmin(stageId: number, payload: any) {
+    return this.http.patch(`${this.apiUrl}/stages/${stageId}/admin`, payload);
   }
 }

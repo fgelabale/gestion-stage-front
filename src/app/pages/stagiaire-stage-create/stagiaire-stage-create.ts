@@ -29,7 +29,6 @@ export class StagiaireStageCreateComponent {
   successMessage = signal('');
 
   form = this.fb.nonNullable.group({
-    titre: [''],
     dateDebut: ['', Validators.required],
     dateFin: ['', Validators.required],
     heureDebut: [''],
@@ -39,22 +38,35 @@ export class StagiaireStageCreateComponent {
     entrepriseAdresse: [''],
     entrepriseTelephone: [''],
 
-    contactStagePrenom: ['', Validators.required],
-    contactStageNom: ['', Validators.required],
+    contactStagePrenom: [''],
+    contactStageNom: [''],
     contactStageCourriel: [''],
     contactStageTelephone: [''],
     contactStagePoste: [''],
 
-    maitreStagePrenom: ['', Validators.required],
-    maitreStageNom: ['', Validators.required],
+    maitreStagePrenom: [''],
+    maitreStageNom: [''],
     maitreStageCourriel: [''],
     maitreStageTelephone: [''],
     maitreStagePoste: [''],
   });
 
   submit(): void {
-    if (this.form.invalid || this.isSaving()) {
+    const value = this.form.getRawValue();
+
+    const hasContactStage =
+      !!value.contactStagePrenom.trim() && !!value.contactStageNom.trim();
+
+    const hasMaitreStage =
+      !!value.maitreStagePrenom.trim() && !!value.maitreStageNom.trim();
+
+    if ((!hasContactStage && !hasMaitreStage) || this.form.invalid || this.isSaving()) {
       this.form.markAllAsTouched();
+      if (!hasContactStage && !hasMaitreStage) {
+        this.errorMessage.set(
+          'Veuillez saisir soit un contact de stage, soit un maître de stage.',
+        );
+      }
       return;
     }
 
@@ -62,14 +74,16 @@ export class StagiaireStageCreateComponent {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    this.stagesService.createStudentStage(this.form.getRawValue()).subscribe({
+    this.stagesService.createStudentStage(value).subscribe({
       next: () => {
         this.successMessage.set('Stage créé avec succès.');
         this.isSaving.set(false);
         this.router.navigate(['/stagiaire']);
       },
-      error: () => {
-        this.errorMessage.set('Impossible de créer le stage.');
+      error: (err) => {
+        this.errorMessage.set(
+          err?.error?.message || 'Impossible de créer le stage.',
+        );
         this.isSaving.set(false);
       },
     });

@@ -23,8 +23,6 @@
   @if (acceptMessage()) {
   <p style="color:green;">{{ acceptMessage() }}</p>
   }
-
-  <p><strong>Titre :</strong> {{ stage.titre }}</p>
   <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
   <p>
     <strong>Période :</strong>

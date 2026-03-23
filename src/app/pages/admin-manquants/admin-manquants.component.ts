@@ -75,7 +75,6 @@ export class AdminManquantsComponent implements OnInit {
         row.etudiant?.nom,
         row.groupe,
         row.entreprise,
-        row.titre,
         row.superviseur?.prenom,
         row.superviseur?.nom,
       ]
@@ -97,8 +96,8 @@ export class AdminManquantsComponent implements OnInit {
     this.filteredStages().filter((row) => row.isStageEnCoursValidation),
   );
 
-  stagesClotures = computed(() =>
-    this.filteredStages().filter((row) => row.isStageCloture),
+  stagesAnnules = computed(() =>
+    this.filteredStages().filter((row) => row.isStageAnnule),
   );
 
   stagesTermines = computed(() =>
@@ -195,8 +194,8 @@ export class AdminManquantsComponent implements OnInit {
         return 'En retard';
       case 'INCOMPLET':
         return 'Incomplet';
-      case 'CLOTURE':
-        return 'Cloture';        
+      case 'ANNULE':
+        return 'Annulé';        
       default:
         return value;
     }
@@ -211,8 +210,8 @@ export class AdminManquantsComponent implements OnInit {
         return 'Entente reçue';
       case 'ACCEPTE':
         return 'Accepté';
-      case 'CLOTURE':
-        return 'Clôturé';
+      case 'ANNULE':
+        return 'Annulé';
       default:
         return value;
     }

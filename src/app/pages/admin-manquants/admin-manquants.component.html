@@ -291,12 +291,12 @@
   </table>
   }
 
-  <h2>Stages clotures ({{ stagesClotures().length }})</h2>
+  <h2>Stages annulés ({{ stagesAnnules().length }})</h2>
 
-  @if (stagesClotures().length === 0) {
-  <p>Aucun stage cloture.</p>
+  @if (stagesAnnules().length === 0) {
+  <p>Aucun stage annulé.</p>
   } @else {
-  <table mat-table [dataSource]="stagesClotures()" class="mat-elevation-z2" style="width:100%; margin-bottom:32px;">
+  <table mat-table [dataSource]="stagesAnnules()" class="mat-elevation-z2" style="width:100%; margin-bottom:32px;">
     <ng-container matColumnDef="etudiant">
       <th mat-header-cell *matHeaderCellDef>Étudiant</th>
       <td mat-cell *matCellDef="let row">
@@ -343,7 +343,7 @@
       <th mat-header-cell *matHeaderCellDef>Mi-bilan</th>
       <td mat-cell *matCellDef="let row">
         <span [style]="getBadgeStyle(row.statutMiBilan)">
-          {{ formatStatut('CLOTURE') }}
+          {{ formatStatut('ANNULE') }}
         </span>
       </td>
     </ng-container>
@@ -352,7 +352,7 @@
       <th mat-header-cell *matHeaderCellDef>Bilan final</th>
       <td mat-cell *matCellDef="let row">
         <span [style]="getBilanFinalBadgeStyle(row.statutBilanFinal)">
-          {{ formatStatut('CLOTURE') }}
+          {{ formatStatut('ANNULE') }}
         </span>
       </td>
     </ng-container>
@@ -367,7 +367,7 @@
     <ng-container matColumnDef="statut">
       <th mat-header-cell *matHeaderCellDef>Statut global</th>
       <td mat-cell *matCellDef="let row">
-        {{ formatStatut('CLOTURE') }}
+        {{ formatStatut('ANNULE') }}
       </td>
     </ng-container>
 

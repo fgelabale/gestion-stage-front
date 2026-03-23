@@ -25,7 +25,54 @@
             Ajouter un étudiant
         </a>
     </div>
+
+    <div style="
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    align-items:flex-end;
+    margin-bottom:16px;
+  ">
+        <mat-form-field appearance="outline" style="min-width:320px;">
+            <mat-label>Recherche</mat-label>
+            <input matInput [value]="texteFilter()" (input)="setTexteFilter($any($event.target).value)"
+                placeholder="Nom, prénom, courriel, groupe" />
+        </mat-form-field>
+
+        <form [formGroup]="assignForm" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+            <mat-form-field appearance="outline" style="min-width:260px;">
+                <mat-label>Associer un superviseur</mat-label>
+                <mat-select formControlName="superviseurId">
+                    @for (superviseur of superviseurs(); track superviseur.id) {
+                    <mat-option [value]="superviseur.id">
+                        {{ superviseur.prenom }} {{ superviseur.nom }}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" type="button" (click)="assignSuperviseurToSelection()"
+                [disabled]="isAssigningSuperviseur()">
+                @if (isAssigningSuperviseur()) {
+                Affectation...
+                } @else {
+                Associer aux sélectionnés
+                }
+            </button>
+        </form>
+    </div>
+
+    <p><strong>Étudiants sélectionnés :</strong> {{ selectedStudentCount() }}</p>
     <table mat-table [dataSource]="filteredEtudiants()" class="mat-elevation-z2" style="width:100%;">
+        <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox [checked]="allFilteredSelected()" (change)="toggleAll($event.checked)"></mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+                <mat-checkbox [checked]="row.selected"
+                    (change)="toggleStudentSelection(row.id, $event.checked)"></mat-checkbox>
+            </td>
+        </ng-container>
         <ng-container matColumnDef="nom">
             <th mat-header-cell *matHeaderCellDef>Nom</th>
             <td mat-cell *matCellDef="let row">

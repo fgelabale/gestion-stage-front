@@ -31,6 +31,13 @@ export class UsersService {
     });
   }
 
+  assignSuperviseurToEtudiants(userId: number[], superviseurId: number) {
+    return this.http.post(`${this.apiUrl}/users/assigner-superviseur-etudiants`, {
+      userId,
+      superviseurId,
+    });
+  }
+
   createUser(payload: any) {
     return this.http.post(`${this.apiUrl}/users/create`, payload);
   }

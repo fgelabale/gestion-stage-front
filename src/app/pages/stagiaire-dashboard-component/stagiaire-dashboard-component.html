@@ -17,8 +17,6 @@
   <div style="display:grid; gap:16px;">
     @for (stage of stages(); track stage.id) {
     <mat-card style="padding:16px;">
-      <h2>{{ stage.titre }}</h2>
-
       <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom }}</p>
       <p>
         <strong>Période :</strong>
@@ -51,18 +49,20 @@
           Voir le stage
         </a>
 
+        @if (stage.etat === 'ACCEPTE') {
         <a mat-stroked-button color="primary"
           [routerLink]="['/stagiaire/stages', stage.id, 'rapport', getFirstMissingWeek(stage)]">
           Rapport à compléter
         </a>
 
         <a mat-stroked-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']">
-          Bilan mi-stage
+          Bilan mi-stage {{ stage.etat}}
         </a>
 
         <a mat-stroked-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']">
-          Bilan fin-stage
+          Bilan fin-stage {{ stage.etat}}
         </a>
+        }
       </div>
     </mat-card>
     }
