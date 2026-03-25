@@ -221,6 +221,23 @@ export class StageDetailComponent implements OnInit {
     });
   }
 
+    formatEtat(value: string): string {
+    switch (value) {
+      case 'EN_COURS':
+        return 'En cours';
+      case 'PRE_VALIDE':
+        return 'Pré-validé';
+      case 'ENTENTE_RECUE':
+        return 'Entente reçue';
+      case 'ACCEPTE':
+        return 'Accepté';
+      case 'ANNULE':
+        return 'Annulé';
+      default:
+        return value;
+    }
+  }
+
   saveFullStage(stageId: number): void {
     if (this.isSavingAdmin()) return;
 

@@ -69,7 +69,7 @@ export class AdminManquantsComponent implements OnInit {
 
     return this.stages().filter((row) => {
       const matchGroupe = groupe === 'TOUS' || row.groupe === groupe;
-
+      
       const searchable = [
         row.etudiant?.prenom,
         row.etudiant?.nom,
