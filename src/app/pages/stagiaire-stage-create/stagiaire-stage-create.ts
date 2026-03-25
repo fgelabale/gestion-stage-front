@@ -35,7 +35,15 @@ export class StagiaireStageCreateComponent {
     heureFin: [''],
 
     entrepriseNom: ['', Validators.required],
-    entrepriseAdresse: [''],
+    entrepriseNumeroRue: [''],
+    entrepriseAdresseLigne2: [''],
+    entrepriseNomRue: [''],
+    entrepriseVille: [''],
+    entrepriseProvince: [''],
+    entrepriseCodePostal: [
+      '',
+      [Validators.pattern(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)],
+    ],
     entrepriseTelephone: [''],
 
     contactStagePrenom: [''],
@@ -67,6 +75,12 @@ export class StagiaireStageCreateComponent {
           'Veuillez saisir soit un contact de stage, soit un maître de stage.',
         );
       }
+      return;
+    }
+
+    if (this.form.controls.entrepriseCodePostal.invalid) {
+      this.errorMessage.set('Le code postal doit respecter le format canadien A1A 1A1.');
+      this.form.markAllAsTouched();
       return;
     }
 

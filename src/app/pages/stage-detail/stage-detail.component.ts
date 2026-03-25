@@ -9,11 +9,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { UsersService } from '../../core/services/users/users';
 import { GroupesService } from '../../core/services/groupes/groupes';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-stage-detail',
   standalone: true,
-  imports: [MatButtonModule, ReactiveFormsModule, MatSelectModule, MatFormFieldModule, MatCardModule],
+  imports: [ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,],
   templateUrl: './stage-detail.component.html',
 })
 export class StageDetailComponent implements OnInit {
@@ -54,8 +60,14 @@ export class StageDetailComponent implements OnInit {
     superviseurId: [null as number | null],
 
     entrepriseNom: [''],
-    entrepriseAdresse: [''],
+    entrepriseNumeroRue: [''],
+    entrepriseAdresseLigne2: [''],
+    entrepriseNomRue: [''],
+    entrepriseVille: [''],
+    entrepriseProvince: [''],
+    entrepriseCodePostal: [''],
     entrepriseTelephone: [''],
+
 
     contactStagePrenom: [''],
     contactStageNom: [''],
@@ -133,34 +145,39 @@ export class StageDetailComponent implements OnInit {
         });
 
 
-        const stage = response?.stage ?? response;
+        const stage = response.stage;
 
         this.adminForm.patchValue({
-          telephoneEtudiant: stage?.etudiant?.telephone ?? '',
-          groupeId: stage?.etudiant?.groupeId ?? null,
+          telephoneEtudiant: stage.etudiant?.telephone ?? '',
+          groupeId: stage.etudiant?.groupeId ?? null,
 
-          dateDebut: this.toDateInputValue(stage?.dateDebut),
-          dateFin: this.toDateInputValue(stage?.dateFin),
-          heureDebut: stage?.heureDebut ?? '',
-          heureFin: stage?.heureFin ?? '',
-          etat: stage?.etat ?? 'EN_COURS',
-          superviseurId: stage?.superviseurId ?? null,
+          dateDebut: this.toDateInputValue(stage.dateDebut),
+          dateFin: this.toDateInputValue(stage.dateFin),
+          heureDebut: stage.heureDebut ?? '',
+          heureFin: stage.heureFin ?? '',
+          etat: stage.etat ?? '',
+          superviseurId: stage.superviseurId ?? null,
 
-          entrepriseNom: stage?.entreprise?.nom ?? '',
-          entrepriseAdresse: stage?.entreprise?.adresse ?? '',
-          entrepriseTelephone: stage?.entreprise?.telephone ?? '',
+          entrepriseNom: stage.entreprise?.nom ?? '',
+          entrepriseNumeroRue: stage.entreprise?.numeroRue ?? '',
+          entrepriseAdresseLigne2: stage.entreprise?.adresseLigne2 ?? '',
+          entrepriseNomRue: stage.entreprise?.nomRue ?? '',
+          entrepriseVille: stage.entreprise?.ville ?? '',
+          entrepriseProvince: stage.entreprise?.province ?? '',
+          entrepriseCodePostal: stage.entreprise?.codePostal ?? '',
+          entrepriseTelephone: stage.entreprise?.telephone ?? '',
 
-          contactStagePrenom: stage?.contactStage?.prenom ?? '',
-          contactStageNom: stage?.contactStage?.nom ?? '',
-          contactStageCourriel: stage?.contactStage?.courriel ?? '',
-          contactStageTelephone: stage?.contactStage?.telephone ?? '',
-          contactStagePoste: stage?.contactStage?.poste ?? '',
+          contactStagePrenom: stage.contactStage?.prenom ?? '',
+          contactStageNom: stage.contactStage?.nom ?? '',
+          contactStageCourriel: stage.contactStage?.courriel ?? '',
+          contactStageTelephone: stage.contactStage?.telephone ?? '',
+          contactStagePoste: stage.contactStage?.poste ?? '',
 
-          maitreStagePrenom: stage?.maitreStage?.prenom ?? '',
-          maitreStageNom: stage?.maitreStage?.nom ?? '',
-          maitreStageCourriel: stage?.maitreStage?.courriel ?? '',
-          maitreStageTelephone: stage?.maitreStage?.telephone ?? '',
-          maitreStagePoste: stage?.maitreStage?.poste ?? '',
+          maitreStagePrenom: stage.maitreStage?.prenom ?? '',
+          maitreStageNom: stage.maitreStage?.nom ?? '',
+          maitreStageCourriel: stage.maitreStage?.courriel ?? '',
+          maitreStageTelephone: stage.maitreStage?.telephone ?? '',
+          maitreStagePoste: stage.maitreStage?.poste ?? '',
         });
       },
       error: () => {
@@ -229,7 +246,12 @@ export class StageDetailComponent implements OnInit {
           etat: updated?.etat ?? 'EN_COURS',
           superviseurId: updated?.superviseurId ?? null,
           entrepriseNom: updated?.entreprise?.nom ?? '',
-          entrepriseAdresse: updated?.entreprise?.adresse ?? '',
+          entrepriseNomRue: updated?.entreprise?.entrepriseNomRue ?? '',
+          entrepriseNumeroRue: updated?.entreprise?.entrepriseNumeroRue ?? '',
+          entrepriseAdresseLigne2: updated?.entreprise?.adresseLigne2 ?? '',
+          entrepriseVille: updated?.entreprise?.entrepriseVille ?? '',
+          entrepriseProvince: updated?.entreprise?.entrepriseProvince ?? '',
+          entrepriseCodePostal: updated?.entreprise?.entrepriseProvince ?? '',
           entrepriseTelephone: updated?.entreprise?.telephone ?? '',
           contactStagePrenom: updated?.contactStage?.prenom ?? '',
           contactStageNom: updated?.contactStage?.nom ?? '',

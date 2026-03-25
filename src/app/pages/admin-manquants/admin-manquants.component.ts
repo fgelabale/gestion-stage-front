@@ -77,6 +77,7 @@ export class AdminManquantsComponent implements OnInit {
         row.entreprise,
         row.superviseur?.prenom,
         row.superviseur?.nom,
+        row.stage?.etat
       ]
         .filter(Boolean)
         .join(' ')

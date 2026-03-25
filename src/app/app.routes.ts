@@ -19,6 +19,8 @@ import { AdminEtudiantCreateComponent } from './pages/admin-etudiant-create/admi
 import { AdminImportCsvComponent } from './pages/admin-import-csv/admin-import-csv';
 import { StagiaireProfilComponent } from './pages/stagiaire-profil/stagiaire-profil';
 import { StagiaireStageCreateComponent } from './pages/stagiaire-stage-create/stagiaire-stage-create';
+import { AdminEntreprises } from './pages/admin-entreprises/admin-entreprises';
+import { AdminEntrepriseEditComponent } from './pages/admin-entreprise-edit/admin-entreprise-edit';
 
 export const routes: Routes = [
   {
@@ -60,6 +62,14 @@ export const routes: Routes = [
         path: 'import-csv',
         component: AdminImportCsvComponent,
         canActivate: [roleGuard('ADMIN')],
+      },
+      {
+        path: 'entreprises',
+        component: AdminEntreprises,
+      },
+      {
+        path: 'entreprises/:id',
+        component: AdminEntrepriseEditComponent,
       },
     ],
   },

@@ -1,0 +1,65 @@
+<div style="padding:24px; max-width:900px;">
+  <h1>Modifier une entreprise</h1>
+
+  <mat-card style="padding:16px;">
+    @if (isLoading()) {
+      <p>Chargement...</p>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="nom" />
+        </mat-form-field>
+
+        <div style="display:grid; grid-template-columns:180px 1fr; gap:12px;">
+          <mat-form-field appearance="outline" style="width:100%;">
+            <mat-label>Numéro de rue</mat-label>
+            <input matInput formControlName="numeroRue" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="width:100%;">
+            <mat-label>Nom de la rue</mat-label>
+            <input matInput formControlName="nomRue" />
+          </mat-form-field>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 160px 180px; gap:12px;">
+          <mat-form-field appearance="outline" style="width:100%;">
+            <mat-label>Ville</mat-label>
+            <input matInput formControlName="ville" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="width:100%;">
+            <mat-label>Province</mat-label>
+            <input matInput formControlName="province" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="width:100%;">
+            <mat-label>Code postal</mat-label>
+            <input matInput formControlName="codePostal" />
+            @if (form.controls.codePostal.touched && form.controls.codePostal.invalid) {
+              <mat-error>Format attendu : A1A 1A1</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="telephone" />
+        </mat-form-field>
+
+        @if (successMessage()) {
+          <p style="color:green;">{{ successMessage() }}</p>
+        }
+
+        @if (errorMessage()) {
+          <p style="color:red;">{{ errorMessage() }}</p>
+        }
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+          @if (isSaving()) { Enregistrement... } @else { Enregistrer }
+        </button>
+      </form>
+    }
+  </mat-card>
+</div>

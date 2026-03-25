@@ -36,10 +36,43 @@
         <input matInput formControlName="entrepriseNom" />
       </mat-form-field>
 
+      <div style="display:grid; grid-template-columns:180px 1fr; gap:12px;">
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Numéro de rue</mat-label>
+          <input matInput formControlName="entrepriseNumeroRue" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Nom de la rue</mat-label>
+          <input matInput formControlName="entrepriseNomRue" />
+        </mat-form-field>
+
+      </div>
+
       <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>Adresse</mat-label>
-        <input matInput formControlName="entrepriseAdresse" />
+        <mat-label>Adresse ligne supplémentaire</mat-label>
+        <input matInput formControlName="entrepriseAdresseLigne2">
       </mat-form-field>
+      <div style="display:grid; grid-template-columns:1fr 160px 180px; gap:12px;">
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Ville</mat-label>
+          <input matInput formControlName="entrepriseVille" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Province</mat-label>
+          <input matInput formControlName="entrepriseProvince" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Code postal</mat-label>
+          <input matInput formControlName="entrepriseCodePostal" />
+          @if (form.controls.entrepriseCodePostal.touched &&
+          form.controls.entrepriseCodePostal.invalid) {
+          <mat-error>Format attendu : A1A 1A1</mat-error>
+          }
+        </mat-form-field>
+      </div>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Téléphone</mat-label>

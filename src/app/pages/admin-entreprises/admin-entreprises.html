@@ -1,0 +1,38 @@
+<div style="padding:24px;">
+  <h1>Entreprises</h1>
+
+  @if (errorMessage()) {
+    <p style="color:red;">{{ errorMessage() }}</p>
+  }
+
+  @if (isLoading()) {
+    <p>Chargement...</p>
+  } @else {
+    <table mat-table [dataSource]="entreprises()" style="width:100%;">
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let e">{{ e.nom }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="adresse">
+        <th mat-header-cell *matHeaderCellDef>Adresse</th>
+        <td mat-cell *matCellDef="let e">{{ formatAdresse(e) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="telephone">
+        <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+        <td mat-cell *matCellDef="let e">{{ e.telephone || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let e">
+          <a mat-button [routerLink]="['/admin/entreprises', e.id]">Modifier</a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  }
+</div>

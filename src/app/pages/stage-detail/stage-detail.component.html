@@ -8,15 +8,22 @@
 </div>
 } @else if (data()?.stage; as stage) {
 <div style="padding:24px;">
-  <h1>Détail du stage</h1>
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  ">
+    <h1 style="margin:0;">Détail du stage</h1>
 
-  <button mat-raised-button color="primary" (click)="downloadPdf()">
-    Télécharger le PDF
-  </button>
+    <button mat-raised-button color="primary" (click)="downloadPdf()">
+      Télécharger le PDF
+    </button>
+  </div>
 
   <mat-card style="padding:16px; margin-bottom:20px;">
-    <h2>Modifier le stage</h2>
-
     <form [formGroup]="adminForm" (ngSubmit)="saveFullStage(stage.id)">
       <h3>Étudiant</h3>
 
@@ -79,21 +86,61 @@
       </mat-form-field>
 
       <h3>Entreprise</h3>
+      <mat-card style="padding:16px; margin-bottom:20px;">
+        <!-- Nom entreprise -->
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Nom de l'entreprise</mat-label>
+          <input matInput formControlName="entrepriseNom" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>Nom entreprise</mat-label>
-        <input matInput formControlName="entrepriseNom" />
-      </mat-form-field>
+        <!-- Numéro + Rue -->
+        <div style="display:grid; grid-template-columns:160px 1fr; gap:12px;">
+          <mat-form-field appearance="outline">
+            <mat-label>No de rue</mat-label>
+            <input matInput formControlName="entrepriseNumeroRue" />
+          </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>Adresse entreprise</mat-label>
-        <input matInput formControlName="entrepriseAdresse" />
-      </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Nom de la rue</mat-label>
+            <input matInput formControlName="entrepriseNomRue" />
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Adresse complémentaire</mat-label>
+          <input matInput formControlName="entrepriseAdresseLigne2" />
+        </mat-form-field>
+        <!-- Ville / Province / Code postal -->
+        <div style="display:grid; grid-template-columns:1fr 160px 180px; gap:12px;">
+          <mat-form-field appearance="outline">
+            <mat-label>Ville</mat-label>
+            <input matInput formControlName="entrepriseVille" />
+          </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>Téléphone entreprise</mat-label>
-        <input matInput formControlName="entrepriseTelephone" />
-      </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Province</mat-label>
+            <input matInput formControlName="entrepriseProvince" placeholder="QC" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Code postal</mat-label>
+            <input matInput formControlName="entrepriseCodePostal" placeholder="A1A 1A1" />
+
+            @if (
+            adminForm.get('entrepriseCodePostal')?.touched &&
+            adminForm.get('entrepriseCodePostal')?.invalid
+            ) {
+            <mat-error>Format attendu : A1A 1A1</mat-error>
+            }
+          </mat-form-field>
+
+        </div>
+
+        <!-- Téléphone -->
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="entrepriseTelephone" />
+        </mat-form-field>
+
+      </mat-card>
 
       <h3>Contact du stage</h3>
 
