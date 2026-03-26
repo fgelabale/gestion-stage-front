@@ -1,0 +1,22 @@
+.etat-chip {
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 999px;
+  min-height: 28px;
+  padding: 0 10px;
+}
+
+.etat-chip,
+.etat-chip .mdc-evolution-chip__text-label {
+  color: #fff !important;
+}
+
+.etat-chip,
+.etat-chip .mdc-evolution-chip__text-label {
+  color: #fff !important;
+}
+
+.etat-chip-warning,
+.etat-chip-warning .mdc-evolution-chip__text-label {
+  color: #212121 !important;
+}

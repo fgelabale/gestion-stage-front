@@ -1,0 +1,53 @@
+.stagiaire-shell {
+  height: 100vh;
+}
+
+.stagiaire-sidenav {
+  width: 240px;
+  border-right: 1px solid #ddd;
+}
+
+.stagiaire-sidenav-content {
+  padding: 16px;
+  background: #fafafa;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.stagiaire-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.stagiaire-toolbar {
+  border-bottom: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.stagiaire-content {
+  padding: 0;
+}
+
+.stagiaire-toolbar {
+  border-bottom: 1px solid #ddd;
+  background: #fafafa;
+  display: flex;
+  gap: 12px;
+}
+
+
+a[mat-button].menu-active {
+  background: rgba(25, 118, 210, 0.12) !important;
+  border-left: 3px solid #fa2626;
+}
+
+a[mat-button].menu-active .mdc-button__label {
+  color: #1976d2 !important;
+  font-weight: 600;
+}

@@ -1,37 +1,98 @@
-<app-header />
+<mat-sidenav-container class="admin-shell">
+  <mat-sidenav mode="side" opened class="admin-sidenav">
+    <div class="admin-sidenav-content">
+      <h3>Administration</h3>
 
-<div style="display:flex; min-height:calc(100vh - 73px);">
-  <aside
-    style="
-      width:240px;
-      border-right:1px solid #ddd;
-      padding:16px;
-      background:#fafafa;
-    "
-  >
-    <h3>Administration</h3>
-
-    @if (isReadOnlyAdmin) {
-      <p style="font-size:12px; color:#666;">
-        Mode lecture seule
-      </p>
-    }
-
-    <div style="display:flex; flex-direction:column; gap:8px;">
-      <a mat-button [routerLink]="['/admin/manquants']">Stages à suivre</a>
-      <a mat-button [routerLink]="['/admin/etudiants']">Étudiants</a>
-      <a mat-button [routerLink]="['/admin/superviseurs']">Superviseurs</a>
-      <a mat-button [routerLink]="['/admin/entreprises']">Entreprises</a>
-
-      @if (!isReadOnlyAdmin) {
-        <a mat-button [routerLink]="['/admin/etudiants/nouveau']">Ajouter un étudiant</a>
-        <a mat-button [routerLink]="['/admin/affectation-superviseur']">Affectation superviseur</a>
-        <a mat-button [routerLink]="['/admin/import-csv']">Import CSV</a>
+      @if (isReadOnlyAdmin) {
+        <p class="readonly-text">Mode lecture seule</p>
       }
-    </div>
-  </aside>
 
-  <main style="flex:1; padding:0;">
-    <router-outlet />
-  </main>
-</div>
+      <nav class="admin-nav">
+        <a
+          mat-button
+          routerLink="/admin/manquants"
+          routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Stages à suivre
+        </a>
+
+        <a
+          mat-button
+          routerLink="/admin/etudiants"
+          routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Étudiants
+        </a>
+
+        <a
+          mat-button
+          routerLink="/admin/superviseurs"
+          routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Superviseurs
+        </a>
+
+        <a
+          mat-button
+          routerLink="/admin/entreprises"
+          routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Entreprises
+        </a>
+
+        @if (!isReadOnlyAdmin) {
+          <a
+            mat-button
+            routerLink="/admin/etudiants/nouveau"
+            routerLinkActive="menu-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Ajouter un étudiant
+          </a>
+
+          <a
+            mat-button
+            routerLink="/admin/affectation-superviseur"
+            routerLinkActive="menu-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Affectation superviseur
+          </a>
+
+          <a
+            mat-button
+            routerLink="/admin/import-csv"
+            routerLinkActive="menu-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Import CSV
+          </a>
+        }
+      </nav>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="admin-toolbar">
+      <span>Gestion de stages</span>
+
+      <span class="toolbar-spacer"></span>
+
+      <span>
+        {{ currentUser?.prenom || '' }} {{ currentUser?.nom || '' }}
+      </span>
+
+      <button mat-stroked-button color="primary" (click)="logout()">
+        Déconnexion
+      </button>
+    </mat-toolbar>
+
+    <div class="admin-page-content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

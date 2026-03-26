@@ -1,22 +1,56 @@
-<app-header />
+<mat-sidenav-container class="stagiaire-shell">
 
-<div style="display:flex; min-height:calc(100vh - 73px);">
-  <aside style="
-      width:240px;
-      border-right:1px solid #ddd;
-      padding:16px;
-      background:#fafafa;
-    ">
-    <h3>Espace stagiaire</h3>
+  <mat-sidenav mode="side" opened class="stagiaire-sidenav">
 
-    <div style="display:flex; flex-direction:column; gap:8px;">
-      <a mat-button [routerLink]="['/stagiaire']">Mon tableau de bord</a>
-      <a mat-button [routerLink]="['/stagiaire/profil']">Mon profil</a>
-      <a mat-button [routerLink]="['/stagiaire/stages/nouveau']">Créer un stage</a>
+    <div class="stagiaire-sidenav-content">
+      <h3>Espace stagiaire</h3>
+
+      <nav class="stagiaire-menu">
+
+        <a mat-button routerLink="/stagiaire" routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }">
+          Tableau de bord
+        </a>
+
+        <a mat-button routerLink="/stagiaire/profil" routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }">
+          Mon profil
+        </a>
+
+        <a mat-button routerLink="/stagiaire/stages/nouveau" routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }">
+          Créer un stage
+        </a>
+
+      </nav>
     </div>
-  </aside>
 
-  <main style="flex:1; padding:0;">
-    <router-outlet />
-  </main>
-</div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <!-- HEADER -->
+    <mat-toolbar class="stagiaire-toolbar">
+
+      <span>Gestion de stages</span>
+
+      <span class="toolbar-spacer"></span>
+
+      <span>
+        {{ currentUser?.prenom || '' }} {{ currentUser?.nom || '' }}
+      </span>
+      
+      <button mat-stroked-button color="primary" (click)="logout()">
+        Déconnexion
+      </button>
+
+    </mat-toolbar>
+
+    <!-- CONTENU -->
+    <div class="stagiaire-content">
+      <router-outlet />
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

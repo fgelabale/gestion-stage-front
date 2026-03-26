@@ -1,0 +1,52 @@
+.admin-shell {
+  height: 100vh;
+}
+
+.admin-sidenav {
+  width: 260px;
+  border-right: 1px solid #ddd;
+}
+
+.admin-sidenav-content {
+  padding: 16px;
+  background: #fafafa;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.readonly-text {
+  font-size: 12px;
+  color: #666;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.admin-toolbar {
+  border-bottom: 1px solid #ddd;
+  background: #fafafa;
+  display: flex;
+  gap: 12px;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.admin-page-content {
+  padding: 0;
+}
+
+a[mat-button].menu-active {
+  background: rgba(25, 118, 210, 0.12) !important;
+  border-left: 3px solid #fa2626;
+}
+
+a[mat-button].menu-active .mdc-button__label {
+  color: #1976d2 !important;
+  font-weight: 600;
+}

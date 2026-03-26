@@ -7,11 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StagesService } from '../../core/services/stage/stages.service';
 import { AccesExterneService } from '../../core/services/accesExterne/acces-externe';
-
+import { MatChipsModule } from '@angular/material/chips';
 import { DatePipe } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-
+import { CommonModule } from '@angular/common';
+import { getStageEtatUi } from '../../shared/helper/stage-etat.util';
 @Component({
   selector: 'app-admin-manquants',
   standalone: true,
@@ -23,6 +24,8 @@ import { HttpClient } from '@angular/common/http';
     MatInputModule,
     MatSelectModule,
     DatePipe,
+    MatChipsModule,
+    CommonModule,
   ],
   templateUrl: './admin-manquants.component.html',
 })
@@ -69,7 +72,7 @@ export class AdminManquantsComponent implements OnInit {
 
     return this.stages().filter((row) => {
       const matchGroupe = groupe === 'TOUS' || row.groupe === groupe;
-      
+
       const searchable = [
         row.etudiant?.prenom,
         row.etudiant?.nom,
@@ -139,18 +142,21 @@ export class AdminManquantsComponent implements OnInit {
     }
   }
 
-  getBilanFinalBadgeStyle(value: 'COMPLET' | 'A_SURVEILLER' | 'EN_RETARD' | string): string {
-    switch (value) {
-      case 'COMPLET':
-        return 'display:inline-block;padding:4px 10px;border-radius:999px;background:#e8f5e9;color:#2e7d32;font-weight:600;';
-      case 'EN_RETARD':
-        return 'display:inline-block;padding:4px 10px;border-radius:999px;background:#ffebee;color:#c62828;font-weight:600;';
-      case 'A_SURVEILLER':
-        return 'display:inline-block;padding:4px 10px;border-radius:999px;background:#eceff1;color:#455a64;font-weight:600;';
-      default:
-        return 'display:inline-block;padding:4px 10px;border-radius:999px;background:#eceff1;color:#455a64;font-weight:600;';
-    }
+  getEtatUi(etat: string | null | undefined) {
+    return getStageEtatUi(etat);
   }
+  getEtatClass(etat: string | null | undefined): string {
+    const map: Record<string, string> = {
+      PRE_VALIDE: 'etat-pre-valide',
+      ENTENTE_RECUE: 'etat-entente-recue',
+      ACCEPTE: 'etat-accepte',
+      EN_COURS: 'etat-en-cours',
+      ANNULE: 'etat-annule',
+    };
+
+    return map[etat ?? ''] ?? 'etat-default';
+  }
+
 
   formatSemainesManquantes(semaines: number[]): string {
     return semaines?.length ? semaines.join(', ') : 'Aucune';
@@ -196,7 +202,7 @@ export class AdminManquantsComponent implements OnInit {
       case 'INCOMPLET':
         return 'Incomplet';
       case 'ANNULE':
-        return 'Annulé';        
+        return 'Annulé';
       default:
         return value;
     }
