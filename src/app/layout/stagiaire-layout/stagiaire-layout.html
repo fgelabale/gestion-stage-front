@@ -37,7 +37,7 @@
       <span class="toolbar-spacer"></span>
 
       <span>
-        {{ currentUser?.prenom || '' }} {{ currentUser?.nom || '' }}
+       Bienvenue {{ currentUser?.prenom || '' }} {{ currentUser?.nom || '' }}
       </span>
       
       <button mat-stroked-button color="primary" (click)="logout()">

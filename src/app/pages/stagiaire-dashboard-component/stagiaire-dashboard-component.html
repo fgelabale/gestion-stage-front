@@ -1,12 +1,6 @@
 <div style="padding:24px;">
   <h1>Mon tableau de bord stagiaire</h1>
 
-  <p>
-    Bienvenue
-    {{ currentUser?.prenom || '' }}
-    {{ currentUser?.nom || '' }}
-  </p>
-
   @if (isLoading()) {
   <p>Chargement...</p>
   } @else if (errorMessage()) {
