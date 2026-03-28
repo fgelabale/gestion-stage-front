@@ -37,8 +37,9 @@
       <span class="toolbar-spacer"></span>
 
       <span>
-       Bienvenue {{ currentUser?.prenom || '' }} {{ currentUser?.nom || '' }}
+       Bienvenue {{ currentUser()?.prenom || '' }} {{ currentUser()?.nom || '' }}
       </span>
+      
       
       <button mat-stroked-button color="primary" (click)="logout()">
         Déconnexion

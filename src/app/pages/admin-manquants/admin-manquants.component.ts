@@ -28,6 +28,7 @@ import { getStageEtatUi } from '../../shared/helper/stage-etat.util';
     CommonModule,
   ],
   templateUrl: './admin-manquants.component.html',
+  styleUrl: './admin-manquants.component.css',
 })
 export class AdminManquantsComponent implements OnInit {
   private stagesService = inject(StagesService);
@@ -168,6 +169,8 @@ export class AdminManquantsComponent implements OnInit {
     return {
       total: rows.length,
       enCours: rows.filter((r) => r.isStageEnCours).length,
+      enCoursDeValidation: rows.filter((r) => r.isStageEnCoursValidation).length,
+      annules:rows.filter((r) => r.isStageAnnule).length,
       termines: rows.filter((r) => r.isStageTermine).length,
       incomplets: rows.filter((r) => r.statutGlobal === 'INCOMPLET').length,
       miBilanEnRetard: rows.filter((r) => r.isMiBilanEnRetard).length,

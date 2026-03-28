@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { StagesService } from '../../core/services/stage/stages.service';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { AuthStore } from '../../core/services/auth-api/auth.store';
 
 @Component({
   selector: 'app-stagiaire-dashboard',
@@ -14,13 +14,15 @@ import { AuthService } from '../../core/services/auth/auth.service';
 })
 export class StagiaireDashboardComponent implements OnInit {
   private stagesService = inject(StagesService);
-  private authService = inject(AuthService);
 
   stages = signal<any[]>([]);
   isLoading = signal(true);
   errorMessage = signal('');
 
-  currentUser = this.authService.getCurrentUser();
+  private authStore = inject(AuthStore);
+
+  // 🔥 IMPORTANT
+  currentUser = this.authStore.utilisateur;
 
   ngOnInit(): void {
     this.stagesService.getMesStages().subscribe({
@@ -42,9 +44,9 @@ export class StagiaireDashboardComponent implements OnInit {
     );
     return semainesAttendues.filter((s) => !semainesRemplies.includes(s));
   }
-  
+
   getFirstMissingWeek(stage: any): number {
     const missing = this.getMissingWeeks(stage);
     return missing.length ? missing[0] : 1;
-  }  
+  }
 }

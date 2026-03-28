@@ -1,22 +1,36 @@
-.etat-chip {
-  font-weight: 600;
-  font-size: 12px;
-  border-radius: 999px;
-  min-height: 28px;
-  padding: 0 10px;
+.status {
+  display: flex;
+  align-items: center; /* Aligne le cercle et le texte verticalement */
+  font-family: sans-serif;
+  gap: 10px; /* Espace entre le cercle et le texte */
 }
 
-.etat-chip,
-.etat-chip .mdc-evolution-chip__text-label {
-  color: #fff !important;
+.cercle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%; /* Rend le carré parfaitement rond */
+  display: inline-block;
 }
 
-.etat-chip,
-.etat-chip .mdc-evolution-chip__text-label {
-  color: #fff !important;
+/* Ta couleur spécifique pour la validation */
+.validation {
+  background-color: #FBC02D; 
 }
 
-.etat-chip-warning,
-.etat-chip-warning .mdc-evolution-chip__text-label {
-  color: #212121 !important;
+.encours {
+  background-color: #2196F3; 
+}
+
+.termine {
+  background-color: #4CAF50; 
+}
+
+.annule {
+  background-color: #9e9e9e; 
+}
+
+.flex {
+  display: flex;
+  align-items: center; /* Aligne verticalement au milieu */
+  gap: 10px;           /* Espace entre le cercle et le texte */
 }

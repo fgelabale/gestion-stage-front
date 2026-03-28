@@ -8,8 +8,6 @@ export type StageEtat =
 export interface StageEtatUi {
   label: string;
   icon: string;
-  bg: string;
-  color: string;
 }
 
 export function getStageEtatUi(etat: string | null | undefined): StageEtatUi {
@@ -17,32 +15,22 @@ export function getStageEtatUi(etat: string | null | undefined): StageEtatUi {
     PRE_VALIDE: {
       label: 'Pré-validé',
       icon: '🟡',
-      bg: '#FFC107',
-      color: '#212121',
     },
     ENTENTE_RECUE: {
       label: 'Entente reçue',
       icon: '📄',
-      bg: '#2196F3',
-      color: '#FFFFFF',
     },
     ACCEPTE: {
       label: 'Accepté',
       icon: '✅',
-      bg: '#4CAF50',
-      color: '#FFFFFF',
     },
     EN_COURS: {
       label: 'En cours',
       icon: '⚡',
-      bg: '#673AB7',
-      color: '#FFFFFF',
     },
     ANNULE: {
       label: 'Annulé',
       icon: '❌',
-      bg: '#F44336',
-      color: '#FFFFFF',
     },
   };
 

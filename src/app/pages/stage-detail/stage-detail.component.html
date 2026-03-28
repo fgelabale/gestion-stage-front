@@ -8,6 +8,7 @@
 </div>
 } @else if (data()?.stage; as stage) {
 <div style="padding:24px;">
+
   <div style="
     display:flex;
     justify-content:space-between;
@@ -24,13 +25,48 @@
   </div>
 
   <mat-card style="padding:16px; margin-bottom:20px;">
-    <form [formGroup]="adminForm" (ngSubmit)="saveFullStage(stage.id)">
-      <h3>Étudiant</h3>
+    <h2>État du stage</h2>
 
+    <form [formGroup]="etatForm" (ngSubmit)="saveEtat(stage.id)">
+      <mat-form-field appearance="outline">
+        <mat-label>État</mat-label>
+        <mat-select formControlName="etat">
+          @for (etat of etatOptions; track etat) {
+          <mat-option [value]="etat">{{ formatEtat(etat) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div style="margin-top:12px;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSavingEtat()">
+          @if (isSavingEtat()) {
+          Enregistrement...
+          } @else {
+          Enregistrer
+          }
+        </button>
+      </div>
+
+      @if (successEtatMessage()) {
+      <p style="color:green;">{{ successEtatMessage() }}</p>
+      }
+    </form>
+  </mat-card>
+
+  <mat-card style="padding:16px; margin-bottom:20px;">
+    <form [formGroup]="adminForm" (ngSubmit)="saveFullStage(stage.id)">
+      <h2>Étudiant</h2>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>Nom</mat-label>
+        <input matInput value="{{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}" readonly>
+      </mat-form-field>
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Téléphone étudiant</mat-label>
         <input matInput formControlName="telephoneEtudiant" />
       </mat-form-field>
+
+
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Groupe</mat-label>
@@ -42,7 +78,7 @@
         </mat-select>
       </mat-form-field>
 
-      <h3>Stage</h3>
+      <h2>Stage</h2>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Date début</mat-label>
@@ -65,15 +101,6 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" style="width:100%;">
-        <mat-label>État</mat-label>
-        <mat-select formControlName="etat">
-          @for (etat of etatOptions; track etat) {
-          <mat-option [value]="etat">{{ formatEtat(etat) }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Superviseur</mat-label>
         <mat-select formControlName="superviseurId">
           <mat-option [value]="null">Aucun superviseur</mat-option>
@@ -85,8 +112,8 @@
         </mat-select>
       </mat-form-field>
 
-      <h3>Entreprise</h3>
-      <mat-card style="padding:16px; margin-bottom:20px;">
+      <h2>Entreprise</h2>
+      
         <!-- Nom entreprise -->
         <mat-form-field appearance="outline" style="width:100%;">
           <mat-label>Nom de l'entreprise</mat-label>
@@ -140,9 +167,8 @@
           <input matInput formControlName="entrepriseTelephone" />
         </mat-form-field>
 
-      </mat-card>
 
-      <h3>Contact du stage</h3>
+      <h2>Contact du stage</h2>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Prénom</mat-label>
@@ -169,7 +195,7 @@
         <input matInput formControlName="contactStagePoste" />
       </mat-form-field>
 
-      <h3>Maître de stage</h3>
+      <h2>Maître de stage</h2>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Prénom</mat-label>
@@ -202,91 +228,12 @@
 
       <button mat-raised-button color="primary" type="submit" [disabled]="isSavingAdmin()">
         @if (isSavingAdmin()) {
-        Enregistrement...
+        Sauvegarde en cours...
         } @else {
-        Enregistrer toutes les modifications
+        Sauvegarder
         }
       </button>
     </form>
   </mat-card>
-
-  <h2 style="margin-top:24px;">Identification</h2>
-  <p><strong>Étudiant :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
-  <p><strong>Groupe :</strong> {{ stage.etudiant?.groupe?.nom || '-' }}</p>
-  <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
-
-  <mat-card style="padding:16px; margin-bottom:20px;">
-    <h2>État du stage</h2>
-
-    <form [formGroup]="etatForm" (ngSubmit)="saveEtat(stage.id)">
-      <mat-form-field appearance="outline" style="min-width:260px;">
-        <mat-label>État</mat-label>
-        <mat-select formControlName="etat">
-          @for (etat of etatOptions; track etat) {
-          <mat-option [value]="etat">{{ etat }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-      <div style="margin-top:12px;">
-        <button mat-raised-button color="primary" type="submit" [disabled]="isSavingEtat()">
-          @if (isSavingEtat()) {
-          Enregistrement...
-          } @else {
-          Enregistrer l’état
-          }
-        </button>
-      </div>
-
-      @if (successEtatMessage()) {
-      <p style="color:green;">{{ successEtatMessage() }}</p>
-      }
-    </form>
-  </mat-card>
-
-  <h2 style="margin-top:24px;">Résumé</h2>
-  <p><strong>Nombre de rapports :</strong> {{ data()?.resume?.nombreRapportsHebdomadaires }}</p>
-  <p>
-    <strong>Semaines manquantes :</strong>
-    {{
-    data()?.resume?.semainesManquantes?.length
-    ? data()?.resume?.semainesManquantes.join(', ')
-    : 'Aucune'
-    }}
-  </p>
-  <p><strong>Bilan mi-stage :</strong> {{ data()?.resume?.bilanMiStageRempli ? 'Oui' : 'Non' }}</p>
-  <p><strong>Bilan fin-stage :</strong> {{ data()?.resume?.bilanFinStageRempli ? 'Oui' : 'Non' }}</p>
-  <p>
-    <strong>Évaluation maître de stage :</strong>
-    {{ data()?.resume?.evaluationMaitreStageRemplie ? 'Oui' : 'Non' }}
-  </p>
-
-  <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
-
-  @if (stage.rapportsHebdomadaires?.length) {
-  @for (rapport of stage.rapportsHebdomadaires; track rapport.id) {
-  <div style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
-    <h3>Semaine {{ rapport.numeroSemaine }}</h3>
-    <p><strong>Niveau autonomie :</strong> {{ rapport.niveauAutonomie }}</p>
-    <p><strong>Difficultés :</strong> {{ rapport.difficultes || '-' }}</p>
-    <p><strong>Apprentissages :</strong> {{ rapport.apprentissages || '-' }}</p>
-    <p><strong>Solutions :</strong> {{ rapport.solutions || '-' }}</p>
-    <p><strong>Axes d’amélioration :</strong> {{ rapport.axesAmelioration || '-' }}</p>
-
-    <ul>
-      @for (tache of rapport.taches; track tache.id) {
-      <li>
-        {{ tache.description }}
-        @if (tache.logicielsUtilises) {
-        <span> — {{ tache.logicielsUtilises }}</span>
-        }
-      </li>
-      }
-    </ul>
-  </div>
-  }
-  } @else {
-  <p>Aucun rapport hebdomadaire.</p>
-  }
 </div>
 }

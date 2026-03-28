@@ -1,16 +1,8 @@
 <div style="padding:24px;">
     <h1>Étudiants</h1>
-
     @if (isLoading()) {
     <p>Chargement...</p>
     } @else {
-    <div style="margin-bottom:16px;">
-        <mat-form-field appearance="outline" style="min-width:320px;">
-            <mat-label>Recherche</mat-label>
-            <input matInput [value]="texteFilter()" (input)="setTexteFilter($any($event.target).value)"
-                placeholder="Nom, prénom, courriel, groupe" />
-        </mat-form-field>
-    </div>
 
     @if (successMessage()) {
     <p style="color:green;">{{ successMessage() }}</p>
@@ -20,12 +12,6 @@
     <p style="color:red;">{{ errorMessage() }}</p>
     }
 
-    <div style="margin-bottom:16px;">
-        <a mat-raised-button color="primary" [routerLink]="['/admin/etudiants/nouveau']">
-            Ajouter un étudiant
-        </a>
-    </div>
-
     <div style="
     display:flex;
     gap:16px;
@@ -33,15 +19,11 @@
     align-items:flex-end;
     margin-bottom:16px;
   ">
-        <mat-form-field appearance="outline" style="min-width:320px;">
-            <mat-label>Recherche</mat-label>
-            <input matInput [value]="texteFilter()" (input)="setTexteFilter($any($event.target).value)"
-                placeholder="Nom, prénom, courriel, groupe" />
-        </mat-form-field>
 
-        <form [formGroup]="assignForm" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+
+        <form [formGroup]="assignForm" style="display:flex; gap:12px; flex-wrap:wrap; align-items:baseline;">
             <mat-form-field appearance="outline" style="min-width:260px;">
-                <mat-label>Associer un superviseur</mat-label>
+                <mat-label>Choisir un superviseur</mat-label>
                 <mat-select formControlName="superviseurId">
                     @for (superviseur of superviseurs(); track superviseur.id) {
                     <mat-option [value]="superviseur.id">
@@ -56,12 +38,16 @@
                 @if (isAssigningSuperviseur()) {
                 Affectation...
                 } @else {
-                Associer aux sélectionnés
+                Associer aux étudiants sélectionnés
                 }
             </button>
         </form>
     </div>
-
+    <mat-form-field appearance="outline" style="min-width:320px;">
+        <mat-label>Recherche</mat-label>
+        <input matInput [value]="texteFilter()" (input)="setTexteFilter($any($event.target).value)"
+            placeholder="Nom, prénom, courriel, groupe" />
+    </mat-form-field>
     <p><strong>Étudiants sélectionnés :</strong> {{ selectedStudentCount() }}</p>
     <table mat-table [dataSource]="filteredEtudiants()" class="mat-elevation-z2" style="width:100%;">
         <ng-container matColumnDef="select">
@@ -111,7 +97,7 @@
                     @if (row.isSaving) {
                     Enregistrement...
                     } @else {
-                    Enregistrer
+                    Enregistrer le groupe
                     }
                 </button>
             </td>

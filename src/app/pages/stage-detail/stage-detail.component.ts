@@ -155,7 +155,7 @@ export class StageDetailComponent implements OnInit {
           dateFin: this.toDateInputValue(stage.dateFin),
           heureDebut: stage.heureDebut ?? '',
           heureFin: stage.heureFin ?? '',
-          etat: stage.etat ?? '',
+          //etat: stage.etat ?? '',
           superviseurId: stage.superviseurId ?? null,
 
           entrepriseNom: stage.entreprise?.nom ?? '',
@@ -221,7 +221,7 @@ export class StageDetailComponent implements OnInit {
     });
   }
 
-    formatEtat(value: string): string {
+  formatEtat(value: string): string {
     switch (value) {
       case 'EN_COURS':
         return 'En cours';
@@ -260,7 +260,7 @@ export class StageDetailComponent implements OnInit {
           dateFin: this.toDateInputValue(updated?.dateFin),
           heureDebut: updated?.heureDebut ?? '',
           heureFin: updated?.heureFin ?? '',
-          etat: updated?.etat ?? 'EN_COURS',
+          //etat: updated?.etat ?? 'EN_COURS',
           superviseurId: updated?.superviseurId ?? null,
           entrepriseNom: updated?.entreprise?.nom ?? '',
           entrepriseNomRue: updated?.entreprise?.entrepriseNomRue ?? '',

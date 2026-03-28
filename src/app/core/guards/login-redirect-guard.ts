@@ -1,14 +1,15 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth/auth.service';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { AuthStore } from '../services/auth-api/auth.store';
 
-export const loginRedirectGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
+export const loginRedirectGuard: CanActivateFn = async (): Promise<boolean | UrlTree> => {
+  const authStore = inject(AuthStore);
   const router = inject(Router);
 
-  if (authService.isLoggedIn()) {
-    router.navigate([authService.getDefaultRouteByRole()]);
-    return false;
+  await authStore.ensureLoaded();
+
+  if (authStore.isLogged()) {
+    return router.createUrlTree([authStore.getDefaultRouteByRole()]);
   }
 
   return true;

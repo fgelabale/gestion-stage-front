@@ -1,4 +1,4 @@
-.etat-chip {
+/*.etat-chip {
   font-weight: 600;
   font-size: 12px;
   border-radius: 999px;
@@ -11,46 +11,46 @@
   display: flex;
   align-items: center;
   gap: 4px;
-}
+}*/
 
 .etat-pre-valide {
   background: #ffc107 !important;
-}
-.etat-pre-valide .mdc-evolution-chip__text-label {
   color: #212121 !important;
 }
 
 .etat-entente-recue {
   background: #2196f3 !important;
-}
-.etat-entente-recue .mdc-evolution-chip__text-label {
   color: #ffffff !important;
 }
 
 .etat-accepte {
   background: #4caf50 !important;
-}
-.etat-accepte .mdc-evolution-chip__text-label {
   color: #ffffff !important;
 }
 
 .etat-en-cours {
   background: #3a74b7 !important;
-}
-.etat-en-cours .mdc-evolution-chip__text-label {
   color: #ffffff !important;
+
 }
 
 .etat-annule {
   background: #f44336 !important;
-}
-.etat-annule .mdc-evolution-chip__text-label {
   color: #ffffff !important;
 }
+
 
 .menu-active {
   background: rgba(25, 118, 210, 0.12) !important;
   color: #1976d2 !important;
   font-weight: 600;
   border-left: 3px solid #1976d2;
+}
+
+.stagiaire-menu a,
+.admin-nav a {
+  justify-content: flex-start !important;
+  text-align: left;
+  width: 100%;
+  padding-left: 40px;
 }

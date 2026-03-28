@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/rou
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { AuthStore } from '../../core/services/auth-api/auth.store';
 
 @Component({
   selector: 'app-stagiaire-layout',
@@ -21,12 +21,15 @@ import { AuthService } from '../../core/services/auth/auth.service';
   ],
 })
 export class StagiaireLayoutComponent {
-  private authService = inject(AuthService);
+  private authStore = inject(AuthStore);
   private router = inject(Router);
-  currentUser = this.authService.getCurrentUser();
+
+  // 🔥 IMPORTANT
+  currentUser = this.authStore.utilisateur;
 
   logout(): void {
-    this.authService.logout();
+    localStorage.removeItem('token');
+    this.authStore.logoutLocalState();
     this.router.navigate(['/login']);
   }
 }

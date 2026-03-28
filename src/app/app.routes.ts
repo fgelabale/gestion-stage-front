@@ -8,8 +8,8 @@ import { StagiaireStageDetailComponent } from './pages/stagiaire-stage-detail-co
 import { StagiaireRapportFormComponent } from './pages/stagiaire-rapport-form/stagiaire-rapport-form';
 import { StagiaireBilanMiStageComponent } from './pages/stagiaire-bilan-mi-stage-form/stagiaire-bilan-mi-stage-form';
 import { StagiaireBilanFinStageComponent } from './pages/stagiaire-bilan-fin-stage/stagiaire-bilan-fin-stage';
-import { roleGuard } from './core/guards/role-guard';
-import { loginRedirectGuard } from './core/guards/login-redirect-guard';
+import { roleGuard } from './core/guards/roles.guard';
+import { guestGuard } from './core/guards/guest.guard';
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout';
 import { StagiaireLayoutComponent } from './layout/stagiaire-layout/stagiaire-layout';
 import { AdminEtudiantsComponent } from './pages/admin-etudiants/admin-etudiants';
@@ -26,7 +26,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [loginRedirectGuard],
+    canActivate: [guestGuard],
   },
 
   {

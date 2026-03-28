@@ -3,7 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/rou
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { AuthStore } from '../../core/services/auth-api/auth.store';
 
 @Component({
   selector: 'app-admin-layout',
@@ -20,17 +20,21 @@ import { AuthService } from '../../core/services/auth/auth.service';
   ],
 })
 export class AdminLayoutComponent {
-  private authService = inject(AuthService);
+  private authStore = inject(AuthStore);
   private router = inject(Router);
 
-  currentUser = this.authService.getCurrentUser();
+  // 🔥 SIGNAL
+  currentUser = this.authStore.utilisateur;
 
+  // 🔥 CORRIGÉ
   get isReadOnlyAdmin(): boolean {
-    return this.currentUser?.role === 'ADMIN_READER';
+    const user = this.currentUser();
+    return user?.role === 'ADMIN_READER';
   }
 
-   logout(): void {
-    this.authService.logout();
+  logout(): void {
+    localStorage.removeItem('token');
+    this.authStore.logoutLocalState();
     this.router.navigate(['/login']);
   }
 }
