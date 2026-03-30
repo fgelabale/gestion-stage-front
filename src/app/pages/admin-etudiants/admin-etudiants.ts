@@ -6,7 +6,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { UsersService } from '../../core/services/users/users';
 import { GroupesService } from '../../core/services/groupes/groupes';
-import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
@@ -14,7 +13,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   selector: 'app-admin-etudiants',
   standalone: true,
   imports: [
-    RouterLink,
     ReactiveFormsModule,
     MatButtonModule,
     MatTableModule,

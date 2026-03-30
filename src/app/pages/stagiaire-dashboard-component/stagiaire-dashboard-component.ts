@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { StagesService } from '../../core/services/stage/stages.service';
 import { AuthStore } from '../../core/services/auth-api/auth.store';
+import { getStageEtatUi } from '../../shared/helper/stage-etat.util';
 
 @Component({
   selector: 'app-stagiaire-dashboard',
@@ -36,7 +37,9 @@ export class StagiaireDashboardComponent implements OnInit {
       },
     });
   }
-
+  getEtatUi(etat: string | null | undefined) {
+    return getStageEtatUi(etat);
+  }
   getMissingWeeks(stage: any): number[] {
     const semainesAttendues = [1, 2, 3, 4, 5, 6, 7];
     const semainesRemplies = (stage.rapportsHebdomadaires ?? []).map(

@@ -1,6 +1,6 @@
 <div style="display:flex; justify-content:center; margin-top:60px;">
   <mat-card style="width:420px; padding:16px;">
-    <h2>Connexion admin</h2>
+    <h2>Connexion</h2>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field appearance="outline" style="width:100%;">
@@ -8,13 +8,13 @@
         <input matInput formControlName="courrielEcole" />
 
         @if (form.controls.courrielEcole.touched && form.controls.courrielEcole.invalid) {
-        <mat-error>
-          @if (form.controls.courrielEcole.errors?.['required']) {
-          Le courriel est requis.
-          } @else if (form.controls.courrielEcole.errors?.['courrielEcole']) {
-          Le format du courriel est invalide.
-          }
-        </mat-error>
+          <mat-error>
+            @if (form.controls.courrielEcole.errors?.['required']) {
+              Le courriel est requis.
+            } @else if (form.controls.courrielEcole.errors?.['email']) {
+              Le format du courriel est invalide.
+            }
+          </mat-error>
         }
       </mat-form-field>
 
@@ -23,21 +23,27 @@
         <input matInput type="password" formControlName="motDePasse" />
 
         @if (form.controls.motDePasse.touched && form.controls.motDePasse.invalid) {
-        <mat-error>Le mot de passe est requis.</mat-error>
+          <mat-error>Le mot de passe est requis.</mat-error>
         }
       </mat-form-field>
 
       @if (errorMessage) {
-      <p style="color:red;">{{ errorMessage }}</p>
+        <p style="color:red;">{{ errorMessage }}</p>
       }
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
-        @if (isLoading) {
-        Connexion...
-        } @else {
-        Se connecter
-        }
-      </button>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:16px;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+          @if (isLoading) {
+            Connexion...
+          } @else {
+            Se connecter
+          }
+        </button>
+
+        <button mat-stroked-button type="button" (click)="loginSchool()">
+          Connexion compte scolaire
+        </button>
+      </div>
     </form>
   </mat-card>
 </div>

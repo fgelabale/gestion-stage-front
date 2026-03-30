@@ -25,7 +25,7 @@ export function getStageEtatUi(etat: string | null | undefined): StageEtatUi {
       icon: '✅',
     },
     EN_COURS: {
-      label: 'En cours',
+      label: 'En traitement',
       icon: '⚡',
     },
     ANNULE: {

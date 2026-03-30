@@ -4,6 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthStore } from '../../core/services/auth-api/auth.store';
+import { MsalService } from '@azure/msal-angular';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -22,7 +24,8 @@ import { AuthStore } from '../../core/services/auth-api/auth.store';
 export class AdminLayoutComponent {
   private authStore = inject(AuthStore);
   private router = inject(Router);
-
+  private readonly msalService = inject(MsalService);
+    private readonly authService = inject(AuthService);
   // 🔥 SIGNAL
   currentUser = this.authStore.utilisateur;
 
@@ -33,8 +36,20 @@ export class AdminLayoutComponent {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    // nettoyage local toujours
+    this.authService.logout();
     this.authStore.logoutLocalState();
-    this.router.navigate(['/login']);
+
+    const hasMicrosoftSession =
+      this.msalService.instance.getAllAccounts().length > 0;
+
+    if (hasMicrosoftSession) {
+      this.msalService.logoutRedirect({
+        postLogoutRedirectUri: 'http://localhost:4200/login',
+      });
+      return;
+    }
+
+    this.router.navigateByUrl('/login');
   }
 }

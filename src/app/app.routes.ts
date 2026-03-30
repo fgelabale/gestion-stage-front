@@ -21,6 +21,7 @@ import { StagiaireProfilComponent } from './pages/stagiaire-profil/stagiaire-pro
 import { StagiaireStageCreateComponent } from './pages/stagiaire-stage-create/stagiaire-stage-create';
 import { AdminEntreprises } from './pages/admin-entreprises/admin-entreprises';
 import { AdminEntrepriseEditComponent } from './pages/admin-entreprise-edit/admin-entreprise-edit';
+import { MsalRedirectComponent } from '@azure/msal-angular';
 
 export const routes: Routes = [
   {
@@ -28,7 +29,10 @@ export const routes: Routes = [
     component: LoginComponent,
     canActivate: [guestGuard],
   },
-
+  {
+    path: 'auth/callback',
+    component: MsalRedirectComponent,
+  },
   {
     path: 'admin',
     component: AdminLayoutComponent,

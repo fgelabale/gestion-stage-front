@@ -213,7 +213,7 @@ export class AdminManquantsComponent implements OnInit {
   formatEtat(value: string): string {
     switch (value) {
       case 'EN_COURS':
-        return 'En cours';
+        return 'En traitement';
       case 'PRE_VALIDE':
         return 'Pré-validé';
       case 'ENTENTE_RECUE':
