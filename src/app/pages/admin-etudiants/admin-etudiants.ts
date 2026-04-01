@@ -198,12 +198,12 @@ export class AdminEtudiantsComponent {
     return;
   }
 
-  const selectedIds = this.etudiants()
+  const selectedEtudiantIds = this.etudiants()
     .filter((e) => e.selected)
     .map((e) => e.etudiantId ?? e.id)
     .filter(Boolean);
 
-  if (!selectedIds.length) {
+  if (!selectedEtudiantIds.length) {
     this.errorMessage.set('Veuillez sélectionner au moins un étudiant.');
     return;
   }
@@ -215,7 +215,7 @@ export class AdminEtudiantsComponent {
   this.successMessage.set('');
 
   this.usersService
-    .assignSuperviseurToEtudiants(selectedIds, superviseurId)
+    .assignSuperviseurToEtudiants(selectedEtudiantIds, superviseurId)
     .subscribe({
       next: (response: any) => {
         this.successMessage.set(

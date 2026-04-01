@@ -1,0 +1,91 @@
+{
+  "common": {
+    "language": "Language",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "layout": {
+    "title": "Internship Management",
+    "logout": "Logout",
+    "welcome": "Hi,"
+  },
+  "admin": {
+    "students": {
+      "title": "Student"
+    }
+  },
+  "globalStage": {
+    "COMPLET": "Completed",
+    "INCOMPLET": "Incomplete"
+  },
+  "statutStage": {
+    "COMPLET": "Complete",
+    "A_SURVEILLER": "To monitor",
+    "EN_RETARD": "Late",
+    "INCOMPLET": "Incomplete",
+    "ANNULE": "Cancelled"
+  },
+  "etatStage": {
+    "OUVERT": "Open",
+    "EN_TRAITEMENT": "Processing",
+    "ENTENTE_ENVOYEE": "Agreement sent",
+    "ACCEPTE": "Accepted",
+    "STAGE_ECHEC": "Failed",
+    "ANNULE": "Cancelled"
+  },
+  "adminStagesPage": {
+    "title": "Internship Administration",
+    "loading": "Loading...",
+    "filters": {
+      "group": "Filter by group",
+      "search": "Search",
+      "searchPlaceholder": "Name, company, group..."
+    },
+    "summary": {
+      "total": "Total",
+      "validation": "Internships under validation",
+      "inProgress": "Internships in progress",
+      "midReviewLate": "Midterm review overdue",
+      "finalReviewLate": "Final review overdue",
+      "completed": "Completed internships",
+      "cancelledFailed": "Cancelled/failed internships"
+    },
+    "sections": {
+      "validation": "Internships under validation",
+      "inProgress": "Internships in progress",
+      "completed": "Completed internships",
+      "cancelledFailed": "Cancelled/failed internships"
+    },
+    "empty": {
+      "validation": "No internship is currently under validation.",
+      "inProgress": "No internship is currently in progress.",
+      "completed": "No completed internship.",
+      "cancelledFailed": "No cancelled or failed internship."
+    },
+    "table": {
+      "student": "Student",
+      "group": "Group",
+      "company": "Company",
+      "start": "Start",
+      "end": "End",
+      "missingWeeks": "Missing weeks",
+      "midReview": "Midterm review",
+      "finalReview": "Final review",
+      "mentorEvaluation": "Mentor evaluation",
+      "globalStatus": "Overall status",
+      "state": "State",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View",
+      "pdf": "PDF",
+      "mentorLink": "Mentor link",
+      "mentorShort": "Mentor"
+    },
+    "common": {
+      "yes": "Yes",
+      "no": "No",
+      "dash": "-"
+    }
+  }
+}

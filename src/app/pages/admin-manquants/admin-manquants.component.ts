@@ -12,7 +12,9 @@ import { DatePipe } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { getStageEtatUi } from '../../shared/helper/stage-etat.util';
+import { getStageEtatUi, formatStatut } from '../../shared/helper/stage-etat.util';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 @Component({
   selector: 'app-admin-manquants',
   standalone: true,
@@ -26,6 +28,7 @@ import { getStageEtatUi } from '../../shared/helper/stage-etat.util';
     DatePipe,
     MatChipsModule,
     CommonModule,
+    TranslocoPipe,
   ],
   templateUrl: './admin-manquants.component.html',
   styleUrl: './admin-manquants.component.css',
@@ -33,7 +36,7 @@ import { getStageEtatUi } from '../../shared/helper/stage-etat.util';
 export class AdminManquantsComponent implements OnInit {
   private stagesService = inject(StagesService);
   private accesExterneService = inject(AccesExterneService);
-
+  private transloco = inject(TranslocoService);
   private apiUrl = environment.apiUrl;
   successMessage = signal('');
   displayedColumns = [
@@ -143,15 +146,17 @@ export class AdminManquantsComponent implements OnInit {
     }
   }
 
-  getEtatUi(etat: string | null | undefined) {
-    return getStageEtatUi(etat);
+  getEtatUi(etat: string) {
+    return getStageEtatUi(etat, this.transloco);
   }
+
   getEtatClass(etat: string | null | undefined): string {
     const map: Record<string, string> = {
-      PRE_VALIDE: 'etat-pre-valide',
-      ENTENTE_RECUE: 'etat-entente-recue',
+      OUVERT: 'etat-ouvert',
+      EN_TRAITEMENT: 'etat-traitement',
+      ENTENTE_ENVOYEE: 'etat-entente-envoyee',
       ACCEPTE: 'etat-accepte',
-      EN_COURS: 'etat-en-cours',
+      STAGE_ECHEC: 'etat-echec',
       ANNULE: 'etat-annule',
     };
 
@@ -170,7 +175,7 @@ export class AdminManquantsComponent implements OnInit {
       total: rows.length,
       enCours: rows.filter((r) => r.isStageEnCours).length,
       enCoursDeValidation: rows.filter((r) => r.isStageEnCoursValidation).length,
-      annules:rows.filter((r) => r.isStageAnnule).length,
+      annules: rows.filter((r) => r.isStageAnnule).length,
       termines: rows.filter((r) => r.isStageTermine).length,
       incomplets: rows.filter((r) => r.statutGlobal === 'INCOMPLET').length,
       miBilanEnRetard: rows.filter((r) => r.isMiBilanEnRetard).length,
@@ -195,37 +200,9 @@ export class AdminManquantsComponent implements OnInit {
   }
 
   formatStatut(value: string): string {
-    switch (value) {
-      case 'COMPLET':
-        return 'Complet';
-      case 'A_SURVEILLER':
-        return 'À surveiller';
-      case 'EN_RETARD':
-        return 'En retard';
-      case 'INCOMPLET':
-        return 'Incomplet';
-      case 'ANNULE':
-        return 'Annulé';
-      default:
-        return value;
-    }
+    return formatStatut(value);
   }
-  formatEtat(value: string): string {
-    switch (value) {
-      case 'EN_COURS':
-        return 'En traitement';
-      case 'PRE_VALIDE':
-        return 'Pré-validé';
-      case 'ENTENTE_RECUE':
-        return 'Entente reçue';
-      case 'ACCEPTE':
-        return 'Accepté';
-      case 'ANNULE':
-        return 'Annulé';
-      default:
-        return value;
-    }
-  }
+
   generateMaitreStageLink(row: any): void {
     this.errorMessage.set('');
     this.successMessage.set('');

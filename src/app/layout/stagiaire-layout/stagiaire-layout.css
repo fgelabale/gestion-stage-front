@@ -51,3 +51,13 @@ a[mat-button].menu-active .mdc-button__label {
   color: #1976d2 !important;
   font-weight: 600;
 }
+
+.lang-toggle {
+  width: 90px; /* fixe */
+  display: flex;
+}
+
+.lang-toggle mat-button-toggle {
+  flex: 1;
+  text-align: center;
+}

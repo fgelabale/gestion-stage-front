@@ -13,7 +13,7 @@ import { UsersService } from '../../core/services/users/users';
 export class AdminSuperviseursComponent {
   private usersService = inject(UsersService);
 
-  displayedColumns = ['nom', 'email', 'nbStages'];
+  displayedColumns = ['nom', 'courrielEcole', 'nbStages'];
 
   superviseurs = signal<any[]>([]);
   isLoading = signal(true);
@@ -24,7 +24,7 @@ export class AdminSuperviseursComponent {
     const texte = this.texteFilter().trim().toLowerCase();
 
     return this.superviseurs().filter((row) => {
-      const searchable = [row.prenom, row.nom, row.email]
+      const searchable = [row.prenom, row.nom, row.courrielEcole]
         .filter(Boolean)
         .join(' ')
         .toLowerCase();

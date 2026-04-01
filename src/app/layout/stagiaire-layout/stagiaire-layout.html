@@ -36,11 +36,18 @@
 
       <span class="toolbar-spacer"></span>
 
+      <!-- 🌍 Switch langue -->
+      <mat-button-toggle-group [value]="currentLang" (change)="setLang($event.value)" aria-label="Choix de la langue"
+        style="margin-right:12px;">
+        <mat-button-toggle value="fr">FR</mat-button-toggle>
+        <mat-button-toggle value="en">EN</mat-button-toggle>
+      </mat-button-toggle-group>
+
       <span>
-       Bienvenue {{ currentUser()?.prenom || '' }} {{ currentUser()?.nom || '' }}
+        Bienvenue {{ currentUser()?.prenom || '' }} {{ currentUser()?.nom || '' }}
       </span>
-      
-      
+
+
       <button mat-stroked-button color="primary" (click)="logout()">
         Déconnexion
       </button>

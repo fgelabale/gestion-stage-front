@@ -7,6 +7,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthStore } from '../../core/services/auth-api/auth.store';
 import { MsalService } from '@azure/msal-angular';
 import { AuthService } from '../../core/services/auth/auth.service';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-stagiaire-layout',
@@ -19,7 +22,13 @@ import { AuthService } from '../../core/services/auth/auth.service';
     RouterOutlet,
     MatButtonModule,
     MatSidenavModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSelectModule,
+    TranslocoPipe,
+    MatButtonToggleModule,
   ],
 })
 export class StagiaireLayoutComponent {
@@ -31,6 +40,16 @@ export class StagiaireLayoutComponent {
   // 🔥 IMPORTANT
   currentUser = this.authStore.utilisateur;
 
+    private transloco = inject(TranslocoService);
+
+  currentLang = this.transloco.getActiveLang();
+
+  setLang(lang: string) {
+    this.transloco.setActiveLang(lang);
+    this.currentLang = lang;
+    localStorage.setItem('lang', lang);
+  }
+  
   logout(): void {
     // nettoyage local toujours
     this.authService.logout();

@@ -10,7 +10,7 @@
 <div style="padding:24px;">
   <h1>Mon stage</h1>
 
-  @if (stage.etat === 'ENTENTE_RECUE') {
+  @if (stage.etat === 'ACCEPTE') {
   <button mat-raised-button color="primary" (click)="acceptStage(stage.id)" [disabled]="isAccepting()">
     @if (isAccepting()) {
     Traitement...

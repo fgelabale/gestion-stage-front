@@ -1,35 +1,48 @@
+import { TranslocoService } from '@jsverse/transloco';
+
 export type StageEtat =
-  | 'PRE_VALIDE'
-  | 'ENTENTE_RECUE'
+  | 'OUVERT'
+  | 'EN_TRAITEMENT'
+  | 'ENTENTE_ENVOYEE'
   | 'ACCEPTE'
-  | 'EN_COURS'
+  | 'STAGE_ECHEC'
   | 'ANNULE';
 
 export interface StageEtatUi {
   label: string;
   icon: string;
 }
+export function formatStatut(value: string): string {
+  return `statutStage.${value}`;
+}
 
-export function getStageEtatUi(etat: string | null | undefined): StageEtatUi {
+export function getStageEtatUi(
+  etat: string | null | undefined,
+  transloco: TranslocoService
+): StageEtatUi {
   const map: Record<string, StageEtatUi> = {
-    PRE_VALIDE: {
-      label: 'Pré-validé',
+    OUVERT: {
+      label: transloco.translate('etatStage.OUVERT'),
       icon: '🟡',
     },
-    ENTENTE_RECUE: {
-      label: 'Entente reçue',
+    ENTENTE_ENVOYEE: {
+      label: transloco.translate('etatStage.ENTENTE_ENVOYEE'),
       icon: '📄',
     },
     ACCEPTE: {
-      label: 'Accepté',
+      label: transloco.translate('etatStage.ACCEPTE'),
       icon: '✅',
     },
-    EN_COURS: {
-      label: 'En traitement',
+    EN_TRAITEMENT: {
+      label: transloco.translate('etatStage.EN_TRAITEMENT'),
       icon: '⚡',
     },
+    STAGE_ECHEC: {
+      label: transloco.translate('etatStage.STAGE_ECHEC'),
+      icon: '❌',
+    },
     ANNULE: {
-      label: 'Annulé',
+      label: transloco.translate('etatStage.ANNULE'),
       icon: '❌',
     },
   };
@@ -38,8 +51,6 @@ export function getStageEtatUi(etat: string | null | undefined): StageEtatUi {
     map[etat ?? ''] ?? {
       label: etat ?? '-',
       icon: '•',
-      bg: '#9E9E9E',
-      color: '#FFFFFF',
     }
   );
 }

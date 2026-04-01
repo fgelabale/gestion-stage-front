@@ -31,11 +31,13 @@ export class UsersService {
     });
   }
 
-  assignSuperviseurToEtudiants(userId: number[], superviseurId: number) {
-    return this.http.post(`${this.apiUrl}/users/assigner-superviseur-etudiants`, {
-      userId,
+  assignSuperviseurToEtudiants(etudiantIds: number[], superviseurId: number) {
+    const body = {
+      etudiantIds,
       superviseurId,
-    });
+    };
+
+    return this.http.post(`${this.apiUrl}/users/assigner-superviseur-etudiants`, body);
   }
 
   createUser(payload: any) {

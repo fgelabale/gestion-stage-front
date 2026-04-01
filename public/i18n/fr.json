@@ -1,0 +1,92 @@
+{
+    "common": {
+        "language": "Langue",
+        "save": "Enregistrer",
+        "cancel": "Annuler"
+    },
+    "layout": {
+        "title": "Gestion de stages",
+        "logout": "Déconnexion",
+        "welcome": "Bienvenue"
+    },
+    "admin": {
+        "students": {
+            "title": "Étudiants"
+        }
+    },
+     "globalStage": {
+        "COMPLET": "Complet",
+        "INCOMPLET": "Incomplet"
+     },
+
+    "statutStage": {
+        "COMPLET": "Complet",
+        "A_SURVEILLER": "À surveiller",
+        "EN_RETARD": "En retard",
+        "INCOMPLET": "Incomplet",
+        "ANNULE": "Annulé"
+    },
+    "etatStage": {
+        "OUVERT": "Ouvert",
+        "EN_TRAITEMENT": "En traitement",
+        "ENTENTE_ENVOYEE": "Entente envoyée",
+        "ACCEPTE": "Accepté",
+        "STAGE_ECHEC": "En échec",
+        "ANNULE": "Annulé"
+    },
+    "adminStagesPage": {
+        "title": "Administration des stages",
+        "loading": "Chargement...",
+        "filters": {
+            "group": "Filtrer par groupe",
+            "search": "Recherche",
+            "searchPlaceholder": "Nom, entreprise, groupe..."
+        },
+        "summary": {
+            "total": "Total",
+            "validation": "Stages en validation",
+            "inProgress": "Stages en cours",
+            "midReviewLate": "Mi-bilan en retard",
+            "finalReviewLate": "Bilan final en retard",
+            "completed": "Stages terminés",
+            "cancelledFailed": "Stages annulés/échec"
+        },
+        "sections": {
+            "validation": "Stages en validation",
+            "inProgress": "Stages en cours",
+            "completed": "Stages terminés",
+            "cancelledFailed": "Stages annulés/échec"
+        },
+        "empty": {
+            "validation": "Aucun stage en cours de validation.",
+            "inProgress": "Aucun stage en cours.",
+            "completed": "Aucun stage terminé.",
+            "cancelledFailed": "Aucun stage annulé ou en échec."
+        },
+        "table": {
+            "student": "Étudiant",
+            "group": "Groupe",
+            "company": "Entreprise",
+            "start": "Début",
+            "end": "Fin",
+            "missingWeeks": "Semaines manquantes",
+            "midReview": "Mi-bilan",
+            "finalReview": "Bilan final",
+            "mentorEvaluation": "Éval maître",
+            "globalStatus": "Statut global",
+            "state": "État",
+            "actions": "Actions"
+        },
+        "actions": {
+            "view": "Voir",
+            "pdf": "PDF",
+            "mentorLink": "Lien maître",
+            "mentorShort": "Maitre"
+        },
+        "common": {
+            "yes": "Oui",
+            "no": "Non",
+            "dash": "-"
+        }
+    }
+}

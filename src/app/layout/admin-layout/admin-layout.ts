@@ -6,6 +6,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthStore } from '../../core/services/auth-api/auth.store';
 import { MsalService } from '@azure/msal-angular';
 import { AuthService } from '../../core/services/auth/auth.service';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-admin-layout',
@@ -19,13 +22,19 @@ import { AuthService } from '../../core/services/auth/auth.service';
     MatButtonModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSelectModule,
+    TranslocoPipe,
+    MatButtonToggleModule,
   ],
 })
 export class AdminLayoutComponent {
   private authStore = inject(AuthStore);
   private router = inject(Router);
   private readonly msalService = inject(MsalService);
-    private readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
   // 🔥 SIGNAL
   currentUser = this.authStore.utilisateur;
 
@@ -33,6 +42,16 @@ export class AdminLayoutComponent {
   get isReadOnlyAdmin(): boolean {
     const user = this.currentUser();
     return user?.role === 'ADMIN_READER';
+  }
+
+  private transloco = inject(TranslocoService);
+
+  currentLang = this.transloco.getActiveLang();
+
+  setLang(lang: string) {
+    this.transloco.setActiveLang(lang);
+    this.currentLang = lang;
+    localStorage.setItem('lang', lang);
   }
 
   logout(): void {

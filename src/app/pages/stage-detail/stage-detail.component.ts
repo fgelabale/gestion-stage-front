@@ -30,10 +30,10 @@ export class StageDetailComponent implements OnInit {
   private groupesService = inject(GroupesService);
   private fb = inject(FormBuilder);
 
-  etatOptions = ['EN_COURS', 'PRE_VALIDE', 'ENTENTE_RECUE', 'ACCEPTE', 'ANNULE'];
+  etatOptions = ['OUVERT', 'EN_TRAITEMENT', 'ENTENTE_ENVOYEE', 'STAGE_ECHEC', 'ACCEPTE', 'ANNULE'];
 
   etatForm = this.fb.nonNullable.group({
-    etat: ['EN_COURS', Validators.required],
+    etat: ['OUVERT', Validators.required],
   });
 
   isSavingEtat = signal(false);
@@ -56,7 +56,7 @@ export class StageDetailComponent implements OnInit {
     dateFin: ['', Validators.required],
     heureDebut: [''],
     heureFin: [''],
-    etat: ['EN_COURS', Validators.required],
+    etat: ['OUVERT', Validators.required],
     superviseurId: [null as number | null],
 
     entrepriseNom: [''],
@@ -141,7 +141,7 @@ export class StageDetailComponent implements OnInit {
         this.data.set(response);
         this.isLoading.set(false);
         this.etatForm.patchValue({
-          etat: response?.stage?.etat ?? response?.etat ?? 'EN_COURS',
+          etat: response?.stage?.etat ?? response?.etat ?? 'OUVERT',
         });
 
 
@@ -221,16 +221,18 @@ export class StageDetailComponent implements OnInit {
     });
   }
 
-  formatEtat(value: string): string {
+ formatEtat(value: string): string {
     switch (value) {
-      case 'EN_COURS':
+      case 'OUVERT':
+        return 'Ouvert';
+      case 'EN_TRAITEMENT':
         return 'En traitement';
-      case 'PRE_VALIDE':
-        return 'Pré-validé';
-      case 'ENTENTE_RECUE':
-        return 'Entente reçue';
+      case 'ENTENTE_ENVOYEE':
+        return 'Entente envoyée';
       case 'ACCEPTE':
         return 'Accepté';
+      case 'STAGE_ECHEC':
+        return 'En échec';
       case 'ANNULE':
         return 'Annulé';
       default:
@@ -260,7 +262,7 @@ export class StageDetailComponent implements OnInit {
           dateFin: this.toDateInputValue(updated?.dateFin),
           heureDebut: updated?.heureDebut ?? '',
           heureFin: updated?.heureFin ?? '',
-          //etat: updated?.etat ?? 'EN_COURS',
+          //etat: updated?.etat ?? 'OUVERT',
           superviseurId: updated?.superviseurId ?? null,
           entrepriseNom: updated?.entreprise?.nom ?? '',
           entrepriseNomRue: updated?.entreprise?.entrepriseNomRue ?? '',
