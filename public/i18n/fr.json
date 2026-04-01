@@ -2,7 +2,8 @@
     "common": {
         "language": "Langue",
         "save": "Enregistrer",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+         "all": "Tous"
     },
     "layout": {
         "admin": "Administration",
