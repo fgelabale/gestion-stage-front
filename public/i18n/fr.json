@@ -5,20 +5,30 @@
         "cancel": "Annuler"
     },
     "layout": {
+        "admin": "Administration",
         "title": "Gestion de stages",
+        "welcome": "Bienvenue",
         "logout": "Déconnexion",
-        "welcome": "Bienvenue"
+        "readonly": "Mode lecture seule"
+    },
+    "adminMenu": {
+        "stagesToFollow": "Stages à suivre",
+        "students": "Étudiants",
+        "supervisors": "Superviseurs",
+        "companies": "Entreprises",
+        "addStudent": "Ajouter un étudiant",
+        "assignSupervisor": "Affectation superviseur",
+        "importCsv": "Import CSV"
     },
     "admin": {
         "students": {
             "title": "Étudiants"
         }
     },
-     "globalStage": {
+    "globalStage": {
         "COMPLET": "Complet",
         "INCOMPLET": "Incomplet"
-     },
-
+    },
     "statutStage": {
         "COMPLET": "Complet",
         "A_SURVEILLER": "À surveiller",

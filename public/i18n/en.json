@@ -5,9 +5,20 @@
     "cancel": "Cancel"
   },
   "layout": {
+    "admin": "Admin",
     "title": "Internship Management",
+    "welcome": "Welcome",
     "logout": "Logout",
-    "welcome": "Hi,"
+    "readonly": "Read-only mode"
+  },
+  "adminMenu": {
+    "stagesToFollow": "Stages to monitor",
+    "students": "Students",
+    "supervisors": "Supervisors",
+    "companies": "Companies",
+    "addStudent": "Add student",
+    "assignSupervisor": "Assign supervisor",
+    "importCsv": "Import CSV"
   },
   "admin": {
     "students": {

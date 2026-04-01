@@ -1,47 +1,49 @@
 <mat-sidenav-container class="admin-shell">
   <mat-sidenav mode="side" opened class="admin-sidenav">
     <div class="admin-sidenav-content">
-      <h3>Administration</h3>
+      <h3>{{ 'layout.admin' | transloco }}</h3>
 
       @if (isReadOnlyAdmin) {
-      <p class="readonly-text">Mode lecture seule</p>
+      <p class="readonly-text">
+        {{ 'layout.readonly' | transloco }}
+      </p>
       }
 
       <nav class="admin-nav">
         <a mat-button routerLink="/admin/manquants" routerLinkActive="menu-active"
           [routerLinkActiveOptions]="{ exact: true }">
-          Stages à suivre
+          {{ 'adminMenu.stagesToFollow' | transloco }}
         </a>
 
         <a mat-button routerLink="/admin/etudiants" routerLinkActive="menu-active"
           [routerLinkActiveOptions]="{ exact: true }">
-          Étudiants
+          {{ 'adminMenu.students' | transloco }}
         </a>
 
         <a mat-button routerLink="/admin/superviseurs" routerLinkActive="menu-active"
           [routerLinkActiveOptions]="{ exact: true }">
-          Superviseurs
+          {{ 'adminMenu.supervisors' | transloco }}
         </a>
 
         <a mat-button routerLink="/admin/entreprises" routerLinkActive="menu-active"
           [routerLinkActiveOptions]="{ exact: true }">
-          Entreprises
+          {{ 'adminMenu.companies' | transloco }}
         </a>
 
         @if (!isReadOnlyAdmin) {
         <a mat-button routerLink="/admin/etudiants/nouveau" routerLinkActive="menu-active"
           [routerLinkActiveOptions]="{ exact: true }">
-          Ajouter un étudiant
+          {{ 'adminMenu.addStudent' | transloco }}
         </a>
 
         <a mat-button routerLink="/admin/affectation-superviseur" routerLinkActive="menu-active"
           [routerLinkActiveOptions]="{ exact: true }">
-          Affectation superviseur
+          {{ 'adminMenu.assignSupervisor' | transloco }}
         </a>
 
         <a mat-button routerLink="/admin/import-csv" routerLinkActive="menu-active"
           [routerLinkActiveOptions]="{ exact: true }">
-          Import CSV
+          {{ 'adminMenu.importCsv' | transloco }}
         </a>
         }
       </nav>
@@ -54,22 +56,24 @@
 
       <span class="toolbar-spacer"></span>
 
-
       <!-- 🌍 Switch langue -->
-      <mat-button-toggle-group [value]="currentLang" (change)="setLang($event.value)" aria-label="Choix de la langue"
-        style="margin-right:12px;">
+      <mat-button-toggle-group
+        [value]="currentLang"
+        (change)="setLang($event.value)"
+        style="margin-right:12px;"
+      >
         <mat-button-toggle value="fr">FR</mat-button-toggle>
         <mat-button-toggle value="en">EN</mat-button-toggle>
       </mat-button-toggle-group>
 
       <span>
-        {{ 'layout.welcome' | transloco }} {{ currentUser()?.prenom || '' }} {{ currentUser()?.nom || '' }}
+        {{ 'layout.welcome' | transloco }}
+        {{ currentUser()?.prenom || '' }} {{ currentUser()?.nom || '' }}
       </span>
 
       <button mat-stroked-button color="primary" (click)="logout()">
-        Déconnexion
+        {{ 'layout.logout' | transloco }}
       </button>
-
     </mat-toolbar>
 
     <div class="admin-page-content">
