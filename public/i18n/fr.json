@@ -59,19 +59,19 @@
             "midReviewLate": "Mi-bilan en retard",
             "finalReviewLate": "Bilan final en retard",
             "completed": "Stages terminés",
-            "cancelledFailed": "Stages annulés/échec"
+            "failed": "Stages en échec"
         },
         "sections": {
             "validation": "Stages en validation",
             "inProgress": "Stages en cours",
             "completed": "Stages terminés",
-            "cancelledFailed": "Stages annulés/échec"
+            "failed": "Stages en échec"
         },
         "empty": {
             "validation": "Aucun stage en cours de validation.",
             "inProgress": "Aucun stage en cours.",
             "completed": "Aucun stage terminé.",
-            "cancelledFailed": "Aucun stage annulé ou en échec."
+            "failed": "Aucun stage en échec."
         },
         "table": {
             "student": "Étudiant",

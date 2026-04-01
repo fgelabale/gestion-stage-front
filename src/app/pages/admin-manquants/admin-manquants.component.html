@@ -71,8 +71,8 @@
     </div>
 
     <div style="border:1px solid #ddd; border-radius:8px; padding:12px;background-color:#9E9E9E; color:#FFF;">
-      <p>{{ 'adminStagesPage.summary.cancelledFailed' | transloco }}</p>
-      <p>{{ resume().annules }}</p>
+      <p>{{ 'adminStagesPage.summary.failed' | transloco }}</p>
+      <p>{{ resume().enEchec }}</p>
     </div>
   </div>
 
@@ -257,7 +257,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.midReview' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [style]="getBadgeStyle(row.statutMiBilan)">
-          {{ formatStatut(row.statutMiBilan) }}
+            {{ formatStatut(row.statutMiBilan) | transloco }}
         </span>
       </td>
     </ng-container>
@@ -266,7 +266,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.finalReview' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [style]="getBadgeStyle(row.statutBilanFinal)">
-          {{ formatStatut(row.statutBilanFinal) }}
+            {{ formatStatut(row.statutBilanFinal) | transloco }}
         </span>
       </td>
     </ng-container>
@@ -282,7 +282,7 @@
     <ng-container matColumnDef="statut">
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.globalStatus' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
-        {{ row.statutGlobal }}
+          {{ `globalStage.` + row.statutGlobal | transloco}}
       </td>
     </ng-container>
 
@@ -378,7 +378,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.midReview' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [style]="getBadgeStyle(row.statutMiBilan)">
-          {{ formatStatut(row.statutMiBilan) }}
+              {{ formatStatut(row.statutMiBilan) | transloco }}
         </span>
       </td>
     </ng-container>
@@ -387,7 +387,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.finalReview' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [style]="getBadgeStyle(row.statutBilanFinal)">
-          {{ formatStatut(row.statutBilanFinal) }}
+            {{ formatStatut(row.statutBilanFinal) | transloco }}
         </span>
       </td>
     </ng-container>
@@ -403,7 +403,7 @@
     <ng-container matColumnDef="statut">
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.globalStatus' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
-        {{ row.statutGlobal }}
+          {{ `globalStage.` + row.statutGlobal | transloco}}
       </td>
     </ng-container>
 
@@ -446,13 +446,13 @@
     <div class="status">
       <span class="cercle annule"></span>
     </div>
-    <h2>{{ 'adminStagesPage.sections.cancelledFailed' | transloco }} ({{ stagesAnnules().length }})</h2>
+    <h2>{{ 'adminStagesPage.sections.failed' | transloco }} ({{ stagesEchec().length }})</h2>
   </div>
 
-  @if (stagesAnnules().length === 0) {
-  <p>{{ 'adminStagesPage.empty.cancelledFailed' | transloco }}</p>
+  @if (stagesEchec().length === 0) {
+  <p>{{ 'adminStagesPage.empty.failed' | transloco }}</p>
   } @else {
-  <table mat-table [dataSource]="stagesAnnules()" class="mat-elevation-z2" style="width:100%; margin-bottom:32px;">
+  <table mat-table [dataSource]="stagesEchec()" class="mat-elevation-z2" style="width:100%; margin-bottom:32px;">
     <ng-container matColumnDef="etudiant">
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.student' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
@@ -498,8 +498,8 @@
     <ng-container matColumnDef="miBilan">
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.midReview' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
-        <span [style]="getBadgeStyle(row.statutMiBilan)">
-          {{ formatStatut('ANNULE') }}
+        <span>
+          -
         </span>
       </td>
     </ng-container>
@@ -507,8 +507,8 @@
     <ng-container matColumnDef="bilanFinal">
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.finalReview' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
-        <span [style]="getBadgeStyle(row.statutBilanFinal)">
-          {{ formatStatut('ANNULE') }}
+        <span >
+          -
         </span>
       </td>
     </ng-container>
@@ -524,7 +524,7 @@
     <ng-container matColumnDef="statut">
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.globalStatus' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
-        {{ formatStatut('ANNULE') }}
+        -
       </td>
     </ng-container>
 

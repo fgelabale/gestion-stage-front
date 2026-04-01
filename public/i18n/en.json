@@ -59,19 +59,19 @@
       "midReviewLate": "Midterm review overdue",
       "finalReviewLate": "Final review overdue",
       "completed": "Completed internships",
-      "cancelledFailed": "Cancelled/failed internships"
+      "failed": "Failed internships"
     },
     "sections": {
       "validation": "Internships under validation",
       "inProgress": "Internships in progress",
       "completed": "Completed internships",
-      "cancelledFailed": "Cancelled/failed internships"
+      "failed": "Failed internships"
     },
     "empty": {
       "validation": "No internship is currently under validation.",
       "inProgress": "No internship is currently in progress.",
       "completed": "No completed internship.",
-      "cancelledFailed": "No cancelled or failed internship."
+      "failed": "No failed internship."
     },
     "table": {
       "student": "Student",

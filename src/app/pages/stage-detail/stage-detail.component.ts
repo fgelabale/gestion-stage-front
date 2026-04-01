@@ -30,7 +30,7 @@ export class StageDetailComponent implements OnInit {
   private groupesService = inject(GroupesService);
   private fb = inject(FormBuilder);
 
-  etatOptions = ['OUVERT', 'EN_TRAITEMENT', 'ENTENTE_ENVOYEE', 'STAGE_ECHEC', 'ACCEPTE', 'ANNULE'];
+  etatOptions = ['OUVERT', 'EN_TRAITEMENT', 'ENTENTE_ENVOYEE', 'ACCEPTE', 'STAGE_ECHEC', 'ANNULE'];
 
   etatForm = this.fb.nonNullable.group({
     etat: ['OUVERT', Validators.required],

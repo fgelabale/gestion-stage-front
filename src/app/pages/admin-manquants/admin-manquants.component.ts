@@ -104,8 +104,8 @@ export class AdminManquantsComponent implements OnInit {
     this.filteredStages().filter((row) => row.isStageEnCoursValidation),
   );
 
-  stagesAnnules = computed(() =>
-    this.filteredStages().filter((row) => row.isStageAnnule),
+  stagesEchec = computed(() =>
+    this.filteredStages().filter((row) => row.isStageEchec),
   );
 
   stagesTermines = computed(() =>
@@ -175,7 +175,7 @@ export class AdminManquantsComponent implements OnInit {
       total: rows.length,
       enCours: rows.filter((r) => r.isStageEnCours).length,
       enCoursDeValidation: rows.filter((r) => r.isStageEnCoursValidation).length,
-      annules: rows.filter((r) => r.isStageAnnule).length,
+      enEchec: rows.filter((r) => r.isStageEchec).length,
       termines: rows.filter((r) => r.isStageTermine).length,
       incomplets: rows.filter((r) => r.statutGlobal === 'INCOMPLET').length,
       miBilanEnRetard: rows.filter((r) => r.isMiBilanEnRetard).length,
