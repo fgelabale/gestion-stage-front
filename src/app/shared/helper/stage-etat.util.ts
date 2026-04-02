@@ -9,47 +9,47 @@ export type StageEtat =
   | 'ANNULE';
 
 export interface StageEtatUi {
-  label: string;
+  labelKey: string;
   icon: string;
 }
+
 export function formatStatut(value: string): string {
   return `statutStage.${value}`;
 }
 
 export function getStageEtatUi(
   etat: string | null | undefined,
-  transloco: TranslocoService
 ): StageEtatUi {
   const map: Record<string, StageEtatUi> = {
     OUVERT: {
-      label: transloco.translate('etatStage.OUVERT'),
+      labelKey: 'etatStage.OUVERT',
       icon: '🟡',
     },
     ENTENTE_ENVOYEE: {
-      label: transloco.translate('etatStage.ENTENTE_ENVOYEE'),
+      labelKey: 'etatStage.ENTENTE_ENVOYEE',
       icon: '📄',
     },
     ACCEPTE: {
-      label: transloco.translate('etatStage.ACCEPTE'),
+      labelKey: 'etatStage.ACCEPTE',
       icon: '✅',
     },
     EN_TRAITEMENT: {
-      label: transloco.translate('etatStage.EN_TRAITEMENT'),
+      labelKey: 'etatStage.EN_TRAITEMENT',
       icon: '⚡',
     },
     STAGE_ECHEC: {
-      label: transloco.translate('etatStage.STAGE_ECHEC'),
+      labelKey: 'etatStage.STAGE_ECHEC',
       icon: '❌',
     },
     ANNULE: {
-      label: transloco.translate('etatStage.ANNULE'),
+      labelKey: 'etatStage.ANNULE',
       icon: '❌',
     },
   };
 
   return (
     map[etat ?? ''] ?? {
-      label: etat ?? '-',
+      labelKey: '',
       icon: '•',
     }
   );

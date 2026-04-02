@@ -7,16 +7,17 @@ import { StagesService } from '../../core/services/stage/stages.service';
 import { AuthStore } from '../../core/services/auth-api/auth.store';
 import { getStageEtatUi } from '../../shared/helper/stage-etat.util';
 import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-stagiaire-dashboard',
   standalone: true,
-  imports: [DatePipe, RouterLink, MatCardModule, MatButtonModule],
+  imports: [DatePipe, RouterLink, MatCardModule, MatButtonModule,TranslocoPipe,],
   templateUrl: './stagiaire-dashboard-component.html'
 })
 export class StagiaireDashboardComponent implements OnInit {
   private stagesService = inject(StagesService);
-private transloco = inject(TranslocoService);
+  private transloco = inject(TranslocoService);
 
   stages = signal<any[]>([]);
   isLoading = signal(true);
@@ -39,9 +40,9 @@ private transloco = inject(TranslocoService);
       },
     });
   }
- getEtatUi(etat: string) {
-  return getStageEtatUi(etat, this.transloco);
-}
+  getEtatUi(etat: string) {
+    return getStageEtatUi(etat);
+  }
   getMissingWeeks(stage: any): number[] {
     const semainesAttendues = [1, 2, 3, 4, 5, 6, 7];
     const semainesRemplies = (stage.rapportsHebdomadaires ?? []).map(

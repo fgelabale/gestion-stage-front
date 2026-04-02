@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StagiaireStageCreate } from './stagiaire-stage-create';
+import { StagiaireStageCreateComponent } from './stagiaire-stage-create';
 
 describe('StagiaireStageCreate', () => {
-  let component: StagiaireStageCreate;
-  let fixture: ComponentFixture<StagiaireStageCreate>;
+  let component: StagiaireStageCreateComponent;
+  let fixture: ComponentFixture<StagiaireStageCreateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StagiaireStageCreate],
+      imports: [StagiaireStageCreateComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StagiaireStageCreate);
+    fixture = TestBed.createComponent(StagiaireStageCreateComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

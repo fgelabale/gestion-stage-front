@@ -27,7 +27,7 @@
 
       <p>
         <strong>État :</strong>
-        {{ getEtatUi(stage.etat).label }}
+         {{ getEtatUi(stage.etat).icon }} {{ getEtatUi(stage.etat).labelKey | transloco }}
       </p>
 
       <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">

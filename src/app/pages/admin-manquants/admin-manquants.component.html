@@ -170,7 +170,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.state' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [ngClass]="getEtatClass(row.etat)" [style]="getBadgeStyle(row.statutGlobal)">
-          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).label }}
+          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).labelKey | transloco }}
         </span>
       </td>
     </ng-container>
@@ -291,7 +291,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.state' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [ngClass]="getEtatClass(row.etat)" [style]="getBadgeStyle(row.statutGlobal)">
-          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).label }}
+          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).labelKey | transloco }}
         </span>
       </td>
     </ng-container>
@@ -412,7 +412,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.state' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [ngClass]="getEtatClass(row.etat)" [style]="getBadgeStyle(row.statutGlobal)">
-          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).label }}
+          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).labelKey | transloco }}
         </span>
       </td>
     </ng-container>
@@ -533,7 +533,7 @@
       <th mat-header-cell *matHeaderCellDef>{{ 'adminStagesPage.table.state' | transloco }}</th>
       <td mat-cell *matCellDef="let row">
         <span [ngClass]="getEtatClass(row.etat)" [style]="getBadgeStyle(row.statutGlobal)">
-          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).label }}
+          {{ getEtatUi(row.etat).icon }} {{ getEtatUi(row.etat).labelKey | transloco }}
         </span>
       </td>
     </ng-container>

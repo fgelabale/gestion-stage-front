@@ -2,142 +2,221 @@
   <h1>Créer un stage</h1>
 
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <mat-card style="padding:16px; margin-bottom:20px;">
+
+    <!-- ERREUR GLOBALE -->
+
+
+
+
+    <!-- ===================== STAGE ===================== -->
+    <mat-card class="section-card">
       <h2>Stage</h2>
-      <mat-form-field appearance="outline" style="width:100%;">
+
+      @if (form.hasError('dateRange') && form.touched) {
+      <div class="form-error-banner">
+        La date de fin doit être après la date de début.
+      </div>
+      }
+
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Date début</mat-label>
-        <input matInput type="date" formControlName="dateDebut" />
+        <input matInput [matDatepicker]="pickerDebut" formControlName="dateDebut" />
+        <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDebut></mat-datepicker>
+
+        @if (form.controls.dateDebut.hasError('required') && form.controls.dateDebut.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Date fin</mat-label>
-        <input matInput type="date" formControlName="dateFin" />
+        <input matInput [matDatepicker]="pickerFin" formControlName="dateFin" />
+        <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+
+        @if (form.controls.dateFin.hasError('required') && form.controls.dateFin.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
+
+        @if (form.hasError('dateRange') && form.controls.dateFin.touched) {
+        <mat-error>La date de fin doit être après la date de début.</mat-error>
+        }
       </mat-form-field>
     </mat-card>
 
+    <!-- ===================== HEURES ===================== -->
     <mat-card style="padding:16px; margin-bottom:20px;">
       <h2>Tranche horaire de travail</h2>
+
+      @if (form.hasError('timeRange') && form.touched) {
+      <div class="form-error-banner">
+        L’heure de fin doit être après l’heure de début.
+      </div>
+      }
+
+
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Heure début</mat-label>
         <input matInput type="time" formControlName="heureDebut" />
+
+        @if (form.controls.heureDebut.hasError('required') && form.controls.heureDebut.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Heure fin</mat-label>
         <input matInput type="time" formControlName="heureFin" />
+
+        @if (form.controls.heureFin.hasError('required') && form.controls.heureFin.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
+
+        @if (form.controls.heureFin.hasError('timeRange')) {
+        <mat-error>Heure fin invalide</mat-error>
+        }
       </mat-form-field>
     </mat-card>
 
+    <!-- ===================== ENTREPRISE ===================== -->
     <mat-card style="padding:16px; margin-bottom:20px;">
       <h2>Entreprise</h2>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Nom entreprise</mat-label>
         <input matInput formControlName="entrepriseNom" />
+        @if (form.controls.entrepriseNom.hasError('required') && form.controls.entrepriseNom.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
       </mat-form-field>
 
       <div style="display:grid; grid-template-columns:180px 1fr; gap:12px;">
-        <mat-form-field appearance="outline" style="width:100%;">
+        <mat-form-field appearance="outline">
           <mat-label>Numéro de rue</mat-label>
           <input matInput formControlName="entrepriseNumeroRue" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
+        <mat-form-field appearance="outline">
           <mat-label>Nom de la rue</mat-label>
           <input matInput formControlName="entrepriseNomRue" />
         </mat-form-field>
-
       </div>
 
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Adresse ligne supplémentaire</mat-label>
-        <input matInput formControlName="entrepriseAdresseLigne2">
+        <input matInput formControlName="entrepriseAdresseLigne2" />
       </mat-form-field>
+
       <div style="display:grid; grid-template-columns:1fr 160px 180px; gap:12px;">
-        <mat-form-field appearance="outline" style="width:100%;">
+        <mat-form-field appearance="outline">
           <mat-label>Ville</mat-label>
           <input matInput formControlName="entrepriseVille" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
+        <!-- PROVINCE QC -->
+        <mat-form-field appearance="outline">
           <mat-label>Province</mat-label>
           <input matInput formControlName="entrepriseProvince" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
+        <mat-form-field appearance="outline">
           <mat-label>Code postal</mat-label>
-          <input matInput formControlName="entrepriseCodePostal" />
-          @if (form.controls.entrepriseCodePostal.touched &&
-          form.controls.entrepriseCodePostal.invalid) {
-          <mat-error>Format attendu : A1A 1A1</mat-error>
-          }
+          <input matInput formControlName="entrepriseCodePostal" appPostalCodeMask />
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Téléphone</mat-label>
-        <input matInput formControlName="entrepriseTelephone" />
+        <input matInput formControlName="entrepriseTelephone" appPhoneMask />
+
+        @if (form.controls.entrepriseTelephone.hasError('pattern') && form.controls.entrepriseTelephone.touched) {
+        <mat-error>Format attendu : (514) 123-4567</mat-error>
+        }
       </mat-form-field>
     </mat-card>
 
+    <!-- ===================== CONTACT ===================== -->
     <mat-card style="padding:16px; margin-bottom:20px;">
       <h2>Contact du stage</h2>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Prénom</mat-label>
         <input matInput formControlName="contactStagePrenom" />
+        @if (form.controls.contactStagePrenom.hasError('required') && form.controls.contactStagePrenom.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Nom</mat-label>
         <input matInput formControlName="contactStageNom" />
+        @if (form.controls.contactStageNom.hasError('required') && form.controls.contactStageNom.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Courriel</mat-label>
         <input matInput formControlName="contactStageCourriel" />
+        @if (form.controls.contactStageCourriel.hasError('required') && form.controls.contactStageCourriel.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Téléphone</mat-label>
-        <input matInput formControlName="contactStageTelephone" />
+        <input matInput formControlName="contactStageTelephone" appPhoneMask />
+
+        @if (form.controls.contactStageTelephone.hasError('pattern') && form.controls.contactStageTelephone.touched) {
+        <mat-error>Format attendu : (514) 123-4567</mat-error>
+        }
+        @if (form.controls.contactStageTelephone.hasError('required') && form.controls.contactStageTelephone.touched) {
+        <mat-error>Champ obligatoire</mat-error>
+        }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Poste</mat-label>
         <input matInput formControlName="contactStagePoste" />
       </mat-form-field>
     </mat-card>
 
+    <!-- ===================== MAITRE ===================== -->
     <mat-card style="padding:16px; margin-bottom:20px;">
       <h2>Maître de stage</h2>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Prénom</mat-label>
         <input matInput formControlName="maitreStagePrenom" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Nom</mat-label>
         <input matInput formControlName="maitreStageNom" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Courriel</mat-label>
         <input matInput formControlName="maitreStageCourriel" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Téléphone</mat-label>
-        <input matInput formControlName="maitreStageTelephone" />
+        <input matInput formControlName="maitreStageTelephone" appPhoneMask />
+
+        @if (form.controls.maitreStageTelephone.hasError('pattern') && form.controls.maitreStageTelephone.touched) {
+        <mat-error>Format attendu : (514) 123-4567</mat-error>
+        }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width:100%;">
+      <mat-form-field appearance="outline">
         <mat-label>Poste</mat-label>
         <input matInput formControlName="maitreStagePoste" />
       </mat-form-field>
     </mat-card>
 
+    <!-- MESSAGES -->
     @if (successMessage()) {
     <p style="color:green;">{{ successMessage() }}</p>
     }
@@ -153,5 +232,6 @@
       Créer le stage
       }
     </button>
+
   </form>
 </div>

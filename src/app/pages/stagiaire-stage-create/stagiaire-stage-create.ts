@@ -6,6 +6,34 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { StagesService } from '../../core/services/stage/stages.service';
+import { PhoneMaskDirective } from '../../shared/directive/phone-mask';
+import { PostalCodeMaskDirective } from '../../shared/directive/code-postal';
+
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+export const timeRangeValidator: ValidatorFn = (
+  group: AbstractControl
+): ValidationErrors | null => {
+  const debut = group.get('heureDebut')?.value;
+  const fin = group.get('heureFin')?.value;
+
+  if (!debut || !fin) return null;
+
+  return debut >= fin ? { timeRange: true } : null;
+};
+
+export const dateRangeValidator: ValidatorFn = (
+  group: AbstractControl
+): ValidationErrors | null => {
+  const debut = group.get('dateDebut')?.value;
+  const fin = group.get('dateFin')?.value;
+
+  if (!debut || !fin) return null;
+
+  return debut > fin ? { dateRange: true } : null;
+};
+
 
 @Component({
   selector: 'app-stagiaire-stage-create',
@@ -16,8 +44,13 @@ import { StagesService } from '../../core/services/stage/stages.service';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    PhoneMaskDirective,
+    PostalCodeMaskDirective,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   templateUrl: './stagiaire-stage-create.html',
+  styleUrl: './stagiaire-stage-create.css',
 })
 export class StagiaireStageCreateComponent {
   private fb = inject(FormBuilder);
@@ -28,36 +61,41 @@ export class StagiaireStageCreateComponent {
   errorMessage = signal('');
   successMessage = signal('');
 
-  form = this.fb.nonNullable.group({
-    dateDebut: ['', Validators.required],
-    dateFin: ['', Validators.required],
-    heureDebut: [''],
-    heureFin: [''],
+  form = this.fb.nonNullable.group(
+    {
+      dateDebut: ['', Validators.required],
+      dateFin: ['', Validators.required],
+      heureDebut: ['', Validators.required],
+      heureFin: ['', Validators.required],
 
-    entrepriseNom: ['', Validators.required],
-    entrepriseNumeroRue: [''],
-    entrepriseAdresseLigne2: [''],
-    entrepriseNomRue: [''],
-    entrepriseVille: [''],
-    entrepriseProvince: [''],
-    entrepriseCodePostal: [
-      '',
-      [Validators.pattern(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)],
-    ],
-    entrepriseTelephone: [''],
+      entrepriseNom: ['', Validators.required],
+      entrepriseNumeroRue: [''],
+      entrepriseAdresseLigne2: [''],
+      entrepriseNomRue: [''],
+      entrepriseVille: [''],
+      entrepriseProvince: [{ value: 'QC', disabled: true }],
+      entrepriseCodePostal: [
+        '',
+        [Validators.pattern(/^[A-Z]\d[A-Z] \d[A-Z]\d$/)],
+      ],
+      entrepriseTelephone: ['', [Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]],
 
-    contactStagePrenom: [''],
-    contactStageNom: [''],
-    contactStageCourriel: [''],
-    contactStageTelephone: [''],
-    contactStagePoste: [''],
+      contactStagePrenom: ['', Validators.required],
+      contactStageNom: ['', Validators.required],
+      contactStageCourriel: ['', [Validators.required, Validators.email]],
+      contactStageTelephone: ['', [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]],
+      contactStagePoste: [''],
 
-    maitreStagePrenom: [''],
-    maitreStageNom: [''],
-    maitreStageCourriel: [''],
-    maitreStageTelephone: [''],
-    maitreStagePoste: [''],
-  });
+      maitreStagePrenom: [''],
+      maitreStageNom: [''],
+      maitreStageCourriel: ['', Validators.email],
+      maitreStageTelephone: ['', [Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]],
+      maitreStagePoste: [''],
+    },
+    {
+      validators: [timeRangeValidator, dateRangeValidator],
+    }
+  );
 
   submit(): void {
     const value = this.form.getRawValue();
@@ -68,24 +106,22 @@ export class StagiaireStageCreateComponent {
     const hasMaitreStage =
       !!value.maitreStagePrenom.trim() && !!value.maitreStageNom.trim();
 
-    if ((!hasContactStage && !hasMaitreStage) || this.form.invalid || this.isSaving()) {
+    this.errorMessage.set('');
+
+    if (!hasContactStage && !hasMaitreStage) {
       this.form.markAllAsTouched();
-      if (!hasContactStage && !hasMaitreStage) {
-        this.errorMessage.set(
-          'Veuillez saisir soit un contact de stage, soit un maître de stage.',
-        );
-      }
+      this.errorMessage.set(
+        'Veuillez saisir soit un contact de stage, soit un maître de stage.',
+      );
       return;
     }
 
-    if (this.form.controls.entrepriseCodePostal.invalid) {
-      this.errorMessage.set('Le code postal doit respecter le format canadien A1A 1A1.');
+    if (this.form.invalid || this.isSaving()) {
       this.form.markAllAsTouched();
       return;
     }
 
     this.isSaving.set(true);
-    this.errorMessage.set('');
     this.successMessage.set('');
 
     this.stagesService.createStudentStage(value).subscribe({
@@ -95,11 +131,20 @@ export class StagiaireStageCreateComponent {
         this.router.navigate(['/stagiaire']);
       },
       error: (err) => {
-        this.errorMessage.set(
-          err?.error?.message || 'Impossible de créer le stage.',
-        );
+        const message = err?.error?.message;
+
+        if (message?.includes('contactStageCourriel')) {
+          this.form.controls.contactStageCourriel.setErrors({ server: true });
+        }
+
+        if (message?.includes('maitreStageCourriel')) {
+          this.form.controls.maitreStageCourriel.setErrors({ server: true });
+        }
+
+        this.form.markAllAsTouched();
+        this.errorMessage.set('Certains champs sont invalides.');
         this.isSaving.set(false);
-      },
+      }
     });
   }
 }

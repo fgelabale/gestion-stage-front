@@ -147,7 +147,7 @@ export class AdminManquantsComponent implements OnInit {
   }
 
   getEtatUi(etat: string) {
-    return getStageEtatUi(etat, this.transloco);
+    return getStageEtatUi(etat);
   }
 
   getEtatClass(etat: string | null | undefined): string {
