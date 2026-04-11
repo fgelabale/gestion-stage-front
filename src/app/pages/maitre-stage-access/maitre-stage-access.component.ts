@@ -1,16 +1,19 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+
 import { AccesExterneService } from '../../core/services/accesExterne/acces-externe';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { DatePipe } from '@angular/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { ConfirmSubmitDialogComponent } from './confirm-submit-dialog.component';
 
 @Component({
   selector: 'app-maitre-stage-access',
@@ -23,20 +26,29 @@ import { DatePipe } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatDialogModule,
+    TranslocoModule,
+    ConfirmSubmitDialogComponent,
   ],
   templateUrl: './maitre-stage-access.component.html',
+  styleUrl: './maitre-stage-access.component.css',
+
 })
 export class MaitreStageAccessComponent {
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private accesExterneService = inject(AccesExterneService);
+  private transloco = inject(TranslocoService);
+  private dialog = inject(MatDialog);
 
   token = signal<string>('');
   isLoading = signal(true);
-  isSaving = signal(false);
+  isSavingDraft = signal(false);
+  isSubmitting = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
   stageData = signal<any | null>(null);
+  submitAttempted = signal(false);
 
   noteOptions = [
     'EXCELLENT',
@@ -48,6 +60,75 @@ export class MaitreStageAccessComponent {
   ];
 
   yesNoOptions = ['OUI', 'NON'];
+
+  requiredFields = [
+    'nomEntreprise',
+    'nomCompletMaitreStage',
+    'fonctionTitreMaitreStage',
+    'nombreHeuresPresence',
+    'respectDureePauses',
+    'tachesEffectuees',
+    'nombreAbsences',
+    'nombreRetards',
+    'nombreDepartsHatifs',
+    'francaisParle',
+    'francaisEcrit',
+    'anglaisParle',
+    'anglaisEcrit',
+    'maitriseEquipementsInformatiques',
+    'maitriseLogicielsInformatiques',
+    'rapiditeExecution',
+    'courtoisie',
+    'capaciteAdaptation',
+    'initiative',
+    'espritCollaboration',
+    'jugement',
+    'sensResponsabilites',
+    'autonomie',
+    'respectEcheanciers',
+    'sensOrganisation',
+    'capaciteTravaillerSousPression',
+    'tenueVestimentaire',
+    'relationAutorite',
+    'qualiteTravail',
+    'relationCollegues',
+    'faciliteApprentissage',
+    'relationClientele',
+    'commentaire',
+    'elementsAmelioration',
+    'aptitudesAppreciees',
+  ];
+
+  private validateFinalSubmitFields(): boolean {
+    let hasErrors = false;
+
+    for (const field of this.requiredFields) {
+      const control = this.form.get(field);
+      const value = control?.value;
+
+      if (value === null || value === undefined || value === '') {
+        control?.setErrors({ requiredForSubmit: true });
+        control?.markAsTouched();
+        hasErrors = true;
+      } else if (control?.hasError('requiredForSubmit')) {
+        control.setErrors(null);
+      }
+    }
+
+    return !hasErrors;
+  }
+  hasSubmitError(fieldName: string): boolean {
+    const control = this.form.get(fieldName);
+    return !!control && control.touched && control.hasError('requiredForSubmit');
+  }
+  private clearFinalSubmitErrors(): void {
+    for (const field of this.requiredFields) {
+      const control = this.form.get(field);
+      if (control?.hasError('requiredForSubmit')) {
+        control.setErrors(null);
+      }
+    }
+  }
 
   form = this.fb.group({
     nomEntreprise: [''],
@@ -92,15 +173,34 @@ export class MaitreStageAccessComponent {
   });
 
   constructor() {
-  this.route.paramMap.subscribe((params) => {
-    const token = params.get('token') ?? '';
+    this.route.paramMap.subscribe((params) => {
+      const token = params.get('token') ?? '';
 
-    this.token.set(token);
-    this.stageData.set(null);
-    this.errorMessage.set('');
-    this.successMessage.set('');
-    this.isLoading.set(true);
+      this.token.set(token);
+      this.stageData.set(null);
+      this.errorMessage.set('');
+      this.successMessage.set('');
+      this.isLoading.set(true);
+      this.submitAttempted.set(false);
 
+      this.resetForm();
+      this.loadAccess();
+    });
+  }
+
+  get stage() {
+    return computed(() => this.stageData()?.stage ?? null);
+  }
+
+  get evaluationExistante() {
+    return computed(() => this.stageData()?.evaluationExistante ?? null);
+  }
+
+  get isLocked() {
+    return computed(() => this.evaluationExistante()?.statut === 'SOUMIS');
+  }
+
+  private resetForm(): void {
     this.form.reset({
       nomEntreprise: '',
       nomCompletMaitreStage: '',
@@ -138,17 +238,14 @@ export class MaitreStageAccessComponent {
       elementsAmelioration: '',
       commentaire: '',
     });
-
-    this.loadAccess();
-  });
-}
-
-  get stage() {
-    return computed(() => this.stageData()?.stage ?? null);
   }
 
-  get evaluationExistante() {
-    return computed(() => this.stageData()?.evaluationExistante ?? null);
+  private applyFormState(): void {
+    if (this.isLocked()) {
+      this.form.disable({ emitEvent: false });
+    } else {
+      this.form.enable({ emitEvent: false });
+    }
   }
 
   private loadAccess(): void {
@@ -158,11 +255,11 @@ export class MaitreStageAccessComponent {
     this.accesExterneService.getMaitreStageAccess(this.token()).subscribe({
       next: (response: any) => {
         this.stageData.set(response);
-
+        const stage = response?.stage;
         const evalExistante = response?.evaluationExistante;
         if (evalExistante) {
           this.form.patchValue({
-            nomEntreprise: evalExistante.nomEntreprise ?? '',
+            nomEntreprise: evalExistante?.nomEntreprise ?? stage?.entreprise?.nom ?? '',
             nomCompletMaitreStage: evalExistante.nomCompletMaitreStage ?? '',
             fonctionTitreMaitreStage: evalExistante.fonctionTitreMaitreStage ?? '',
             nombreHeuresPresence: evalExistante.nombreHeuresPresence ?? null,
@@ -207,33 +304,109 @@ export class MaitreStageAccessComponent {
           });
         }
 
+        this.applyFormState();
         this.isLoading.set(false);
       },
       error: () => {
-        this.errorMessage.set('Lien invalide ou expiré.');
+        this.errorMessage.set(
+          this.transloco.translate('mentorEvaluation.messages.invalidLink')
+        );
         this.isLoading.set(false);
       },
     });
   }
 
-  submit(): void {
-    if (this.isSaving()) return;
+  private normalizePayload(payload: any) {
+    return Object.fromEntries(
+      Object.entries(payload).map(([key, value]) => [
+        key,
+        value === '' ? null : value,
+      ]),
+    );
+  }
 
-    this.isSaving.set(true);
+
+  saveDraft(): void {
+    if (this.isSavingDraft() || this.isSubmitting() || this.isLocked()) return;
+    this.clearFinalSubmitErrors();
+    this.isSavingDraft.set(true);
+    this.successMessage.set('');
+    this.errorMessage.set('');
+    this.submitAttempted.set(false);
+
+    this.accesExterneService
+      .saveMaitreStageEvaluationDraft(this.token(), this.normalizePayload(this.form.getRawValue()))
+      .subscribe({
+        next: () => {
+          this.successMessage.set(
+            this.transloco.translate('mentorEvaluation.messages.draftSaved')
+          );
+          this.isSavingDraft.set(false);
+          this.loadAccess();
+        },
+        error: () => {
+          this.errorMessage.set(
+            this.transloco.translate('mentorEvaluation.messages.saveError')
+          );
+          this.isSavingDraft.set(false);
+        },
+      });
+  }
+
+  submitFinal(): void {
+    if (this.isSavingDraft() || this.isSubmitting() || this.isLocked()) return;
+
     this.successMessage.set('');
     this.errorMessage.set('');
 
-    this.accesExterneService
-      .submitMaitreStageEvaluation(this.token(), this.form.getRawValue())
-      .subscribe({
-        next: () => {
-          this.successMessage.set('Évaluation enregistrée avec succès.');
-          this.isSaving.set(false);
-        },
-        error: () => {
-          this.errorMessage.set("Impossible d'enregistrer l’évaluation.");
-          this.isSaving.set(false);
-        },
-      });
+    const isValid = this.validateFinalSubmitFields();
+
+    if (!isValid) {
+      this.errorMessage.set(
+        this.transloco.translate('mentorEvaluation.messages.formInvalid')
+      );
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmSubmitDialogComponent, {
+      width: '420px',
+      disableClose: true,
+      data: {
+        message: this.transloco.translate('mentorEvaluation.confirmSubmitMessage'),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) return;
+
+      this.isSubmitting.set(true);
+
+      this.accesExterneService
+        .submitMaitreStageEvaluationFinal(
+          this.token(),
+          this.normalizePayload(this.form.getRawValue())
+        )
+        .subscribe({
+          next: () => {
+            this.successMessage.set(
+              this.transloco.translate('mentorEvaluation.messages.submitted')
+            );
+            this.isSubmitting.set(false);
+            this.loadAccess();
+          },
+          error: (err) => {
+            const backendMessage = err?.error?.message;
+
+            this.errorMessage.set(
+              Array.isArray(backendMessage)
+                ? backendMessage.join(', ')
+                : backendMessage ||
+                this.transloco.translate('mentorEvaluation.messages.submitError')
+            );
+
+            this.isSubmitting.set(false);
+          },
+        });
+    });
   }
 }

@@ -1,224 +1,515 @@
 <div style="padding: 24px; max-width: 1100px; margin: 0 auto;">
   @if (isLoading()) {
-    <p>Chargement...</p>
+  <p>{{ 'mentorEvaluation.loading' | transloco }}</p>
   } @else if (errorMessage() && !stageData()) {
-    <p style="color:red;">{{ errorMessage() }}</p>
+  <p style="color:red;">{{ errorMessage() }}</p>
   } @else if (stage(); as stage) {
+  <mat-card class="stage-summary-card">
+    <div class="stage-summary-header">
+      <div class="stage-summary-kicker">
+        {{ 'mentorEvaluation.title' | transloco }}
+      </div>
+    </div>
+
+    <div class="stage-summary-grid">
+      <!-- STAGIAIRE -->
+      <div class="summary-tile">
+        <div class="tile-label">
+          {{ 'mentorEvaluation.student' | transloco }}
+        </div>
+        <div class="tile-value">
+          {{ stage.etudiant?.user?.prenom }} {{ stage.etudiant?.user?.nom }}
+        </div>
+      </div>
+
+      <!-- ENTREPRISE -->
+      <div class="summary-tile">
+        <div class="tile-label">
+          {{ 'mentorEvaluation.company' | transloco }}
+        </div>
+        <div class="tile-value">
+          {{ stage.entreprise?.nom || '-' }}
+        </div>
+      </div>
+
+      <!-- PERIODE -->
+      <div class="summary-tile">
+        <div class="tile-label">
+          {{ 'mentorEvaluation.period' | transloco }}
+        </div>
+        <div class="tile-value">
+          {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+          <span class="tile-separator">→</span>
+          {{ stage.dateFin | date:'yyyy-MM-dd' }}
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  @if (isLocked()) {
+  <mat-card style="margin-bottom: 20px; padding: 16px;">
+    <p style="margin: 0; color: #2e7d32; font-weight: 600;">
+      {{ 'mentorEvaluation.lockedMessage' | transloco }}
+    </p>
+  </mat-card>
+  }
+
+  <form [formGroup]="form">
     <mat-card style="margin-bottom: 20px; padding: 16px;">
-      <h1>Évaluation du maître de stage</h1>
-      <p><strong>Stagiaire :</strong> {{ stage.etudiant?.prenom }} {{ stage.etudiant?.nom }}</p>
-      <p><strong>Groupe :</strong>{{ stage.etudiant?.groupe?.nom || '-' }}</p>
-      <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
-      <p><strong>Période :</strong> {{ stage.dateDebut | date:'yyyy-MM-dd' }} au {{ stage.dateFin | date:'yyyy-MM-dd' }}</p>
+      <h2>{{ 'mentorEvaluation.sections.identification' | transloco }}</h2>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.companyName' | transloco }}</mat-label>
+        <input matInput formControlName="nomEntreprise" [value]="stage.entreprise?.nom || '-'" />
+        @if (hasSubmitError('nomEntreprise')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.mentorName' | transloco }}</mat-label>
+        <input matInput formControlName="nomCompletMaitreStage" />
+        @if (hasSubmitError('nomCompletMaitreStage')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.mentorTitle' | transloco }}</mat-label>
+        <input matInput formControlName="fonctionTitreMaitreStage" />
+        @if (hasSubmitError('fonctionTitreMaitreStage')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
     </mat-card>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <mat-card style="margin-bottom: 20px; padding: 16px;">
-        <h2>Identification</h2>
+    <mat-card style="margin-bottom: 20px; padding: 16px;">
+      <h2>{{ 'mentorEvaluation.sections.attendance' | transloco }}</h2>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Nom de l’entreprise</mat-label>
-          <input matInput formControlName="nomEntreprise" />
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.hoursPresence' | transloco }}</mat-label>
+          <input matInput type="number" formControlName="nombreHeuresPresence" />
+          @if (hasSubmitError('nombreHeuresPresence')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Nom complet du maître de stage</mat-label>
-          <input matInput formControlName="nomCompletMaitreStage" />
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.absences' | transloco }}</mat-label>
+          <input matInput type="number" formControlName="nombreAbsences" />
+          @if (hasSubmitError('nombreAbsences')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Fonction / titre</mat-label>
-          <input matInput formControlName="fonctionTitreMaitreStage" />
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.lateCount' | transloco }}</mat-label>
+          <input matInput type="number" formControlName="nombreRetards" />
+          @if (hasSubmitError('nombreRetards')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
         </mat-form-field>
-      </mat-card>
 
-      <mat-card style="margin-bottom: 20px; padding: 16px;">
-        <h2>Assiduité et ponctualité</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.earlyDepartures' | transloco }}</mat-label>
+          <input matInput type="number" formControlName="nombreDepartsHatifs" />
+          @if (hasSubmitError('nombreDepartsHatifs')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-          <mat-form-field appearance="outline">
-            <mat-label>Nombre d’heures de présence</mat-label>
-            <input matInput type="number" formControlName="nombreHeuresPresence" />
-          </mat-form-field>
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.breakRespect' | transloco }}</mat-label>
+        <mat-select formControlName="respectDureePauses">
+          @for (option of yesNoOptions; track option) {
+          <mat-option [value]="option">
+            {{ ('mentorEvaluation.options.yesNo.' + option) | transloco }}
+          </mat-option>
+          }
+        </mat-select>
+        @if (hasSubmitError('respectDureePauses')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
+    </mat-card>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Nombre d’absences</mat-label>
-            <input matInput type="number" formControlName="nombreAbsences" />
-          </mat-form-field>
+    <mat-card style="margin-bottom: 20px; padding: 16px;">
+      <h2>{{ 'mentorEvaluation.sections.tasks' | transloco }}</h2>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Nombre de retards</mat-label>
-            <input matInput type="number" formControlName="nombreRetards" />
-          </mat-form-field>
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.tasksDone' | transloco }}</mat-label>
+        <textarea matInput rows="5" formControlName="tachesEffectuees"></textarea>
+        @if (hasSubmitError('tachesEffectuees')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
+    </mat-card>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Nombre de départs hâtifs</mat-label>
-            <input matInput type="number" formControlName="nombreDepartsHatifs" />
-          </mat-form-field>
-        </div>
+    <mat-card style="margin-bottom: 20px; padding: 16px;">
+      <h2>{{ 'mentorEvaluation.sections.languages' | transloco }}</h2>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Respect de la durée des pauses</mat-label>
-          <mat-select formControlName="respectDureePauses">
-            @for (option of yesNoOptions; track option) {
-              <mat-option [value]="option">{{ option }}</mat-option>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.frenchSpoken' | transloco }}</mat-label>
+          <mat-select formControlName="francaisParle">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">
+              {{ ('mentorEvaluation.options.notes.' + option) | transloco }}
+            </mat-option>
             }
           </mat-select>
-        </mat-form-field>
-      </mat-card>
-
-      <mat-card style="margin-bottom: 20px; padding: 16px;">
-        <h2>Tâches effectuées</h2>
-
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Tâches effectuées par le stagiaire</mat-label>
-          <textarea matInput rows="5" formControlName="tachesEffectuees"></textarea>
-        </mat-form-field>
-      </mat-card>
-
-      <mat-card style="margin-bottom: 20px; padding: 16px;">
-        <h2>Compétences linguistiques</h2>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-          <mat-form-field appearance="outline">
-            <mat-label>Français parlé</mat-label>
-            <mat-select formControlName="francaisParle">
-              @for (option of noteOptions; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Français écrit</mat-label>
-            <mat-select formControlName="francaisEcrit">
-              @for (option of noteOptions; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Anglais parlé</mat-label>
-            <mat-select formControlName="anglaisParle">
-              @for (option of noteOptions; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Anglais écrit</mat-label>
-            <mat-select formControlName="anglaisEcrit">
-              @for (option of noteOptions; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </mat-card>
-
-      <mat-card style="margin-bottom: 20px; padding: 16px;">
-        <h2>Compétences techniques</h2>
-
-        <div style="display:grid; grid-template-columns:1fr; gap:16px;">
-          <mat-form-field appearance="outline">
-            <mat-label>Maîtrise les équipements informatiques</mat-label>
-            <mat-select formControlName="maitriseEquipementsInformatiques">
-              @for (option of noteOptions; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Maîtrise les logiciels informatiques</mat-label>
-            <mat-select formControlName="maitriseLogicielsInformatiques">
-              @for (option of noteOptions; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Rapidité d’exécution</mat-label>
-            <mat-select formControlName="rapiditeExecution">
-              @for (option of noteOptions; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </mat-card>
-
-      <mat-card style="margin-bottom: 20px; padding: 16px;">
-        <h2>Qualités personnelles et professionnelles</h2>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-          @for (field of [
-            ['courtoisie','Courtoisie'],
-            ['capaciteAdaptation','Capacité d’adaptation'],
-            ['initiative','Initiative'],
-            ['espritCollaboration','Esprit de collaboration'],
-            ['jugement','Jugement'],
-            ['sensResponsabilites','Sens des responsabilités'],
-            ['autonomie','Autonomie'],
-            ['respectEcheanciers','Respect des échéanciers'],
-            ['sensOrganisation','Sens de l’organisation'],
-            ['capaciteTravaillerSousPression','Capacité à travailler sous pression'],
-            ['tenueVestimentaire','Tenue vestimentaire'],
-            ['relationAutorite','Relation avec l’autorité'],
-            ['qualiteTravail','Qualité du travail'],
-            ['relationCollegues','Relation avec les collègues'],
-            ['faciliteApprentissage','Facilité d’apprentissage'],
-            ['relationClientele','Relation avec la clientèle']
-          ]; track field[0]) {
-            <mat-form-field appearance="outline">
-              <mat-label>{{ field[1] }}</mat-label>
-              <mat-select [formControlName]="field[0]">
-                @for (option of noteOptions; track option) {
-                  <mat-option [value]="option">{{ option }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+          @if (hasSubmitError('francaisParle')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
           }
-        </div>
-      </mat-card>
-
-      <mat-card style="margin-bottom: 20px; padding: 16px;">
-        <h2>Appréciation globale et commentaires</h2>
-
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Aptitudes appréciées</mat-label>
-          <textarea matInput rows="4" formControlName="aptitudesAppreciees"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Éléments à améliorer</mat-label>
-          <textarea matInput rows="4" formControlName="elementsAmelioration"></textarea>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.frenchWritten' | transloco }}</mat-label>
+          <mat-select formControlName="francaisEcrit">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">
+              {{ ('mentorEvaluation.options.notes.' + option) | transloco }}
+            </mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('francaisEcrit')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Commentaires</mat-label>
-          <textarea matInput rows="4" formControlName="commentaire"></textarea>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.englishSpoken' | transloco }}</mat-label>
+          <mat-select formControlName="anglaisParle">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">
+              {{ ('mentorEvaluation.options.notes.' + option) | transloco }}
+            </mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('anglaisParle')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
         </mat-form-field>
-      </mat-card>
 
-      @if (successMessage()) {
-        <p style="color:green;">{{ successMessage() }}</p>
-      }
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.englishWritten' | transloco }}</mat-label>
+          <mat-select formControlName="anglaisEcrit">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">
+              {{ ('mentorEvaluation.options.notes.' + option) | transloco }}
+            </mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('anglaisEcrit')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </mat-card>
 
-      @if (errorMessage()) {
-        <p style="color:red;">{{ errorMessage() }}</p>
-      }
+    <mat-card style="margin-bottom: 20px; padding: 16px;">
+      <h2>{{ 'mentorEvaluation.sections.technical' | transloco }}</h2>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
-        @if (isSaving()) {
-          Enregistrement...
+      <div style="display:grid; grid-template-columns:1fr; gap:16px;">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.computerEquipment' | transloco }}</mat-label>
+          <mat-select formControlName="maitriseEquipementsInformatiques">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">
+              {{ ('mentorEvaluation.options.notes.' + option) | transloco }}
+            </mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('maitriseEquipementsInformatiques')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.computerSoftware' | transloco }}</mat-label>
+          <mat-select formControlName="maitriseLogicielsInformatiques">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">
+              {{ ('mentorEvaluation.options.notes.' + option) | transloco }}
+            </mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('maitriseLogicielsInformatiques')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.speed' | transloco }}</mat-label>
+          <mat-select formControlName="rapiditeExecution">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">
+              {{ ('mentorEvaluation.options.notes.' + option) | transloco }}
+            </mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('rapiditeExecution')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </mat-card>
+
+    <mat-card style="margin-bottom: 20px; padding: 16px;">
+      <h2>{{ 'mentorEvaluation.sections.qualities' | transloco }}</h2>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.courtoisie' | transloco }}</mat-label>
+          <mat-select formControlName="courtoisie">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('courtoisie')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.capaciteAdaptation' | transloco }}</mat-label>
+          <mat-select formControlName="capaciteAdaptation">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('capaciteAdaptation')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.initiative' | transloco }}</mat-label>
+          <mat-select formControlName="initiative">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('initiative')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.espritCollaboration' | transloco }}</mat-label>
+          <mat-select formControlName="espritCollaboration">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('espritCollaboration')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.jugement' | transloco }}</mat-label>
+          <mat-select formControlName="jugement">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('jugement')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.sensResponsabilites' | transloco }}</mat-label>
+          <mat-select formControlName="sensResponsabilites">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('sensResponsabilites')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.autonomie' | transloco }}</mat-label>
+          <mat-select formControlName="autonomie">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('autonomie')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.respectEcheanciers' | transloco }}</mat-label>
+          <mat-select formControlName="respectEcheanciers">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('respectEcheanciers')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.sensOrganisation' | transloco }}</mat-label>
+          <mat-select formControlName="sensOrganisation">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('sensOrganisation')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.capaciteTravaillerSousPression' | transloco }}</mat-label>
+          <mat-select formControlName="capaciteTravaillerSousPression">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('capaciteTravaillerSousPression')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.tenueVestimentaire' | transloco }}</mat-label>
+          <mat-select formControlName="tenueVestimentaire">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('tenueVestimentaire')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.relationAutorite' | transloco }}</mat-label>
+          <mat-select formControlName="relationAutorite">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('relationAutorite')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.qualiteTravail' | transloco }}</mat-label>
+          <mat-select formControlName="qualiteTravail">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('qualiteTravail')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.relationCollegues' | transloco }}</mat-label>
+          <mat-select formControlName="relationCollegues">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('relationCollegues')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.faciliteApprentissage' | transloco }}</mat-label>
+          <mat-select formControlName="faciliteApprentissage">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('faciliteApprentissage')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'mentorEvaluation.fields.relationClientele' | transloco }}</mat-label>
+          <mat-select formControlName="relationClientele">
+            @for (option of noteOptions; track option) {
+            <mat-option [value]="option">{{ ('mentorEvaluation.options.notes.' + option) | transloco }}</mat-option>
+            }
+          </mat-select>
+          @if (hasSubmitError('relationClientele')) {
+          <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </mat-card>
+
+    <mat-card style="margin-bottom: 20px; padding: 16px;">
+      <h2>{{ 'mentorEvaluation.sections.comments' | transloco }}</h2>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.strengths' | transloco }}</mat-label>
+        <textarea matInput rows="4" formControlName="aptitudesAppreciees"></textarea>
+        @if (hasSubmitError('aptitudesAppreciees')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.improvements' | transloco }}</mat-label>
+        <textarea matInput rows="4" formControlName="elementsAmelioration"></textarea>
+        @if (hasSubmitError('elementsAmelioration')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:100%;">
+        <mat-label>{{ 'mentorEvaluation.fields.comments' | transloco }}</mat-label>
+        <textarea matInput rows="4" formControlName="commentaire"></textarea>
+        @if (hasSubmitError('commentaire')) {
+        <mat-error>{{ 'mentorEvaluation.messages.requiredField' | transloco }}</mat-error>
+        }
+      </mat-form-field>
+    </mat-card>
+
+    @if (successMessage()) {
+    <p style="color:green;">{{ successMessage() }}</p>
+    }
+
+    @if (errorMessage()) {
+    <p style="color:red;">{{ errorMessage() }}</p>
+    }
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <button mat-stroked-button color="primary" type="button" (click)="saveDraft()"
+        [disabled]="isSavingDraft() || isSubmitting() || isLocked()">
+        @if (isSavingDraft()) {
+        {{ 'mentorEvaluation.actions.savingDraft' | transloco }}
         } @else {
-          Enregistrer l’évaluation
+        {{ 'mentorEvaluation.actions.saveDraft' | transloco }}
         }
       </button>
-    </form>
+
+      <button mat-raised-button color="primary" type="button" (click)="submitFinal()"
+        [disabled]="isSavingDraft() || isSubmitting() || isLocked()">
+        @if (isSubmitting()) {
+        {{ 'mentorEvaluation.actions.submitting' | transloco }}
+        } @else {
+        {{ 'mentorEvaluation.actions.submit' | transloco }}
+        }
+      </button>
+    </div>
+  </form>
   }
 </div>

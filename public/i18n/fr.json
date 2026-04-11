@@ -3,7 +3,7 @@
         "language": "Langue",
         "save": "Enregistrer",
         "cancel": "Annuler",
-         "all": "Tous"
+        "all": "Tous"
     },
     "layout": {
         "admin": "Administration",
@@ -98,6 +98,95 @@
             "yes": "Oui",
             "no": "Non",
             "dash": "-"
+        }
+    },
+    "mentorEvaluation": {
+        "title": "Évaluation du maître de stage",
+        "loading": "Chargement...",
+        "student": "Stagiaire",
+        "group": "Groupe",
+        "company": "Entreprise",
+        "period": "Période",
+        "from": "du",
+        "to": "au",
+        "sections": {
+            "identification": "Identification",
+            "attendance": "Assiduité et ponctualité",
+            "tasks": "Tâches effectuées",
+            "languages": "Compétences linguistiques",
+            "technical": "Compétences techniques",
+            "qualities": "Qualités personnelles et professionnelles",
+            "comments": "Appréciation globale et commentaires"
+        },
+        "fields": {
+            "companyName": "Nom de l’entreprise",
+            "mentorName": "Nom complet du maître de stage",
+            "mentorTitle": "Fonction / titre",
+            "hoursPresence": "Nombre d’heures de présence",
+            "absences": "Nombre d’absences",
+            "lateCount": "Nombre de retards",
+            "earlyDepartures": "Nombre de départs hâtifs",
+            "breakRespect": "Respect de la durée des pauses",
+            "tasksDone": "Tâches effectuées par le stagiaire",
+            "frenchSpoken": "Français parlé",
+            "frenchWritten": "Français écrit",
+            "englishSpoken": "Anglais parlé",
+            "englishWritten": "Anglais écrit",
+            "computerEquipment": "Maîtrise les équipements informatiques",
+            "computerSoftware": "Maîtrise les logiciels informatiques",
+            "speed": "Rapidité d’exécution",
+            "courtoisie": "Courtoisie",
+            "capaciteAdaptation": "Capacité d’adaptation",
+            "initiative": "Initiative",
+            "espritCollaboration": "Esprit de collaboration",
+            "jugement": "Jugement",
+            "sensResponsabilites": "Sens des responsabilités",
+            "autonomie": "Autonomie",
+            "respectEcheanciers": "Respect des échéanciers",
+            "sensOrganisation": "Sens de l’organisation",
+            "capaciteTravaillerSousPression": "Capacité à travailler sous pression",
+            "tenueVestimentaire": "Tenue vestimentaire",
+            "relationAutorite": "Relation avec l’autorité",
+            "qualiteTravail": "Qualité du travail",
+            "relationCollegues": "Relation avec les collègues",
+            "faciliteApprentissage": "Facilité d’apprentissage",
+            "relationClientele": "Relation avec la clientèle",
+            "strengths": "Aptitudes appréciées",
+            "improvements": "Éléments à améliorer",
+            "comments": "Commentaires"
+        },
+        "actions": {
+            "saveDraft": "Enregistrer brouillon",
+            "savingDraft": "Enregistrement du brouillon...",
+            "submit": "Soumettre l’évaluation",
+            "submitting": "Soumission..."
+        },
+        "messages": {
+            "draftSaved": "Brouillon enregistré avec succès.",
+            "submitted": "Évaluation soumise avec succès.",
+            "saveError": "Impossible d’enregistrer le brouillon.",
+            "submitError": "Impossible de soumettre l’évaluation.",
+            "invalidLink": "Lien invalide ou expiré.",
+            "formInvalid": "Veuillez compléter tous les champs obligatoires avant la soumission.",
+            "requiredField": "Champ obligatoire"
+        },
+        "confirmSubmitTitle": "Soumettre l’évaluation",
+        "confirmSubmitMessage": "Après la soumission, vous ne pourrez plus modifier cette évaluation. Voulez-vous continuer ?",
+        "formInvalid": "Veuillez compléter tous les champs obligatoires avant la soumission.",
+        "lockedMessage": "Cette évaluation a déjà été soumise. Le lien est maintenant désactivé.",
+        "options": {
+            "yesNo": {
+                "OUI": "Oui",
+                "NON": "Non"
+            },
+            "notes": {
+                "EXCELLENT": "Excellent",
+                "TRES_BIEN": "Très bien",
+                "BIEN": "Bien",
+                "A_AMELIORER": "À améliorer",
+                "INSATISFAISANT": "Insatisfaisant",
+                "NE_S_APPLIQUE_PAS": "Ne s’applique pas"
+            }
         }
     }
 }

@@ -99,5 +99,94 @@
       "no": "No",
       "dash": "-"
     }
+  },
+  "mentorEvaluation": {
+    "title": "Internship Supervisor Evaluation",
+    "loading": "Loading...",
+    "student": "Student",
+    "group": "Group",
+    "company": "Company",
+    "period": "Period",
+    "from": "from",
+    "to": "to",
+    "sections": {
+      "identification": "Identification",
+      "attendance": "Attendance and punctuality",
+      "tasks": "Tasks performed",
+      "languages": "Language skills",
+      "technical": "Technical skills",
+      "qualities": "Personal and professional qualities",
+      "comments": "Overall evaluation and comments"
+    },
+    "fields": {
+      "companyName": "Company name",
+      "mentorName": "Supervisor full name",
+      "mentorTitle": "Position / title",
+      "hoursPresence": "Number of hours present",
+      "absences": "Number of absences",
+      "lateCount": "Number of late arrivals",
+      "earlyDepartures": "Number of early departures",
+      "breakRespect": "Respects break duration",
+      "tasksDone": "Tasks performed by the student",
+      "frenchSpoken": "Spoken French",
+      "frenchWritten": "Written French",
+      "englishSpoken": "Spoken English",
+      "englishWritten": "Written English",
+      "computerEquipment": "Use of computer equipment",
+      "computerSoftware": "Use of software",
+      "speed": "Execution speed",
+      "courtoisie": "Courtesy",
+      "capaciteAdaptation": "Adaptability",
+      "initiative": "Initiative",
+      "espritCollaboration": "Teamwork",
+      "jugement": "Judgment",
+      "sensResponsabilites": "Sense of responsibility",
+      "autonomie": "Autonomy",
+      "respectEcheanciers": "Deadline respect",
+      "sensOrganisation": "Organization",
+      "capaciteTravaillerSousPression": "Works well under pressure",
+      "tenueVestimentaire": "Dress code",
+      "relationAutorite": "Relation with authority",
+      "qualiteTravail": "Quality of work",
+      "relationCollegues": "Relation with colleagues",
+      "faciliteApprentissage": "Learning ability",
+      "relationClientele": "Customer relations",
+      "strengths": "Strengths",
+      "improvements": "Areas for improvement",
+      "comments": "Comments"
+    },
+    "actions": {
+      "saveDraft": "Save draft",
+      "savingDraft": "Saving draft...",
+      "submit": "Submit evaluation",
+      "submitting": "Submitting..."
+    },
+    "messages": {
+      "draftSaved": "Draft saved successfully.",
+      "submitted": "Evaluation submitted successfully.",
+      "saveError": "Unable to save draft.",
+      "submitError": "Unable to submit evaluation.",
+      "invalidLink": "Invalid or expired link.",
+      "formInvalid": "Please complete all required fields before submitting.",
+      "requiredField": "Required field"
+    },
+    "confirmSubmitTitle": "Submit evaluation",
+    "confirmSubmitMessage": "Once submitted, you will no longer be able to modify this evaluation. Do you want to continue?",
+    "formInvalid": "Veuillez compléter tous les champs obligatoires avant la soumission.",
+    "lockedMessage": "This evaluation has already been submitted. The link is now disabled.",
+    "options": {
+      "yesNo": {
+        "OUI": "Yes",
+        "NON": "No"
+      },
+      "notes": {
+        "EXCELLENT": "Excellent",
+        "TRES_BIEN": "Very good",
+        "BIEN": "Good",
+        "A_AMELIORER": "Needs improvement",
+        "INSATISFAISANT": "Unsatisfactory",
+        "NE_S_APPLIQUE_PAS": "Not applicable"
+      }
+    }
   }
 }

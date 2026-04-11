@@ -1,0 +1,65 @@
+.stage-summary-card {
+  margin-bottom: 24px;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid #e8ecf4;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  background: linear-gradient(135deg, #f8fafc, #ffffff);
+}
+
+.stage-summary-header {
+  margin-bottom: 16px;
+}
+
+.stage-summary-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+/* 🔥 3 colonnes égales */
+.stage-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.summary-tile {
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #eef2f7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 90px;
+}
+
+.tile-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.tile-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.tile-separator {
+  margin: 0 8px;
+  color: #94a3b8;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .stage-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
