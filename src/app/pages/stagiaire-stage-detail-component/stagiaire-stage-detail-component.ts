@@ -3,12 +3,14 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { StagesService } from '../../core/services/stage/stages.service';
-import { EtudiantsService } from '../../core/services/etudiants/etudiants.service';
+import { MatCardModule } from '@angular/material/card';
 @Component({
   selector: 'app-stagiaire-stage-detail',
   standalone: true,
-  imports: [DatePipe, RouterLink, MatButtonModule],
-  templateUrl: './stagiaire-stage-detail-component.html'
+  imports: [DatePipe, RouterLink, MatButtonModule, MatCardModule],
+  templateUrl: './stagiaire-stage-detail-component.html',
+  styleUrl: './stagiaire-stage-detail-component.css',
+
 })
 export class StagiaireStageDetailComponent {
   private route = inject(ActivatedRoute);
@@ -60,29 +62,33 @@ export class StagiaireStageDetailComponent {
       ? 'display:inline-block;padding:4px 10px;border-radius:999px;background:#e8f5e9;color:#2e7d32;font-weight:600;'
       : 'display:inline-block;padding:4px 10px;border-radius:999px;background:#ffebee;color:#c62828;font-weight:600;';
   }
+  getDisplayedResponsable(stage: any) {
+    const maitre = stage?.maitreStage;
+    const contact = stage?.contactStage;
 
-  private etudiantsService = inject(EtudiantsService);
+    const hasMaitre =
+      !!maitre?.prenom?.trim() ||
+      !!maitre?.nom?.trim() ||
+      !!maitre?.courriel?.trim() ||
+      !!maitre?.telephone?.trim();
 
-  isAccepting = signal(false);
-  acceptMessage = signal('');
+    return hasMaitre ? maitre : contact;
+  }
 
-  acceptStage(stageId: number): void {
-    if (this.isAccepting()) return;
+  hasRealMaitreStage(stage: any): boolean {
+    const maitre = stage?.maitreStage;
 
-    this.isAccepting.set(true);
-    this.errorMessage.set('');
-    this.acceptMessage.set('');
+    return !!(
+      maitre?.prenom?.trim() ||
+      maitre?.nom?.trim() ||
+      maitre?.courriel?.trim() ||
+      maitre?.telephone?.trim()
+    );
+  }
 
-    this.etudiantsService.acceptStage(stageId).subscribe({
-      next: () => {
-        this.acceptMessage.set('Stage accepté.');
-        this.isAccepting.set(false);
-        this.loadStage(stageId);
-      },
-      error: () => {
-        this.errorMessage.set("Impossible d'accepter ce stage.");
-        this.isAccepting.set(false);
-      },
-    });
+  getDisplayedResponsableLabel(stage: any): string {
+    return this.hasRealMaitreStage(stage)
+      ? 'Maître de stage'
+      : 'Contact de stage';
   }
 }

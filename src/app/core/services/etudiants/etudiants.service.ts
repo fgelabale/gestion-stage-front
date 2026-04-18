@@ -19,8 +19,4 @@ export class EtudiantsService {
       telephone,
     });
   }
-
-  acceptStage(stageId: number) {
-    return this.http.post(`${this.apiUrl}/etudiants/stages/${stageId}/accepter`, {});
-  }
 }

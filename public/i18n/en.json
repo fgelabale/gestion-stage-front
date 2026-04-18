@@ -7,8 +7,13 @@
   },
   "layout": {
     "admin": "Admin",
-    "title": "Internship Management",
+    "title": {
+      "admin": "Internship Management",
+      "supervisor": "Validation des stages",
+      "stagiaire": "Espace personnel"
+    },
     "welcome": "Welcome",
+    "supervisor": "Supervisor",
     "logout": "Logout",
     "readonly": "Read-only mode"
   },
@@ -188,5 +193,16 @@
         "NE_S_APPLIQUE_PAS": "Not applicable"
       }
     }
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page:",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "firstPage": "First page",
+    "lastPage": "Last page",
+    "range": "{{start}} - {{end}} of {{length}}"
+  },
+  "stage": {
+    "status": "Stage status"
   }
 }

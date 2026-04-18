@@ -17,6 +17,7 @@ import { EtudiantsService } from '../../core/services/etudiants/etudiants.servic
     MatInputModule,
   ],
   templateUrl: './stagiaire-profil.html',
+  styleUrl: './stagiaire-profil.css'
 })
 export class StagiaireProfilComponent {
   private fb = inject(FormBuilder);

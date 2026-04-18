@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,10 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { StagesService } from '../../core/services/stage/stages.service';
 import { PhoneMaskDirective } from '../../shared/directive/phone-mask';
 import { PostalCodeMaskDirective } from '../../shared/directive/code-postal';
-
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
+
 export const timeRangeValidator: ValidatorFn = (
   group: AbstractControl
 ): ValidationErrors | null => {
@@ -34,7 +35,6 @@ export const dateRangeValidator: ValidatorFn = (
   return debut > fin ? { dateRange: true } : null;
 };
 
-
 @Component({
   selector: 'app-stagiaire-stage-create',
   standalone: true,
@@ -48,6 +48,7 @@ export const dateRangeValidator: ValidatorFn = (
     PostalCodeMaskDirective,
     MatDatepickerModule,
     MatNativeDateModule,
+    DatePipe,
   ],
   templateUrl: './stagiaire-stage-create.html',
   styleUrl: './stagiaire-stage-create.css',
@@ -57,9 +58,27 @@ export class StagiaireStageCreateComponent {
   private stagesService = inject(StagesService);
   private router = inject(Router);
 
+  isLoadingStages = signal(true);
   isSaving = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
+  stages = signal<any[]>([]);
+
+  acceptedOngoingStage = computed(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return this.stages().find(stage => {
+      if (stage.etat !== 'ACCEPTE') return false;
+
+      const dateFin = new Date(stage.dateFin);
+      dateFin.setHours(0, 0, 0, 0);
+
+      return dateFin >= today;
+    }) ?? null;
+  });
+
+  canCreateStage = computed(() => !this.acceptedOngoingStage());
 
   form = this.fb.nonNullable.group(
     {
@@ -97,7 +116,32 @@ export class StagiaireStageCreateComponent {
     }
   );
 
+  constructor() {
+    this.loadStages();
+  }
+
+  private loadStages(): void {
+    // adapte ici au vrai nom de ta méthode de service
+ this.stagesService.getMesStages().subscribe({
+      next: (response: any) => {
+        this.stages.set(response ?? []);
+        this.isLoadingStages.set(false);
+      },
+      error: () => {
+        this.errorMessage.set('Impossible de vérifier vos stages pour le moment.');
+        this.isLoadingStages.set(false);
+      }
+    });
+  }
+
   submit(): void {
+    if (!this.canCreateStage()) {
+      this.errorMessage.set(
+        'Il n’est pas possible d’ajouter un nouveau stage pour le moment, car un stage accepté est toujours en cours.'
+      );
+      return;
+    }
+
     const value = this.form.getRawValue();
 
     const hasContactStage =

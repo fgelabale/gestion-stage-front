@@ -22,6 +22,9 @@ import { StagiaireStageCreateComponent } from './pages/stagiaire-stage-create/st
 import { AdminEntreprises } from './pages/admin-entreprises/admin-entreprises';
 import { AdminEntrepriseEditComponent } from './pages/admin-entreprise-edit/admin-entreprise-edit';
 import { MsalRedirectComponent } from '@azure/msal-angular';
+import { SupervisorLayoutComponent } from './layout/supervisor-layout/supervisor-layout';
+import { SupervisorManquantsComponent } from './pages/supevisor-manquants/supervisor-manquants.component';
+import { SupervisorStageDetailComponent } from './pages/supervisor-stage-detail/supervisor-stage-detail.component';
 
 export const routes: Routes = [
   {
@@ -36,7 +39,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    canActivate: [roleGuard('ADMIN', 'ADMIN_READER', 'SUPERVISEUR')],
+    canActivate: [roleGuard('ADMIN', 'ADMIN_READER')],
     children: [
       {
         path: 'manquants',
@@ -74,6 +77,27 @@ export const routes: Routes = [
       {
         path: 'entreprises/:id',
         component: AdminEntrepriseEditComponent,
+      },
+    ],
+  },
+
+  {
+    path: 'supervisor',
+    component: SupervisorLayoutComponent,
+    canActivate: [roleGuard('SUPERVISEUR')],
+    children: [
+      {
+        path: '',
+        component: SupervisorManquantsComponent,
+      },
+      {
+        path: 'admin',
+        redirectTo: '',
+        pathMatch: 'full',
+      },
+      {
+        path: 'stages/:stageId',
+        component: SupervisorStageDetailComponent,
       },
     ],
   },

@@ -1,122 +1,145 @@
 @if (isLoading()) {
-<div style="padding:24px;">
-  <p>Chargement...</p>
+<div class="page-state loading-state">
+  <p>Chargement du stage...</p>
 </div>
 } @else if (errorMessage()) {
-<div style="padding:24px;">
-  <p style="color:red;">{{ errorMessage() }}</p>
+<div class="page-state error-state">
+  <p>{{ errorMessage() }}</p>
 </div>
 } @else if (data()?.stage; as stage) {
-<div style="padding:24px;">
-  <h1>Mon stage</h1>
 
-  @if (stage.etat === 'ACCEPTE') {
-  <button mat-raised-button color="primary" (click)="acceptStage(stage.id)" [disabled]="isAccepting()">
-    @if (isAccepting()) {
-    Traitement...
-    } @else {
-    ACCEPTE
-    }
-  </button>
-  }
+<div class="stage-page">
 
-  @if (acceptMessage()) {
-  <p style="color:green;">{{ acceptMessage() }}</p>
-  }
-  <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom || '-' }}</p>
-  <p>
-    <strong>Période :</strong>
-    {{ stage.dateDebut | date:'yyyy-MM-dd' }}
-    au
-    {{ stage.dateFin | date:'yyyy-MM-dd' }}
-  </p>
-
-  <p>
-    <strong>Maître de stage :</strong>
-    {{ stage.maitreStage?.prenom }} {{ stage.maitreStage?.nom }}
-  </p>
-
-  <p>
-    <strong>Superviseur :</strong>
-    {{ stage.superviseur?.prenom }} {{ stage.superviseur?.nom }}
-  </p>
-
-  <h2 style="margin-top:24px;">Suivi</h2>
-
-  <p>
-    <strong>Nombre de rapports complétés :</strong>
-    {{ data()?.resume?.nombreRapportsHebdomadaires }}
-  </p>
-
-  <p>
-    <strong>Semaines manquantes :</strong>
-    {{
-    data()?.resume?.semainesManquantes?.length
-    ? data()?.resume?.semainesManquantes.join(', ')
-    : 'Aucune'
-    }}
-  </p>
-
-  <p>
-    <strong>Bilan mi-stage :</strong>
-    <span [style]="getBadgeStyle(data()?.resume?.bilanMiStageRempli)">
-      {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}
-    </span>
-  </p>
-
-  <p>
-    <strong>Bilan fin-stage :</strong>
-    <span [style]="getBadgeStyle(data()?.resume?.bilanFinStageRempli)">
-      {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}
-    </span>
-  </p>
-
-  <h2 style="margin-top:24px;">Rapports hebdomadaires</h2>
-
-  @if (stage.etat === 'ACCEPTE') {
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:24px;">
-    @for (semaine of [1, 2, 3, 4, 5, 6, 7]; track semaine) {
-    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
-      <p style="margin:0 0 8px 0;">
-        <strong>Semaine {{ semaine }}</strong>
+  <section class="hero-shell">
+    <div class="hero-left">
+      <p class="hero-kicker">Espace stagiaire</p>
+      <h1>Mon stage</h1>
+      <p class="hero-subtitle">
+        Accédez à vos rapports hebdomadaires et à vos bilans de stage dans une interface claire et structurée.
       </p>
+    </div>
 
-      <p style="margin:0 0 12px 0;">
-        <span [style]="getBadgeStyle(isWeekCompleted(stage,semaine))">
-          {{ isWeekCompleted(stage,semaine) ? 'Complétée' : 'À faire' }}
+    <div class="hero-right">
+      <div class="stage-pill" [class.accepted]="stage.etat === 'ACCEPTE'" [class.cancelled]="stage.etat === 'ANNULE'"
+        [class.pending]="stage.etat !== 'ACCEPTE' && stage.etat !== 'ANNULE'">
+        {{ stage.etat }}
+      </div>
+    </div>
+  </section>
+
+  <section class="infos-strip">
+    <div class="info-item">
+      <span>Entreprise</span>
+      <strong>{{ stage.entreprise?.nom || '-' }}</strong>
+    </div>
+
+    <div class="info-item">
+      <span>Période</span>
+      <strong>
+        {{ stage.dateDebut | date:'yyyy-MM-dd' }} au {{ stage.dateFin | date:'yyyy-MM-dd' }}
+      </strong>
+    </div>
+
+    <div class="info-item">
+      <span>{{ getDisplayedResponsableLabel(stage) }}</span>
+
+      <strong>
+        {{ getDisplayedResponsable(stage)?.prenom || '-' }}
+        {{ getDisplayedResponsable(stage)?.nom || '' }}
+      </strong>
+    </div>
+
+    <div class="info-item">
+      <span>Superviseur</span>
+      <strong>{{ stage.superviseur?.prenom }} {{ stage.superviseur?.nom }}</strong>
+    </div>
+  </section>
+
+  @if (stage.etat === 'ACCEPTE') {
+  <section class="premium-grid">
+
+    <mat-card class="premium-card">
+      <div class="premium-card-top">
+        <div>
+          <p class="card-tag">Étape 1</p>
+          <h2>Bilan mi-stage</h2>
+          <p class="card-subtitle">Semaines 1 à 4</p>
+        </div>
+
+        <span class="soft-badge" [style]="getBadgeStyle(data()?.resume?.bilanMiStageRempli)">
+          {{ data()?.resume?.bilanMiStageRempli ? 'Complété' : 'À faire' }}
         </span>
+      </div>
+
+      <div class="weeks-list">
+        @for (semaine of [1,2,3,4]; track semaine) {
+        <a class="week-row" [routerLink]="['/stagiaire/stages', stage.id, 'rapport', semaine]">
+          <div>
+            <strong>Semaine {{ semaine }}</strong>
+            <p>{{ isWeekCompleted(stage,semaine) ? 'Rapport complété' : 'Rapport à remplir' }}</p>
+          </div>
+          <span>Ouvrir</span>
+        </a>
+        }
+      </div>
+
+      <a mat-flat-button class="premium-btn" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']">
+        Ouvrir le bilan mi-stage
+      </a>
+    </mat-card>
+
+    <mat-card class="premium-card">
+      <div class="premium-card-top">
+        <div>
+          <p class="card-tag">Étape 2</p>
+          <h2>Fin de stage</h2>
+          <p class="card-subtitle">Semaines 5 à 7</p>
+        </div>
+
+        <span class="soft-badge" [style]="getBadgeStyle(data()?.resume?.bilanFinStageRempli)">
+          {{ data()?.resume?.bilanFinStageRempli ? 'Complété' : 'À faire' }}
+        </span>
+      </div>
+
+      <div class="weeks-list">
+        @for (semaine of [5,6,7]; track semaine) {
+        <a class="week-row" [routerLink]="['/stagiaire/stages', stage.id, 'rapport', semaine]">
+          <div>
+            <strong>Semaine {{ semaine }}</strong>
+            <p>{{ isWeekCompleted(stage,semaine) ? 'Rapport complété' : 'Rapport à remplir' }}</p>
+          </div>
+          <span>Ouvrir</span>
+        </a>
+        }
+      </div>
+
+      <a mat-flat-button class="premium-btn" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']">
+        Ouvrir le bilan fin de stage
+      </a>
+    </mat-card>
+
+  </section>
+  } @else if (stage.etat === 'ANNULE') {
+  <mat-card class="status-card cancelled-card">
+    <div class="status-icon">✕</div>
+    <div>
+      <h2>Stage annulé</h2>
+      <p>
+        Ce stage a été annulé. Les rapports hebdomadaires et les bilans ne sont plus disponibles.
       </p>
-
-      <a mat-stroked-button color="primary" [routerLink]="['/stagiaire/stages',stage.id,'rapport',semaine]">
-        Ouvrir
-      </a>
     </div>
-    }
-  </div>
+  </mat-card>
   } @else {
-  <p>Les rapports hebdomadaires sont disponibles seulement lorsque le stage est accepté.</p>
+  <mat-card class="status-card pending-card">
+    <div class="status-icon">⏳</div>
+    <div>
+      <h2>Stage non accepté</h2>
+      <p>
+        Les rapports hebdomadaires et les bilans seront disponibles lorsque le stage sera accepté.
+      </p>
+    </div>
+  </mat-card>
   }
 
-  <h2>Bilans</h2>
-
-  @if (stage.etat === 'ACCEPTE') {
-  <div style="display:flex; gap:16px; flex-wrap:wrap;">
-    <div style="border:1px solid #ddd; border-radius:8px; padding:16px; min-width:240px;">
-      <p><strong>Bilan mi-stage</strong></p>
-      <a mat-raised-button color="primary" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']">
-        Ouvrir
-      </a>
-    </div>
-
-    <div style="border:1px solid #ddd; border-radius:8px; padding:16px; min-width:240px;">
-      <p><strong>Bilan fin-stage</strong></p>
-      <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']">
-        Ouvrir
-      </a>
-    </div>
-  </div>
-  } @else {
-  <p>Les bilans sont disponibles seulement lorsque le stage est accepté.</p>
-  }
 </div>
 }

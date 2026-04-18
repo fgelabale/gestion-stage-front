@@ -5,6 +5,9 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
 import { inject, Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { TranslocoMatPaginatorIntl } from './core/services/transloco-paginator-intl/transloco-paginator-intl';
+
 import {
   MsalModule,
   MsalService,
@@ -37,6 +40,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+        {
+      provide: MatPaginatorIntl,
+      useClass: TranslocoMatPaginatorIntl,
+    },
     provideTransloco({
       config: {
         availableLangs: ['fr', 'en'],
@@ -45,6 +52,7 @@ export const appConfig: ApplicationConfig = {
         prodMode: !isDevMode(),
       },
       loader: TranslocoHttpLoader,
+  
     }),
     // Ton interceptor actuel + interceptors DI (MSAL)
     provideHttpClient(

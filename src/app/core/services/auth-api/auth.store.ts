@@ -50,8 +50,12 @@ export class AuthStore {
   getDefaultRouteByRole(): string {
     const role = this.role();
 
-    if (role === 'ADMIN' || role === 'ADMIN_READER' || role === 'SUPERVISEUR') {
+    if (role === 'ADMIN' || role === 'ADMIN_READER' ) {
       return '/admin/manquants';
+    }
+
+    if (role === 'SUPERVISEUR') {
+      return '/supervisor';
     }
 
     if (role === 'ETUDIANT') {

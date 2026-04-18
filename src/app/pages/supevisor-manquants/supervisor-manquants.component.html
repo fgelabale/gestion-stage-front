@@ -1,0 +1,104 @@
+<div class="page">
+  <section class="hero-shell">
+    <div class="hero-left">
+      <p class="hero-kicker">Espace superviseur</p>
+      <h1>Mes stagiaires</h1>
+      <p class="hero-subtitle">
+        Recherchez, triez et ouvrez rapidement la fiche superviseur de chaque stagiaire.
+      </p>
+    </div>
+  </section>
+
+  @if (isLoading()) {
+    <div class="page-state">
+      <p>Chargement...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="page-state error-state">
+      <p>{{ errorMessage() }}</p>
+    </div>
+  } @else if (stages().length === 0) {
+    <div class="page-state">
+      <p>Aucun stagiaire assigné.</p>
+    </div>
+  } @else {
+    <mat-card class="table-card">
+      <div class="table-toolbar">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Recherche</mat-label>
+          <input
+            matInput
+            [value]="globalSearch()"
+            (input)="setGlobalSearch($any($event.target).value)"
+            placeholder="Nom, prénom, groupe, entreprise, code postal"
+          />
+        </mat-form-field>
+
+        <div class="results-chip">
+          {{ totalResults() }} résultat{{ totalResults() > 1 ? 's' : '' }}
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table
+          mat-table
+          [dataSource]="pagedStages()"
+          matSort
+          [matSortActive]="sortState().active"
+          [matSortDirection]="sortState().direction"
+          (matSortChange)="sortData($event)"
+          class="stages-table"
+        >
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="nom">Nom</th>
+            <td mat-cell *matCellDef="let row">{{ row.nom }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="prenom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="prenom">Prénom</th>
+            <td mat-cell *matCellDef="let row">{{ row.prenom }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="groupe">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="groupe">Groupe</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="group-badge">{{ row.groupe }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="entreprise">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="entreprise">Entreprise</th>
+            <td mat-cell *matCellDef="let row">{{ row.entreprise }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="codePostal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="codePostal">Code postal</th>
+            <td mat-cell *matCellDef="let row">{{ row.codePostal }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="clickable-row"
+            (click)="openStage(row.id)"
+          ></tr>
+        </table>
+      </div>
+
+      @if (totalResults() === 0) {
+        <div class="empty-filter-state">
+          <p>Aucun résultat pour cette recherche.</p>
+        </div>
+      }
+
+      <mat-paginator
+        [length]="totalResults()"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+      ></mat-paginator>
+    </mat-card>
+  }
+</div>

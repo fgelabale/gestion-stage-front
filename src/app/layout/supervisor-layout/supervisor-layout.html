@@ -1,0 +1,67 @@
+<mat-sidenav-container class="admin-shell">
+
+  <mat-sidenav mode="side" opened class="admin-sidenav">
+    <div class="admin-sidenav-content">
+
+      <div class="brand-block">
+        <p class="brand-kicker">{{ 'layout.title.supervisor' | transloco }}</p>
+        <h3>{{ 'layout.supervisor' | transloco }}</h3>
+      </div>
+
+      @if (isReadOnlyAdmin) {
+      <div class="readonly-pill">
+        {{ 'layout.readonly' | transloco }}
+      </div>
+      }
+
+      <nav class="admin-nav">
+        <a
+          mat-button
+          routerLink="/supervisor/admin"
+          routerLinkActive="menu-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          {{ 'adminMenu.stagesToFollow' | transloco }}
+        </a>
+      </nav>
+
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="admin-main">
+
+    <mat-toolbar class="admin-toolbar">
+
+      <div class="toolbar-left">
+        <span class="toolbar-title">{{ 'layout.title.supervisor' | transloco }}</span>
+      </div>
+
+      <div class="toolbar-right">
+
+        <mat-button-toggle-group
+          [value]="currentLang"
+          (change)="setLang($event.value)"
+          class="lang-switch"
+        >
+          <mat-button-toggle value="fr">FR</mat-button-toggle>
+          <mat-button-toggle value="en">EN</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <div class="user-pill">
+          {{ 'layout.welcome' | transloco }}
+          {{ currentUser()?.nom || '' }}, {{ currentUser()?.prenom || '' }}
+        </div>
+
+        <button mat-stroked-button class="logout-btn" (click)="logout()">
+          {{ 'layout.logout' | transloco }}
+        </button>
+
+      </div>
+    </mat-toolbar>
+
+    <div class="admin-page-content">
+      <router-outlet />
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,137 +1,197 @@
 @if (isLoading()) {
-  <div style="padding:24px;">
-    <p>Chargement...</p>
-  </div>
-} @else {
-  <div style="padding:24px; max-width:1000px; margin:0 auto;">
-    <mat-card style="padding:16px; margin-bottom:20px;">
-      <h1>Bilan fin de stage</h1>
-      <p><strong>Stage :</strong> {{ stageId() }}</p>
+<div class="page-state loading-state">
+  <p>Chargement du bilan fin de stage...</p>
+</div>
+} @else if (accessDenied()) {
+<div class="bilan-page">
+  <mat-card class="state-card denied-card">
+    <div class="state-icon">🔒</div>
+    <div>
+      <h1>Accès refusé</h1>
+      <p>{{ loadErrorMessage() }}</p>
 
-      <a
-        mat-button
-        [routerLink]="['/stagiaire']"
-      >
-        Retour au stage
+      <a mat-flat-button class="primary-btn" [routerLink]="['/stagiaire']">
+        Retour au tableau de bord
       </a>
+    </div>
+  </mat-card>
+</div>
+} @else if (loadErrorMessage()) {
+<div class="bilan-page">
+  <mat-card class="state-card error-card">
+    <div class="state-icon">⚠️</div>
+    <div>
+      <h1>Erreur</h1>
+      <p>{{ loadErrorMessage() }}</p>
+
+      <a mat-stroked-button class="secondary-btn" [routerLink]="['/stagiaire']">
+        Retour
+      </a>
+    </div>
+  </mat-card>
+</div>
+} @else {
+<div class="bilan-page">
+
+  <section class="bilan-hero">
+    <div>
+      <p class="hero-kicker">Espace stagiaire</p>
+      <h1>Bilan fin de stage</h1>
+      <p class="hero-subtitle">
+        Faites le point sur vos apprentissages, votre appréciation du stage et votre préparation pour la suite.
+      </p>
+    </div>
+
+    <div class="hero-actions">
+      <a mat-stroked-button class="secondary-btn" [routerLink]="['/stagiaire']">
+        Retour
+      </a>
+    </div>
+  </section>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="bilan-form">
+
+    @if (saveErrorMessage()) {
+    <div class="form-message error-message global-message">
+      {{ saveErrorMessage() }}
+    </div>
+    }
+
+    @if (successMessage()) {
+    <div class="form-message success-message global-message">
+      {{ successMessage() }}
+    </div>
+    }
+
+    <mat-card class="form-card">
+      <div class="card-header">
+        <div>
+          <p class="card-tag">Section 1</p>
+          <h2>Tâches</h2>
+          <p class="card-subtitle">
+            Évaluez la nature de vos tâches et la progression de votre travail durant le stage.
+          </p>
+        </div>
+      </div>
+
+      <div class="radio-blocks">
+        @for (field of taskQuestions; track field.key) {
+        <div class="radio-row">
+          <p class="radio-label">{{ field.label }}</p>
+          <mat-radio-group class="radio-group" [formControlName]="field.key">
+            @for (option of yesNoOptions; track option) {
+            <mat-radio-button [value]="option">
+              {{ option }}
+            </mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
+        }
+      </div>
     </mat-card>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <mat-card style="padding:16px; margin-bottom:20px;">
-        <h2>Tâches</h2>
+    <mat-card class="form-card">
+      <div class="card-header">
+        <div>
+          <p class="card-tag">Section 2</p>
+          <h2>Appréciation et réflexion</h2>
+          <p class="card-subtitle">
+            Faites le point sur votre appréciation générale du stage et sur les apprentissages réalisés.
+          </p>
+        </div>
+      </div>
 
-        @for (field of [
-          ['tachesEnLienAvecFormation', 'Les tâches assignées sont en lien avec ma formation.'],
-          ['tachesVariees', 'Les tâches sont variées.'],
-          ['tachesRecommencees', 'J’ai dû recommencer une ou plusieurs tâches.'],
-          ['retroactionRecue', 'J’ai reçu de la rétroaction sur le travail effectué.'],
-          ['progressionDansExecution', 'J’ai progressé dans l’exécution de mes tâches.'],
-          ['difficultesDansCertainesTaches', 'J’ai rencontré des difficultés dans certaines tâches.'],
-          ['respectSanteSecurite', 'J’ai respecté les consignes de santé et sécurité au travail.']
-        ]; track field[0]) {
-          <div style="margin-bottom:18px;">
-            <p><strong>{{ field[1] }}</strong></p>
-            <mat-radio-group [formControlName]="field[0]">
-              @for (option of yesNoOptions; track option) {
-                <mat-radio-button [value]="option" style="margin-right:16px;">
-                  {{ option }}
-                </mat-radio-button>
-              }
-            </mat-radio-group>
-          </div>
+      <div class="radio-blocks">
+        @for (field of reflectionQuestions; track field.key) {
+        <div class="radio-row">
+          <p class="radio-label">{{ field.label }}</p>
+          <mat-radio-group class="radio-group" [formControlName]="field.key">
+            @for (option of yesNoOptions; track option) {
+            <mat-radio-button [value]="option">
+              {{ option }}
+            </mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
         }
-      </mat-card>
+      </div>
+    </mat-card>
 
-      <mat-card style="padding:16px; margin-bottom:20px;">
-        <h2>Appréciation et réflexion</h2>
+    <mat-card class="form-card">
+      <div class="card-header">
+        <div>
+          <p class="card-tag">Section 3</p>
+          <h2>Directives fin de stage</h2>
+          <p class="card-subtitle">
+            Prenez un moment pour réfléchir à votre intégration, à votre formation et à votre avenir professionnel.
+          </p>
+        </div>
+      </div>
 
-        @for (field of [
-          ['appreciationGlobaleTaches', 'Dans l’ensemble, j’ai apprécié les tâches que j’ai pu effectuer.'],
-          ['difficulteTachesCorrespondNiveau', 'Le degré de difficulté de mes tâches correspondait à mon niveau de connaissance.'],
-          ['nouvellesConnaissancesAcquises', 'J’ai acquis de nouvelles connaissances durant mon stage.'],
-          ['consolidationConnaissancesCompetences', 'Mon stage m’a permis de consolider mes connaissances et mes compétences.'],
-          ['stageUtileEtCompleteFormation', 'Mon stage a été utile et complète bien ma formation.'],
-          ['mieuxPrepareMarcheTravail', 'Je me sens mieux préparé pour mon entrée sur le marché du travail.'],
-          ['appreciationEchangesMaitreStage', 'J’ai apprécié les échanges avec mon maître de stage.'],
-          ['satisfactionStage', 'Je suis satisfait de mon stage.']
-        ]; track field[0]) {
-          <div style="margin-bottom:18px;">
-            <p><strong>{{ field[1] }}</strong></p>
-            <mat-radio-group [formControlName]="field[0]">
-              @for (option of yesNoOptions; track option) {
-                <mat-radio-button [value]="option" style="margin-right:16px;">
-                  {{ option }}
-                </mat-radio-button>
-              }
-            </mat-radio-group>
-          </div>
-        }
-      </mat-card>
-
-      <mat-card style="padding:16px; margin-bottom:20px;">
-        <h2>Directives fin de stage</h2>
-
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Comment s’est déroulé votre intégration au sein de l’entreprise ? Est-ce que votre intégration s’est modifiée au cours de cette 2e partie du stage ?</mat-label>
+      <div class="textarea-grid">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Comment s’est déroulé votre intégration au sein de l’entreprise ? Est-ce que votre intégration
+            s’est modifiée au cours de cette 2e partie du stage ?</mat-label>
           <textarea matInput rows="4" formControlName="integrationEntrepriseEvolution"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Quelles actions avez-vous posées pour mieux vous intégrer à l’équipe au cours de cette 2e partie du stage ?</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Quelles actions avez-vous posées pour mieux vous intégrer à l’équipe au cours de cette 2e partie du
+            stage ?</mat-label>
           <textarea matInput rows="4" formControlName="actionsIntegrationDeuxiemePartie"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Pensez-vous que la formation que vous avez reçue est en adéquation avec le monde professionnel ?</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Pensez-vous que la formation que vous avez reçue est en adéquation avec le monde professionnel
+            ?</mat-label>
           <textarea matInput rows="4" formControlName="formationAdequationMondeProfessionnel"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Quelles compétences mériteraient d’être plus développées ? Pensez-vous que votre formation couvre bien tous les champs de compétence attendus ?</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Quelles compétences mériteraient d’être plus développées ? Pensez-vous que votre formation couvre
+            bien tous les champs de compétence attendus ?</mat-label>
           <textarea matInput rows="4" formControlName="competencesADevelopper"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Si vous ne deviez en citer qu’une, quelle compétence a été capitale pour l’exécution de vos tâches ?</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Si vous ne deviez en citer qu’une, quelle compétence a été capitale pour l’exécution de vos tâches
+            ?</mat-label>
           <textarea matInput rows="4" formControlName="competenceCapitale"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Quels points forts avez-vous pu mettre de l’avant durant cette 2e partie de votre stage ?</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Quels points forts avez-vous pu mettre de l’avant durant cette 2e partie de votre stage
+            ?</mat-label>
           <textarea matInput rows="4" formControlName="pointsFortsDeuxiemePartie"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Quels éléments aimeriez-vous améliorer pour votre futur emploi ?</mat-label>
           <textarea matInput rows="4" formControlName="elementsAAmeliorerFuturEmploi"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
-          <mat-label>Est-ce que votre perception de votre métier a évolué durant le stage ? Expliquez votre réponse.</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Est-ce que votre perception de votre métier a évolué durant le stage ? Expliquez votre
+            réponse.</mat-label>
           <textarea matInput rows="4" formControlName="perceptionMetierEvolution"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width:100%;">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Votre stage a-t-il confirmé votre choix de carrière ? Expliquez votre réponse.</mat-label>
           <textarea matInput rows="4" formControlName="confirmationChoixCarriere"></textarea>
         </mat-form-field>
-      </mat-card>
+      </div>
+    </mat-card>
 
-      @if (successMessage()) {
-        <p style="color:green;">{{ successMessage() }}</p>
-      }
-
-      @if (errorMessage()) {
-        <p style="color:red;">{{ errorMessage() }}</p>
-      }
-
-      <button mat-raised-button color="primary" type="submit" [disabled]="isSaving()">
+    <div class="form-actions">
+      <button mat-flat-button type="submit" class="primary-btn" [disabled]="isSaving()">
         @if (isSaving()) {
-          Enregistrement...
+        Enregistrement...
         } @else {
-          Enregistrer le bilan fin de stage
+        Enregistrer le bilan fin de stage
         }
       </button>
-    </form>
-  </div>
+    </div>
+  </form>
+</div>
 }

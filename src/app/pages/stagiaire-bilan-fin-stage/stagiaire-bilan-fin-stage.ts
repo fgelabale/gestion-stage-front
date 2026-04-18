@@ -25,17 +25,85 @@ import { StagesService } from '../../core/services/stage/stages.service';
     MatRadioModule
   ],
   templateUrl: './stagiaire-bilan-fin-stage.html',
+  styleUrl: './stagiaire-bilan-fin-stage.css',
 })
 export class StagiaireBilanFinStageComponent {
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private stagesService = inject(StagesService);
 
+  readonly  taskQuestions = [
+  {
+    key: 'tachesEnLienAvecFormation',
+    label: 'Les tâches assignées sont en lien avec ma formation.'
+  },
+  {
+    key: 'tachesVariees',
+    label: 'Les tâches sont variées.'
+  },
+  {
+    key: 'tachesRecommencees',
+    label: "J'ai dû recommencer une ou plusieurs tâches."
+  },
+  {
+    key: 'retroactionRecue',
+    label: "J'ai reçu de la rétroaction sur le travail effectué."
+  },
+  {
+    key: 'progressionDansExecution',
+    label: "J'ai progressé dans l’exécution de mes tâches."
+  },
+  {
+    key: 'difficultesDansCertainesTaches',
+    label: "J'ai rencontré des difficultés dans certaines tâches."
+  },
+  {
+    key: 'respectSanteSecurite',
+    label: "J'ai respecté les consignes de santé et sécurité au travail."
+  }
+];
+
+ readonly reflectionQuestions = [
+  {
+    key: 'appreciationGlobaleTaches',
+    label: "Dans l’ensemble, j'ai apprécié les tâches que j'ai pu effectuer."
+  },
+  {
+    key: 'difficulteTachesCorrespondNiveau',
+    label: "Le degré de difficulté de mes tâches correspondait à mon niveau de connaissance."
+  },
+  {
+    key: 'nouvellesConnaissancesAcquises',
+    label: "J'ai acquis de nouvelles connaissances durant mon stage."
+  },
+  {
+    key: 'consolidationConnaissancesCompetences',
+    label: "Mon stage m'a permis de consolider mes connaissances et mes compétences."
+  },
+  {
+    key: 'stageUtileEtCompleteFormation',
+    label: "Mon stage a été utile et complète bien ma formation."
+  },
+  {
+    key: 'mieuxPrepareMarcheTravail',
+    label: "Je me sens mieux préparé pour mon entrée sur le marché du travail."
+  },
+  {
+    key: 'appreciationEchangesMaitreStage',
+    label: "J'ai apprécié les échanges avec mon maître de stage."
+  },
+  {
+    key: 'satisfactionStage',
+    label: "Je suis satisfait de mon stage."
+  }
+];
   stageId = signal<number | null>(null);
   isLoading = signal(true);
   isSaving = signal(false);
-  errorMessage = signal('');
   successMessage = signal('');
+  accessDenied = signal(false);
+  loadErrorMessage = signal('');
+  saveErrorMessage = signal('');
 
   yesNoOptions = ['OUI', 'NON'];
 
@@ -75,10 +143,12 @@ export class StagiaireBilanFinStageComponent {
       const stageId = Number(params.get('id'));
 
       this.successMessage.set('');
-      this.errorMessage.set('');
+      this.saveErrorMessage.set('');
+      this.loadErrorMessage.set('');
+      this.accessDenied.set(false);
 
       if (!stageId || Number.isNaN(stageId)) {
-        this.errorMessage.set('Identifiant de stage invalide.');
+        this.loadErrorMessage.set('Identifiant de stage invalide.');
         this.isLoading.set(false);
         return;
       }
@@ -121,7 +191,7 @@ export class StagiaireBilanFinStageComponent {
     const stageId = this.stageId();
 
     if (!stageId) {
-      this.errorMessage.set('Identifiant de stage invalide.');
+      this.loadErrorMessage.set('Identifiant de stage invalide.');
       this.isLoading.set(false);
       return;
     }
@@ -178,12 +248,19 @@ export class StagiaireBilanFinStageComponent {
       },
       error: (err) => {
         if (err?.status === 403) {
-          this.errorMessage.set(
-            "Ce bilan fin-stage est disponible seulement pour un stage à l'état ACCEPTE.",
+          this.accessDenied.set(true);
+          this.loadErrorMessage.set(
+            "Vous n’avez pas accès à ce bilan fin de stage."
           );
+        } else if (err?.status === 404) {
+          this.accessDenied.set(true);
+          this.loadErrorMessage.set('Cette action n\'est pas autorisée.');
         } else {
-          this.errorMessage.set('Impossible de charger le bilan fin de stage.');
+          this.loadErrorMessage.set(
+            'Impossible de charger le bilan fin de stage.'
+          );
         }
+
         this.isLoading.set(false);
       },
     });
@@ -196,7 +273,7 @@ export class StagiaireBilanFinStageComponent {
     }
 
     this.isSaving.set(true);
-    this.errorMessage.set('');
+    this.saveErrorMessage.set('');
     this.successMessage.set('');
 
     this.stagesService.upsertBilanFinStage(this.form.getRawValue()).subscribe({
@@ -204,8 +281,18 @@ export class StagiaireBilanFinStageComponent {
         this.successMessage.set('Bilan fin de stage enregistré avec succès.');
         this.isSaving.set(false);
       },
-      error: () => {
-        this.errorMessage.set("Impossible d'enregistrer le bilan fin de stage.");
+      error: (err) => {
+        if (err?.status === 403) {
+          this.accessDenied.set(true);
+          this.loadErrorMessage.set(
+            "Vous n’avez pas accès à ce bilan fin de stage."
+          );
+        } else {
+          this.saveErrorMessage.set(
+            "Impossible d'enregistrer le bilan fin de stage."
+          );
+        }
+
         this.isSaving.set(false);
       },
     });

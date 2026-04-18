@@ -1,0 +1,321 @@
+@if (isLoading()) {
+<div class="page-state loading-state">
+  <p>Chargement du stage...</p>
+</div>
+} @else if (errorMessage()) {
+<div class="page-state error-state">
+  <p>{{ errorMessage() }}</p>
+</div>
+} @else if (stage(); as currentStage) {
+
+<div class="stage-page">
+
+  <section class="hero-shell">
+    <div class="hero-left">
+      <p class="hero-kicker">Espace superviseur</p>
+      <h1>Fiche superviseur</h1>
+      <p class="hero-subtitle">
+        Consultez rapidement les informations du stage, les bilans remplis et faites le suivi de vos entrevues.
+      </p>
+    </div>
+
+    <div class="hero-right">
+      <div class="status-card">
+        <span class="hero-status-label">
+          {{ 'stage.status' | transloco }}
+        </span>
+
+        <div class="stage-pill" [ngClass]="stageStatusUi().cssClass">
+          <mat-icon class="stage-pill-icon">
+            {{ stageStatusUi().iconTitle }}
+          </mat-icon>
+          <span>{{ stageStatusUi().labelKey | transloco }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="infos-strip">
+    <div class="info-item">
+      <span>Stagiaire</span>
+      <strong>
+        {{ currentStage.etudiant?.user?.prenom || '-' }}
+        {{ currentStage.etudiant?.user?.nom || '' }}
+      </strong>
+    </div>
+
+    <div class="info-item">
+      <span>Entreprise</span>
+      <strong>{{ currentStage.entreprise?.nom || '-' }}</strong>
+    </div>
+
+    <div class="info-item">
+      <span>Période</span>
+      <strong>
+        {{ currentStage.dateDebut | date:'yyyy-MM-dd' }} au
+        {{ currentStage.dateFin | date:'yyyy-MM-dd' }}
+      </strong>
+    </div>
+
+    <div class="info-item">
+      <span>Tranche horaire</span>
+      <strong>{{ getTrancheHoraire() }}</strong>
+    </div>
+  </section>
+
+  <section class="premium-grid top-grid">
+    <mat-card class="premium-card">
+      <div class="premium-card-top">
+        <div>
+          <p class="card-tag">Fiche stagiaire</p>
+          <h2>Informations</h2>
+          <p class="card-subtitle">Coordonnées et informations de base</p>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span>Nom</span>
+          <strong>{{ currentStage.etudiant?.user?.nom || '-' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Prénom</span>
+          <strong>{{ currentStage.etudiant?.user?.prenom || '-' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Courriel école</span>
+          <strong>{{ currentStage.etudiant?.user?.courrielEcole || '-' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Téléphone</span>
+          <strong>{{ currentStage.etudiant?.telephone || '-' }}</strong>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="premium-card">
+      <div class="premium-card-top">
+        <div>
+          <p class="card-tag">Entreprise</p>
+          <h2>Coordonnées</h2>
+          <p class="card-subtitle">Lieu de stage et personne ressource</p>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item detail-item-full">
+          <span>Adresse complète</span>
+          <strong>{{ getAdresseEntrepriseComplete() }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>{{ getContactEntrepriseType() }}</span>
+          <strong>
+            {{ getContactEntrepriseAffiche()?.prenom || '-' }}
+            {{ getContactEntrepriseAffiche()?.nom || '' }}
+          </strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Courriel</span>
+          <strong>{{ getContactEntrepriseAffiche()?.courriel || '-' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Téléphone</span>
+          <strong>{{ getContactEntrepriseAffiche()?.telephone || '-' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Poste</span>
+          <strong>{{ getContactEntrepriseAffiche()?.poste || '-' }}</strong>
+        </div>
+      </div>
+    </mat-card>
+  </section>
+
+  <section class="premium-grid actions-grid">
+    <mat-card class="premium-card compact-card">
+      <div class="premium-card-top">
+        <div>
+          <p class="card-tag">Documents</p>
+          <h2>PDF</h2>
+          <p class="card-subtitle">Télécharger les documents disponibles</p>
+        </div>
+      </div>
+
+      <div class="button-stack">
+        <button mat-stroked-button type="button" (click)="downloadBilanMiStagePdf()" [disabled]="!bilanMiStage()">
+          PDF bilan mi-stage
+        </button>
+
+        <button mat-stroked-button type="button" (click)="downloadBilanFinStagePdf()" [disabled]="!bilanFinStage()">
+          PDF bilan fin-stage
+        </button>
+
+        <button mat-stroked-button type="button" (click)="downloadEvaluationMaitreStagePdf()"
+          [disabled]="!evaluationMaitreStage()">
+          PDF évaluation maître de stage
+        </button>
+
+        <button mat-flat-button class="premium-btn" type="button" (click)="downloadVisiteSuperviseurPdf()"
+          [disabled]="!isVisiteComplete()">
+          PDF formulaire superviseur
+        </button>
+      </div>
+    </mat-card>
+
+    <mat-card class="premium-card compact-card">
+      <div class="premium-card-top">
+        <div>
+          <p class="card-tag">Suivi</p>
+          <h2>Statut des formulaires</h2>
+          <p class="card-subtitle">Vue rapide des documents complétés</p>
+        </div>
+      </div>
+
+      <div class="status-list">
+        <div class="status-row">
+          <span>Bilan mi-stage</span>
+          <strong>{{ bilanMiStage() ? 'Complété' : 'Non rempli' }}</strong>
+        </div>
+
+        <div class="status-row">
+          <span>Bilan fin-stage</span>
+          <strong>{{ bilanFinStage() ? 'Complété' : 'Non rempli' }}</strong>
+        </div>
+
+        <div class="status-row">
+          <span>Évaluation maître de stage</span>
+          <strong>{{ evaluationMaitreStage() ? 'Complétée' : 'Non remplie' }}</strong>
+        </div>
+
+        <div class="status-row">
+          <span>Entrevues superviseur</span>
+          <strong>{{ visibleInterviewCount() }} / 3</strong>
+        </div>
+      </div>
+    </mat-card>
+  </section>
+
+  @if (successMessage()) {
+  <div class="page-inline-success">
+    {{ successMessage() }}
+  </div>
+  }
+
+  <mat-card class="premium-card interview-card">
+    <div class="premium-card-top">
+      <div>
+        <p class="card-tag">Entrevues</p>
+        <h2>Suivi du superviseur</h2>
+        <p class="card-subtitle">
+          Ajoutez jusqu’à 3 entrevues. Une seule entrevue est affichée au départ.
+        </p>
+      </div>
+
+      @if (canAddInterview()) {
+      <button mat-stroked-button type="button" (click)="addInterview()">
+        Ajouter une entrevue
+      </button>
+      }
+    </div>
+
+    <div class="interview-stack">
+      @for (item of visibleInterviewForms(); track item.numero) {
+      <div class="interview-panel">
+        <div class="interview-panel-header">
+          <div>
+            <h3>Entrevue n° {{ item.numero }}</h3>
+            <p>{{ getInterviewStatusLabel(item.form) }}</p>
+          </div>
+        </div>
+
+        <form [formGroup]="item.form" class="form-grid">
+          <h4 class="full-width section-title">Entrevue avec le maître de stage</h4>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date</mat-label>
+            <input matInput type="date" formControlName="dateEntrevueMaitre" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Durée (min)</mat-label>
+            <input matInput type="number" formControlName="dureeEntrevueMaitreMinutes" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Type d’entrevue</mat-label>
+            <mat-select formControlName="typeEntrevueMaitre">
+              <mat-option value="PRESENTIEL">Présentiel</mat-option>
+              <mat-option value="VISIOCONFERENCE">Visioconférence</mat-option>
+              <mat-option value="TELEPHONE">Téléphone</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Personne rencontrée</mat-label>
+            <input matInput formControlName="personneRencontreeEntreprise" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Commentaires généraux sur l’établissement d’accueil</mat-label>
+            <textarea matInput rows="4" formControlName="commentairesEtablissementMaitre"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Commentaires sur le déroulement du stage</mat-label>
+            <textarea matInput rows="4" formControlName="commentairesDeroulementStageMaitre"></textarea>
+          </mat-form-field>
+
+          <h4 class="full-width section-title">Entrevue avec le stagiaire</h4>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date</mat-label>
+            <input matInput type="date" formControlName="dateEntrevueStagiaire" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Durée (min)</mat-label>
+            <input matInput type="number" formControlName="dureeEntrevueStagiaireMinutes" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Type d’entrevue</mat-label>
+            <mat-select formControlName="typeEntrevueStagiaire">
+              <mat-option value="PRESENTIEL">Présentiel</mat-option>
+              <mat-option value="VISIOCONFERENCE">Visioconférence</mat-option>
+              <mat-option value="TELEPHONE">Téléphone</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Commentaires généraux sur l’établissement d’accueil</mat-label>
+            <textarea matInput rows="4" formControlName="commentairesEtablissementStagiaire"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Commentaires sur le déroulement du stage</mat-label>
+            <textarea matInput rows="4" formControlName="commentairesDeroulementStageStagiaire"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Commentaires généraux</mat-label>
+            <textarea matInput rows="4" formControlName="commentaireGeneral"></textarea>
+          </mat-form-field>
+
+          <div class="full-width actions-row">
+            <button mat-flat-button class="premium-btn" type="button" (click)="saveInterview(item.numero)">
+              Enregistrer l’entrevue {{ item.numero }}
+            </button>
+          </div>
+        </form>
+      </div>
+      }
+    </div>
+  </mat-card>
+</div>
+}

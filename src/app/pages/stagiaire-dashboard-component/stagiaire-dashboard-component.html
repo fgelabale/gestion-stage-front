@@ -1,61 +1,238 @@
-<div style="padding:24px;">
-  <h1>Mon tableau de bord stagiaire</h1>
+@if (isLoading()) {
+<div class="dashboard-state loading-state">
+  <p>Chargement de votre tableau de bord...</p>
+</div>
+} @else if (errorMessage()) {
+<div class="dashboard-state error-state">
+  <p>{{ errorMessage() }}</p>
+</div>
+} @else {
 
-  @if (isLoading()) {
-  <p>Chargement...</p>
+<div class="dashboard-page">
 
-  } @else if (errorMessage()) {
-  <p style="color:red;">{{ errorMessage() }}</p>
+  <section class="dashboard-hero">
+    <div>
+      <p class="hero-kicker">Espace stagiaire</p>
+      <h1>Mon tableau de bord</h1>
+      <p class="hero-subtitle">
+        Consultez l’évolution de vos demandes de stage et accédez à vos formulaires lorsqu’un stage est accepté.
+      </p>
+    </div>
 
-  } @else if (stages().length === 0) {
-  <p>Aucun stage disponible.</p>
+    <div class="hero-summary">
+      <div class="summary-card">
+        <span>Stages</span>
+        <strong>{{ stages().length }}</strong>
+      </div>
+    </div>
+  </section>
 
+  @if (stages().length === 0) {
+  <mat-card class="empty-card">
+    <h2>Aucun stage disponible</h2>
+    <p>Votre tableau de bord affichera ici vos stages dès qu’ils seront accessibles.</p>
+  </mat-card>
   } @else {
-  <div style="display:grid; gap:16px;">
 
-    @for (stage of stages(); track stage.id) {
-    <mat-card style="padding:16px;">
+  <!-- DEMANDES EN COURS -->
+  @if (pendingStages().length > 0) {
+  <section class="dashboard-section">
+    <div class="section-header">
+      <div>
+        <p class="section-kicker info">Demandes</p>
+        <h2>Demandes de stage en cours</h2>
+        <p class="section-subtitle">
+          Les demandes de stage non encore approuvées ou validées.
+        </p>
+      </div>
+    </div>
 
-      <p><strong>Entreprise :</strong> {{ stage.entreprise?.nom }}</p>
+    <div class="stage-list">
+      @for (stage of pendingStages(); track stage.id) {
+      <mat-card class="stage-card">
+        <div class="stage-card-top">
+          <div>
+            <p class="card-tag">Demande</p>
+            <h2>{{ stage.entreprise?.nom || '-' }}</h2>
+            <p class="card-subtitle">
+              {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+              au
+              {{ stage.dateFin | date:'yyyy-MM-dd' }}
+            </p>
+          </div>
 
-      <p>
-        <strong>Période :</strong>
-        {{ stage.dateDebut | date:'yyyy-MM-dd' }}
-        au
-        {{ stage.dateFin | date:'yyyy-MM-dd' }}
-      </p>
+          <div class="stage-pill pending">
+            {{ getEtatUi(stage.etat).icon }} {{ getEtatUi(stage.etat).labelKey | transloco }}
+          </div>
+        </div>
 
-      <p>
-        <strong>État :</strong>
-         {{ getEtatUi(stage.etat).icon }} {{ getEtatUi(stage.etat).labelKey | transloco }}
-      </p>
+        <div class="stage-actions">
+          <a mat-stroked-button class="secondary-btn" [routerLink]="['/stagiaire/stages', stage.id]">
+            Voir la demande
+          </a>
+        </div>
 
-      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+        <div class="state-note pending-note">
+          Les rapports hebdomadaires et les bilans seront disponibles lorsque le stage sera accepté.
+        </div>
+      </mat-card>
+      }
+    </div>
+  </section>
+  }
 
-        <a mat-raised-button color="primary" [routerLink]="['/stagiaire/stages', stage.id]">
+  <!-- STAGE ACCEPTE -->
+  @if (acceptedStage(); as stage) {
+  <section class="dashboard-section">
+    <div class="section-separator"></div>
+    <div class="section-header">
+      <div>
+        <p class="section-kicker success">Stage actif</p>
+        <h2>Stage accepté</h2>
+        <p class="section-subtitle">
+          Voici le stage actuellement accessible pour vos rapports hebdomadaires et vos bilans.
+        </p>
+      </div>
+    </div>
+
+    <a class="stage-card-link" [routerLink]="['/stagiaire/stages', stage.id]">
+      <mat-card class="stage-card featured-stage-card">
+        <div class="stage-card-top">
+          <div>
+            <p class="card-tag">Stage principal</p>
+            <h2>{{ stage.entreprise?.nom || '-' }}</h2>
+            <p class="card-subtitle">
+              {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+              au
+              {{ stage.dateFin | date:'yyyy-MM-dd' }}
+            </p>
+          </div>
+
+          <div class="stage-pill accepted">
+            {{ getEtatUi(stage.etat).icon }} {{ getEtatUi(stage.etat).labelKey | transloco }}
+          </div>
+        </div>
+
+        <div class="stage-infos">
+          <div class="info-line">
+            <span>Entreprise</span>
+            <strong>{{ stage.entreprise?.nom || '-' }}</strong>
+          </div>
+
+          <div class="info-line">
+            <span>Période</span>
+            <strong>
+              {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+              au
+              {{ stage.dateFin | date:'yyyy-MM-dd' }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <p class="card-helper">
+            Accéder aux rapports hebdomadaires et aux bilans de stage
+          </p>
+          <span class="card-arrow">Ouvrir →</span>
+        </div>
+
+      </mat-card>
+    </a>
+  </section>
+  }
+
+  <!-- STAGE EN ECHEC -->
+  @if (failedStage(); as stage) {
+  <section class="dashboard-section">
+    <div class="section-separator"></div>
+    <div class="section-header">
+      <div>
+        <p class="section-kicker danger">Historique</p>
+        <h2>Stage en échec</h2>
+        <p class="section-subtitle">
+          Ce stage s’est terminé de façon précoce après avoir été accepté.
+        </p>
+      </div>
+    </div>
+
+    <mat-card class="stage-card failed-stage-card">
+      <div class="stage-card-top">
+        <div>
+          <p class="card-tag">Stage interrompu</p>
+          <h2>{{ stage.entreprise?.nom || '-' }}</h2>
+          <p class="card-subtitle">
+            {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+            au
+            {{ stage.dateFin | date:'yyyy-MM-dd' }}
+          </p>
+        </div>
+
+        <div class="stage-pill failed">
+          {{ getEtatUi(stage.etat).icon }} {{ getEtatUi(stage.etat).labelKey | transloco }}
+        </div>
+      </div>
+
+      <div class="state-note failed-note">
+        Ce stage s’est terminé avant la fin prévue.
+      </div>
+
+      <div class="stage-actions">
+        <a mat-stroked-button class="secondary-btn" [routerLink]="['/stagiaire/stages', stage.id]">
           Voir le stage
         </a>
-
-        @if (stage.etat === 'ACCEPTE') {
-
-        <a mat-raised-button color="primary"
-          [routerLink]="['/stagiaire/stages', stage.id, 'rapport', getFirstMissingWeek(stage)]">
-          Rapport à compléter
-        </a>
-
-        <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-mi-stage']">
-          Bilan mi-stage
-        </a>
-
-        <a mat-raised-button color="accent" [routerLink]="['/stagiaire/stages', stage.id, 'bilan-fin-stage']">
-          Bilan fin-stage
-        </a>
-        }
-
       </div>
     </mat-card>
-    }
+  </section>
+  }
 
-  </div>
+  <!-- STAGES ANNULES -->
+  @if (cancelledStages().length > 0) {
+  <section class="dashboard-section">
+    <div class="section-separator"></div>
+    <div class="section-header">
+      <div>
+        <p class="section-kicker muted">Archives</p>
+        <h2>Stages annulés</h2>
+        <p class="section-subtitle">
+          Stages fermés automatiquement lorsqu’un autre stage a été accepté.
+        </p>
+      </div>
+    </div>
+
+    <div class="stage-list">
+      @for (stage of cancelledStages(); track stage.id) {
+      <mat-card class="stage-card archived-stage-card">
+        <div class="stage-card-top">
+          <div>
+            <p class="card-tag">Stage annulé</p>
+            <h2>{{ stage.entreprise?.nom || '-' }}</h2>
+            <p class="card-subtitle">
+              {{ stage.dateDebut | date:'yyyy-MM-dd' }}
+              au
+              {{ stage.dateFin | date:'yyyy-MM-dd' }}
+            </p>
+          </div>
+
+          <div class="stage-pill cancelled">
+            {{ getEtatUi(stage.etat).icon }} {{ getEtatUi(stage.etat).labelKey | transloco }}
+          </div>
+        </div>
+
+        <div class="state-note cancelled-note">
+          Ce stage a été annulé. Les rapports hebdomadaires et les bilans ne sont plus disponibles.
+        </div>
+
+        <div class="stage-actions">
+          <a mat-stroked-button class="secondary-btn" [routerLink]="['/stagiaire/stages', stage.id]">
+            Voir le stage
+          </a>
+        </div>
+      </mat-card>
+      }
+    </div>
+  </section>
+  }
+
   }
 </div>
+}

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,8 +12,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
 @Component({
   selector: 'app-stagiaire-dashboard',
   standalone: true,
-  imports: [DatePipe, RouterLink, MatCardModule, MatButtonModule,TranslocoPipe,],
-  templateUrl: './stagiaire-dashboard-component.html'
+  imports: [DatePipe, RouterLink, MatCardModule, MatButtonModule, TranslocoPipe,],
+  templateUrl: './stagiaire-dashboard-component.html',
+  styleUrl: './stagiaire-dashboard-component.css'
 })
 export class StagiaireDashboardComponent implements OnInit {
   private stagesService = inject(StagesService);
@@ -55,4 +56,22 @@ export class StagiaireDashboardComponent implements OnInit {
     const missing = this.getMissingWeeks(stage);
     return missing.length ? missing[0] : 1;
   }
+
+  pendingStages = computed(() =>
+    this.stages().filter(stage =>
+      ['OUVERT', 'EN_TRAITEMENT', 'ENTENTE_ENVOYEE'].includes(stage.etat)
+    )
+  );
+
+  acceptedStage = computed(() =>
+    this.stages().find(stage => stage.etat === 'ACCEPTE') ?? null
+  );
+
+  failedStage = computed(() =>
+    this.stages().find(stage => stage.etat === 'STAGE_ECHEC') ?? null
+  );
+
+  cancelledStages = computed(() =>
+    this.stages().filter(stage => stage.etat === 'ANNULE')
+  );
 }

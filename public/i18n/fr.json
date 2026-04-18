@@ -7,7 +7,12 @@
     },
     "layout": {
         "admin": "Administration",
-        "title": "Gestion de stages",
+        "title": {
+            "admin": "Gestion de stages",
+            "supervisor": "Validation des stages",
+            "stagiaire": "Espace personnel"
+        },
+        "supervisor": "Superviseur",
         "welcome": "Bienvenue",
         "logout": "Déconnexion",
         "readonly": "Mode lecture seule"
@@ -44,6 +49,9 @@
         "ACCEPTE": "Accepté",
         "STAGE_ECHEC": "En échec",
         "ANNULE": "Annulé"
+    },
+    "supervisorStagesPage": {
+        "title": "Listes des stages"
     },
     "adminStagesPage": {
         "title": "Administration des stages",
@@ -188,5 +196,16 @@
                 "NE_S_APPLIQUE_PAS": "Ne s’applique pas"
             }
         }
+    },
+    "paginator": {
+        "itemsPerPage": "Éléments par page :",
+        "nextPage": "Page suivante",
+        "previousPage": "Page précédente",
+        "firstPage": "Première page",
+        "lastPage": "Dernière page",
+        "range": "{{start}} - {{end}} sur {{length}}"
+    },
+    "stage": {
+        "status": "Statut du stage"
     }
 }
